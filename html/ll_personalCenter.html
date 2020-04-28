@@ -32,17 +32,16 @@
 			<li class="mui-table-view-cell mui-media">
 				<a href="javascript:;">
 					<span id="nickname" class="mui-pull-right"
-						style="color: gray;font-size: 14px;">小明</span>
+						style="color: gray;font-size: 14px;"></span>
 					<div class="mui-media-body" style="font-size:16px">
 						假名
-						
 					</div>
 				</a>
 			</li>
 			<li class="mui-table-view-cell mui-media">
 				<a href="javascript:;">
-					<span id="sex" class="mui-pull-right"
-						style="color: gray;font-size: 14px;">男</span>
+					<span id="gender" class="mui-pull-right"
+						style="color: gray;font-size: 14px;"></span>
 					<div class="mui-media-body" style="font-size:16px">
 						性别
 					</div>
@@ -50,8 +49,17 @@
 			</li>
 			<li class="mui-table-view-cell mui-media">
 				<a href="javascript:;">
+					<span id="telephone" class="mui-pull-right"
+						style="color: gray;font-size: 14px;"></span>
+					<div class="mui-media-body" style="font-size:16px">
+						手机号
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
 					<span id="profile" class="mui-pull-right"
-						style="color: gray;font-size: 14px;">没有简介</span>
+						style="color: gray;font-size: 14px;"></span>
 					<div class="mui-media-body" style="font-size:16px">
 					    简介
 					</div>
@@ -59,15 +67,15 @@
 			</li>
 			<li class="mui-table-view-cell mui-media" >
 				<a href="javascript:;">
-					<span class="mui-pull-right mui-icon mui-icon-arrowright" style="color:black;margin-left: 3px;" onclick="window.open('ll_blackList.html')"></span>
-					<div class="mui-media-body" style="font-size:16px">
+					<span id="blackList" class="mui-pull-right mui-icon mui-icon-arrowright" style="color:black;margin-left: 3px;" ></span>
+					<div  class="mui-media-body" style="font-size:16px">
 						黑名单
 					</div>
 				</a>
 			</li>
 			<li class="mui-table-view-cell mui-media">
 				<a href="javascript:;">
-					<span id="crossingMemory" class="mui-pull-right mui-icon mui-icon-arrowright" style="color:black;margin-left: 3px;" onclick="window.open('ll_crossingMemory.html')"></span>
+					<span id="crossingMemory" class="mui-pull-right mui-icon mui-icon-arrowright" style="color:black;margin-left: 3px;"></span>
 					<div class="mui-media-body" style="font-size:16px">
 						十字记忆
 					</div>
@@ -86,7 +94,7 @@
 			</li>
 			<li class="mui-table-view-cell mui-media">
 				<a href="javascript:;">
-					<span class="mui-pull-right mui-icon mui-icon-plusempty" style="color:black;margin-left: 3px;" onclick="window.open('ll_addTags.html')"></span>
+					<span id="addTag" class="mui-pull-right mui-icon mui-icon-plusempty" style="color:black;margin-left: 3px;" ></span>
 					<div class="mui-media-body" style="font-size:16px">
 						本周标签
 						<sapn id="week_tags">
@@ -130,29 +138,6 @@
 			</div>
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/app.js"></script>
-	<script type="text/javascript">
-		mui.init();
-		mui.plusReady(function () {
-			document.getElementById("confirmBtn").addEventListener('tap', function() {
-				var btnArray = ['否', '是'];
-				mui.confirm('确认退出？', '', btnArray, function(e) {
-					if (e.index == 1) {
-						info.innerText = '退出';
-					} else {
-						info.innerText = '不退出'
-					}
-				})
-			});
-			
-			//页面跳转，修改头像
-			/*document.getElementById('myImage').addEventListener('tap',function(){
-				window.open('ll_updateImage.html');
-			});*/
-		    var meWebview = plus.webview.currentWebview();
-			meWebview.addEventListener("show",function(){
-				refreshUserInfo();
-			});
-		});
-	</script>
+	<script src="../js/ll_personalCenter.js"></script>
 </body>
 </html>

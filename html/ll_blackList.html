@@ -41,24 +41,6 @@
 			
 		</div>
 		<script src="../js/mui.js"></script>
-		<script type="text/javascript">
-			mui.init();
-			(function($) {
-				$('#OA_task_1').on('tap', '.mui-btn', function(event) {
-					var elem = this;
-					var li = elem.parentNode.parentNode;
-					mui.confirm('确认将该联系人从黑名单移出？', '', btnArray, function(e) {
-						if (e.index == 0) {
-							li.parentNode.removeChild(li);
-						} else {
-							setTimeout(function() {
-								$.swipeoutClose(li);
-							}, 0);
-						}
-					});
-				});
-				var btnArray = ['确认', '取消'];
-			})(mui);
-		</script>
+		<script src="../js/ll_blackList.js"></script>
 	</body>
 </html>

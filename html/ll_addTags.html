@@ -10,7 +10,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav ">
-			<button type="button" class="mui-btn mui-btn-primary mui-pull-right" >保存</button>
+			<button id="save" type="button" class="mui-btn mui-btn-primary mui-pull-right" >保存</button>
 			<a href="ll_personalCenter.html" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title ">我的标签</h1>
 		</header>
@@ -19,23 +19,21 @@
 				<form class="mui-input-group">
 					<div class="mui-input-row mui-checkbox">
 						<label>浪漫</label>
-						<input name="checkbox1" value="Item 3" type="checkbox" checked>
+						<input name="checkbox1" value="浪漫" type="checkbox" checked>
 					</div>
 					<div class="mui-input-row mui-checkbox">
 						<label>失恋</label>
-						<input name="checkbox1" value="Item 4" type="checkbox" >
+						<input name="checkbox1" value="失恋" type="checkbox" >
 					</div>
 					<div class="mui-input-row mui-checkbox">
 						<label>孤独</label>
-						<input name="checkbox1" value="Item 4" type="checkbox" >
+						<input name="checkbox1" value="孤独" type="checkbox" >
 					</div>
 				</form>
 			</div>
 		</div>
-		<script src="../js/mui.js"></script>
-		<script type="text/javascript">
-			mui.init()
-		</script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/ll_addTags.js"></script>
 	</body>
 
 </html>
