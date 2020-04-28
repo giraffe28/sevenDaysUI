@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="../js/mui.min.js"></script>
+	<link href="../css/crb_login.css" rel="stylesheet"/>
+	<link href="../css/crb_util.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+</head>
+<body>
+	<div class="mui-content">
+		<div class="container-login">
+			<div class="wrap-login p-t-10 p-b-20">
+        <form class="mui-input-group">
+			<span>
+				<h1 class="mui-title login-form-title p-b-35">登录</h1>
+			</span>
+			<span class="login-form-avatar">
+				<img id="img_login_face" src="../img/seven.png" alt="七日记忆">
+			</span>
+            <div class="mui-input-row wrap-input validate-input m-t-15 m-b-35">
+                <input class="input" type="text" id="telephone" name="telephone" placeholder="手机号">
+				<span class="focus-input"></span>
+            </div>
+            <div class="mui-input-row wrap-input validate-input m-b-15">
+                <input class="input" type="text" id="captcha" name="captcha" placeholder="验证码">
+            	<span class="focus-input"></span>
+            </div>
+        </form>
+        <div class="mui-content-padded container-login-form-btn" align="center">
+			<div>
+				<button type="button" class="capbt m-b-10" id="capbt">获取验证码</button>
+			</div>
+            <span class="focus-input"></span>
+			<button type="button" class="login-form-btn m-b-10" id="login">登录</button>
+			<span class="focus-input"></span>
+            <button type="button" class="login-form-btn" id="login1">账号密码登录</button>
+			<span class="focus-input"></span>
+			<button type="label" class="m-t-20 m-r-20" id="reg">注册</button>
+			<button type="label" class="m-t-20" id="forget">忘记密码</button>
+        </div>
+			</div>
+		</div>
+    </div>
+	<script src="../js/crb_app.js"></script>
+	<script src="../js/crb_login2.js"></script>
+</body>
+</html>
