@@ -29,88 +29,108 @@ mui.plusReady(function(){
 	        id:'forget.html'
 	    })
 	});
+	
 	//检验手机号
-	var byzm;
+	var textcap;//收到的验证码
 	document.getElementById('capbt').addEventListener('tap',function(){
-		var zhuceBox = document.getElementById('telephone').value;
-		if(zhuceBox==''){
+		var telephone = document.getElementById('telephone').value;
+		if(telephone==''){
 			mui.toast('手机号不能为空');
 			return false; 
 		}
-		else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(zhuceBox))){
+		else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
 	    	mui.toast("手机号不正确");
 	    	return false; 
 		}
-		else if(zhuceBox.length!=11){
+		else if(telephone.length!=11){
 			mui.toast("手机号不正确");
-	      		return false; 
+		return false; 
 		}
 		else{
 			settime(this);
-			byzm=GetCode(zhuceBox);
+			textcap=GetCode(telephone);
 		}
 	});
 	//点击登录按钮事件
-	document.getElementById('reg').addEventListener('tap',function(){
-		var zhuceBox = document.getElementById('telephone').value;
-		var yzinfoBox = document.getElementById('captcha').value;
-		if(zhuceBox==''){
-			mui.toast('手机号不能为空');
-			return false; 
-		}
-		else if(zhuceBox.length!=11){
-			mui.toast('手机号不正确');
-			return false; 
-		}
-		else if(yzinfoBox1==''){
-			mui.toast('请填写验证码');
-			return false; 
-		}
+	login.addEventListener('tap',function(){
+		var telephone = document.getElementById('telephone').value;
+	    var password=document.getElementById("password");
+	    if(telephone==''){
+	    	mui.toast('手机号不能为空');
+	    	return false; 
+	    }
+	    else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
+	    	mui.toast("手机号不正确");
+	    	return false; 
+	    }
+	    else if(telephone.length!=11){
+	    	mui.toast("手机号不正确");
+	    	return false; 
+	    }
+	    else if(captcha==''){
+	    	mui.toast('请填写验证码');
+	    	return false; 
+	    }
 		else{
-			mui.ajax('http://192.168.0.7/newssystem/index.php/Home/User/login',{//需修改
-			    data:{
-			        telephone:telephone.value
-			    },
-			    dataType:'json',
-			    type:'POST',
-			    timeout:10000,
-			    success:function(data){
-			        //{"reslut":1}
-			        if(data.result==1&&yzinfoBox==byzm){
-			            //登录成功
-			            plus.ui.toast("登录成功");
-			            mui.openWindow({
-			                url:'list.html',//跳转到软件默认首页
-			                id:'list'
-			            })
-			        }else{
-			            //登录失败
-			            plus.ui.toast(data.data);
-			        }
-			    },
-			    error:function(){
-			    }
-			})
-		};
-	});
-	/*第五部分：此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
-	function GetCode(tels){
-		var yzm;
+				if(captcha==textcap){
+					console.log("登录成功");
+					dduse(telephone,password1);
+					mui.toast('登录成功！！')
+					setTimeout(function() { 
+		    			mui.back();
+		    		}
+		    		,1000)
+				}
+				else{
+					mui.toast('验证码输入不对')
+				}
+			};
+	    mui.ajax('……',{//后端url
+	        data:{
+	            telephone:telephone.value,
+	            //password:password.value
+	        },
+	        dataType:'json',
+	        type:'POST',
+	        timeout:10000,
+			contentType:'application/json;charset=utf-8',
+	        success:function(data){
+			//服务器返回响应，根据响应结果，分析是否登录成功；
+	        //console.log(JSON.stringify(data));
+	        	telephone.blur();
+	        	//password.blur();
+	        	if (data.status == 200) {
+	        		// 登录成功之后，保存全局用户对象到本地缓存
+	        		var userInfoJson = data.data;
+	        		app.setUserGlobalInfo(userInfoJson);
+	        		// 页面跳转到默认首页（后续需更改
+	        		mui.openWindow("index.html", "index.html");
+	        	}
+				else{
+	        		app.showToast(data.msg, "error");
+	        	}
+	        }
+	    })
+	})
+	//此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
+	function GetCode(telephone){
+		var capt;
 		mui.ajax({
-		type:'post',
-		contentType: "application/json",
-		url:http.......//此处填服务器url，
-		dataType: "json",
-		async: false,
-		data: {
-			username:tels,
-			msg:'',
-		},
-		success: function(data) {//成功的data函数
-			var json = eval('('+ data.d + ")");
-			yzm=json.code;
-			console.log("返回的验证："+yzm);
-		}
-	});
-	return yzm;*/
+			type:'post',
+			contentType: "application/json;charset=utf-8",
+			url:http.......//此处填服务器url，
+			dataType: "json",
+			async: false,
+			data: {
+				telephone:telephone,
+				msg:'',
+			},
+			success: function(data) {//成功的data函数
+				var json = eval('('+ data.d + ")");
+				capt=json.code;
+				console.log("返回的验证："+capt);
+			}
+		});
+		return capt;
+	}
 })

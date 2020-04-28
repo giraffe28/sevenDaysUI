@@ -2,9 +2,9 @@ mui.init();
 mui.plusReady(function(){
 	var userInfo=app.getUserGlobalInfo();
 	if(userInfo!=null){
-		mui.openWindow({
-		    url:'list.html',
-		    id:'list'
+		mui.openWindow({//跳转到默认首页（后续需更改
+		    url:'index.html',
+		    id:'index.html'
 		})
 	}
     var reg=document.getElementById("reg");
@@ -30,39 +30,48 @@ mui.plusReady(function(){
 	    })
 	});
     login.addEventListener('tap',function(){
-        var username=document.getElementById("username");
+		var telephone = document.getElementById('telephone').value;
         var password=document.getElementById("password");
-        if(username.value.length==0){
-            plus.ui.toast("用户名不能为空");
-            return;
+        if(telephone==''){
+        	mui.toast('手机号不能为空');
+        	return false; 
+        }
+        else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
+        	mui.toast("手机号不正确");
+        	return false; 
+        }
+        else if(telephone.length!=11){
+        	mui.toast("手机号不正确");
+        	return false; 
         }
         if(password.value.length==0){
             plus.ui.toast("密码不能为空");
             return;
         }
-        mui.ajax('http://192.168.0.7/newssystem/index.php/Home/User/login',{//需更改
+        mui.ajax('……',{//后端url
             data:{
-                username:username.value,
+                telephone:telephone.value,
                 password:password.value
             },
             dataType:'json',
             type:'POST',
             timeout:10000,
+			contentType:'application/json;charset=utf-8',
             success:function(data){
-                //{"reslut":1}
-                if(data.result==1){
-                    //登录成功
-                    plus.ui.toast("登录成功");
-                    mui.openWindow({
-                        url:'list.html',
-                        id:'list'
-                    })
-                }else{
-                    //登录失败
-                    plus.ui.toast(data.data);
-                }
-            },
-            error:function(){
+			//服务器返回响应，根据响应结果，分析是否登录成功；
+            //console.log(JSON.stringify(data));
+            	telephone.blur();
+            	password.blur();
+            	if (data.status == 200) {
+            		// 登录成功之后，保存全局用户对象到本地缓存
+            		var userInfoJson = data.data;
+            		app.setUserGlobalInfo(userInfoJson);
+            		// 页面跳转到默认首页（后续需更改
+            		mui.openWindow("index.html", "index.html");
+            	}
+				else{
+            		app.showToast(data.msg, "error");
+            	}
             }
         })
     })

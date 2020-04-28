@@ -21,62 +21,62 @@ mui.plusReady(function(){
 	}
 	
 	//第二部分 检验手机号
-	var byzm;
+	var textcap;//收到的验证码
 	document.getElementById('capbt').addEventListener('tap',function(){
-		var zhuceBox = document.getElementById('telephone').value;
-		if(zhuceBox==''){
+		var telephone = document.getElementById('telephone').value;
+		if(telephone==''){
 			mui.toast('手机号不能为空');
 			return false; 
 		}
-		else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(zhuceBox))){
+		else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
 	    	mui.toast("手机号不正确");
 	    	return false; 
 		}
-		else if(zhuceBox.length!=11){
+		else if(telephone.length!=11){
 			mui.toast("手机号不正确");
-    		return false; 
+		return false; 
 		}
 		else{
 			settime(this);
-			byzm=GetCode(zhuceBox);
+			textcap=GetCode(telephone);
 		}
 	});
 	
 	//第三部分 点击注册按钮事件
 	document.getElementById('reg').addEventListener('tap',function(){
-		var zhuceBox = document.getElementById('telephone').value;
-		var yhinfoBox = document.getElementById('username').value;
-		var yzinfoBox = document.getElementById('captcha').value;
-		var dlinfoBox1 = document.getElementById('password1').value;
-		var dlinfoBox2 = document.getElementById('password2').value;
-		if(zhuceBox==''){
+		var telephone = document.getElementById('telephone').value;
+		var username= document.getElementById('username').value;
+		var captcha = document.getElementById('captcha').value;
+		var password1 = document.getElementById('password1').value;
+		var password2 = document.getElementById('password2').value;
+		if(telephone==''){
 			mui.toast('手机号不能为空');
 			return false; 
 		}
-		else if(zhuceBox.length!=11){
+		else if(telephone.length!=11){
 			mui.toast('手机号不正确');
 			return false; 
 		}
-		else if(!(/^[a-zA-Z][a-zA-Z0-9_]{0,}$/.test(yhinfoBox))&&yhinfoBox.length>10){
+		else if(!(/^[a-zA-Z][a-zA-Z0-9_]{0,}$/.test(username))&&username.length>10){
 			mui.toast('用户名格式错误');
 			return false;
 		}
-		else if(yzinfoBox==''){
+		else if(captcha==''){
 			mui.toast('请填写验证码');
 			return false; 
 		}
-		else if(dlinfoBox1==''||dlinfoBox1.length<6){
+		else if(password1==''||password1.length<6){
 			mui.toast('密码不能为空并且不能少于6个字符');
 			return false;
 		}
-		else if(dlinfoBox1!=dlinfoBox2){
+		else if(password1!=password2){
 			mui.toast('两次输入密码不一致');
 			return false;
 		}
 		else{
-			if(yzinfoBox==byzm){
+			if(captcha==textcap){
 				console.log("注册成功");
-				dduse(zhuceBox,dlinfoBox);
+				dduse(telephone,password1);
 				mui.toast('注册成功！！')
 				setTimeout(function() { 
 	    			mui.back();
@@ -89,44 +89,57 @@ mui.plusReady(function(){
 		};
 	});
 	
-	/*第四部分；此处为注册接口调用；
-	function adduse(zh,mm){
+	//第四部分；此处为注册接口调用；
+	function adduse(telephone,password){
 	    mui.ajax({
 			type:'post',
-			contentType: "application/json",
+			contentType: "application/json;charset=utf-8",
 			url:http...//此处填写自己的服务器url地址；
 			dataType: "json",
-			data: {//data携带的参数，根据自己的服务器参数写就ok；
-				sortname:zh,
-				username:zh,
-				pwd:mm,
-				model:1
+			data: {//data携带的参数，根据自己的服务器参数写
+				telephone:telephone,
+				password:password,
+				username:username
 			},
-			success: function(data) {
-				console.log(JSON.stringify(data.d));
+			success:function(data){
+			//服务器返回响应，根据响应结果，分析是否注册成功；
+			//console.log(JSON.stringify(data));
+				telephone.blur();
+				password.blur();
+				username.blur();
+				if (data.status == 200) {
+					// 注册成功之后，保存全局用户对象到本地缓存
+					var userInfoJson = data.data;
+					app.setUserGlobalInfo(userInfoJson);
+					// 页面跳转到默认首页（后续需更改
+					mui.openWindow("index.html", "index.html");
+				}
+				else{
+					app.showToast(data.msg, "error");
+				}
 			}
-		);
+		});
 	}
 				
-	第五部分：此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
+	//第五部分：此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
 	function GetCode(tels){
-		var yzm;
+		var capt;
 		mui.ajax({
 			type:'post',
-			contentType: "application/json",
+			contentType: "application/json;charset=utf-8",
 			url:http.......//此处填服务器url，
 			dataType: "json",
 			async: false,
 			data: {
-				username:tels,
+				telephone:telephone,
 				msg:'',
 			},
 			success: function(data) {//成功的data函数
 				var json = eval('('+ data.d + ")");
-				yzm=json.code;
-				console.log("返回的验证："+yzm);
+				capt=json.code;
+				console.log("返回的验证："+capt);
 			}
 		});
-		return yzm;
-	 }*/
+		return capt;
+	}
 })
