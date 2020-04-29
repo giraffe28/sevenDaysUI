@@ -1,6 +1,6 @@
 mui.init();
 
-/*mui.plusReady(function () {
+mui.plusReady(function () {
 	loadingFriendRequests();
     var thisWebview=plus.webview.currentWebview();
 	thisWebview.addEventListener("show",function(){
@@ -9,7 +9,7 @@ mui.init();
 		renderFriPage();
 	})
 });
-*/
+
 
 //从缓存中获取朋友列表，并且渲染到页面
 function renderFriPage(){
@@ -45,15 +45,15 @@ function renderFriPage(){
 
 function loadingFriendRequests(){//发送朋友列表信息的加载
 	var user=app.getUserGlobalInfo();//获取用户全局对象
-	mui.ajax(app.serverUrl+""+user.id,{
-		data:{},
+	mui.ajax(app.serverUrl+"/Friends?userId="+user.id,{
+		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
-			console.log(JSON.stringify(data.data));
+			console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
 				frilist=data.data;
 				app.setFriList(frilist);//缓存朋友数据
@@ -67,15 +67,15 @@ function loadingFriendRequests(){//发送朋友列表信息的加载
 
 function loadingRecFriendRequests(){//发送朋友推荐列表信息的资源请求以及加载
 	var user=app.getUserGlobalInfo();//获取用户全局对象
-	mui.ajax(app.serverUrl+""+user.id,{
-		data:{},
+	mui.ajax(app.serverUrl+"/Friend/getInterest/?userId="+user.id,{
+		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
-			console.log(JSON.stringify(data.data));
+			console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
 				friRecList=data.data;
 				var friRecUlist=document.getElementById("recommendFri");
@@ -154,7 +154,7 @@ mui('.chatRecords').on('tap','.mui-btn-red',function() {
 });
 
 function uploadDelFri(userId,friendId){//发送删除好友信息到后端
-	mui.ajax(app.serverUrl+""+userId,{
+	mui.ajax(app.serverUrl+"/Friend/delete/userId="+userId+"&deleteId="+friendId,{
 		data:{},
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -205,8 +205,8 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 });
 
 function sendMakeFri(userId,friendId){//对推荐好友进行发起聊天时，向后端发送消息
-	mui.ajax(app.serverUrl+""+userId,{
-		data:{},
+	mui.ajax(app.serverUrl+"/Friend/add/"+userId+"&addedId="+friendId,{
+		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；

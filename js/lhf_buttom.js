@@ -14,20 +14,20 @@ var sevenDaysArray=[
 		pageUrl:"../html/lhf_chatRecord.html"
 	},
 	{
-		pageId:"lhf_chat.html",
+		pageId:"test1.html",
 		pageUrl:"../html/test.html"
 	},
 	{
-		pageId:"lhf_chat.html",
+		pageId:"test2.html",
 		pageUrl:"../html/test.html"
 	},
 	{
-		pageId:"lhf_chat.html",
+		pageId:"test3.html",
 		pageUrl:"../html/test.html"
 	},
-	{
-		pageId:"lhf_chat.html",
-		pageUrl:"../html/test.html"
+	{//个人中心
+		pageId:"ll_personalCenter.html",
+		pageUrl:"../html/ll_personalCenter.html"
 	},
 ];
 

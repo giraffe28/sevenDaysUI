@@ -57,12 +57,13 @@ mui.plusReady(function() {
 		mui.confirm('退出登录？', '', btnArray, function(e) {
 			if (e.index == 1) {
 				info.innerText = '退出';
+				//返回到初始页面
 				//清空缓存
 				app.setBasicInfo("");
 			} else {
 				info.innerText = '不退出'
 			}
-		})
+		});
 	});
 
 	/*点击“黑名单”项*/

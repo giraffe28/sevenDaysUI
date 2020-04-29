@@ -104,3 +104,14 @@ mui.plusReady(function() {
 		window.open('ll_personalCenter.html');
 	})
 });
+
+//确认框用于流程确认，最终版本时删除
+mui.back = function(){
+  	var btn = ["确定","取消"];
+	mui.confirm('确认关闭当前窗口？','Hello MUI',btn,function(e){
+	if(e.index==0){
+ 		mui.currentWebview.close();
+		plus.webview.open("../html/ll_personalCenter.html","ll_personalCenter.html","fade-in",200);
+	}
+	});
+}

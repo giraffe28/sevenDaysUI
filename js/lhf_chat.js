@@ -27,7 +27,7 @@ window.addEventListener("resize",function(){
 
 
 /*
-//监听用户输入，使得发送按钮变色
+//监听用户输入，使得发送按钮变色//此处经过试验，事件不会生效
 var msgText=document.getElementById("msg");
 var send=document.getElementById("sendMsg");
 var sendStyle=send.class;
@@ -56,12 +56,13 @@ setObj[0].addEventListener("tap",function () {
 });
 
 
+//确认框用于流程确认，最终版本时删除
 mui.back = function(){
   	var btn = ["确定","取消"];
 	mui.confirm('确认关闭当前窗口？','Hello MUI',btn,function(e){
 	if(e.index==0){
  		mui.currentWebview.close();
-		plus.webview.open("../html/lhf_chatRecord.html","lhf_chatRecord.html","fade-in",200);
+		plus.webview.show("lhf_chatRecord.html","fade-in",200);
 	}
 	});
 }

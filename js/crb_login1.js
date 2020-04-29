@@ -48,8 +48,10 @@ mui.plusReady(function(){
             plus.ui.toast("密码不能为空");
             return;
         }
+		mui.openWindow("../html/index.html", "index.html");
+		 /*
         mui.ajax('……',{//后端url
-            data:{
+           data:{
                 telephone:telephone.value,
                 password:password.value
             },
@@ -66,13 +68,13 @@ mui.plusReady(function(){
             		// 登录成功之后，保存全局用户对象到本地缓存
             		var userInfoJson = data.data;
             		app.setUserGlobalInfo(userInfoJson);
-            		// 页面跳转到默认首页（后续需更改
-            		mui.openWindow("index.html", "index.html");
+            		// 页面跳转到默认首页
+            		mui.openWindow("../html/index.html", "index.html");
             	}
 				else{
             		app.showToast(data.msg, "error");
             	}
             }
-        })
+        })*/
     })
 })
