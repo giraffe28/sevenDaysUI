@@ -152,17 +152,4 @@ window.app = {
 
 	},
 	
-	//设置所有性别选项
-	setGenderInfo:function(genderInfo){
-		var genderInfoStr = JSON.stringify(genderInfo);
-		plus.storage.setItem("genderInfo",genderInfoStr);
-	},
-	//获得所有性别选项
-	getGenderInfo:function(){
-		var genderInfoStr=plus.storage.getItem("genderInfo");
-		return genderInfoStr;
-	},
-	
-	
-	
 }
