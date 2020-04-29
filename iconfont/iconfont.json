@@ -1,0 +1,30 @@
+{
+  "id": "1774275",
+  "name": "no name",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "13939922",
+      "name": "bottle",
+      "font_class": "bottle",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "10294707",
+      "name": "person",
+      "font_class": "person",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "722453",
+      "name": "门店",
+      "font_class": "mendian",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    }
+  ]
+}
