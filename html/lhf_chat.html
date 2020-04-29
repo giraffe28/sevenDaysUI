@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="../js/mui.min.js"></script>
+    <link href="../css/mui.min.css" rel="stylesheet" />
+	<link href="../css/lhf_chat.css" rel="stylesheet" />
+</head>
+<body>
+	<!-- 侧滑导航根容器 -->
+	<div class="mui-off-canvas-wrap mui-draggable">
+	  <!-- 菜单容器 -->
+	  <aside class="mui-off-canvas-right lhf_settings">
+	    <div class="mui-scroll-wrapper">
+	      <div class="mui-scroll">
+				<header class="mui-bar mui-bar-nav">
+					<h1 class="mui-title">设置</h1>
+				</header>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">加入黑名单</li>
+					<li class="mui-table-view-cell">查看信赖</li>
+					<li class="mui-table-view-cell">查看信息</li>
+					<li class="mui-table-view-cell">举报</li>
+					<li class="mui-table-view-cell">添加备注</li>
+					<li class="mui-table-view-cell">结束对话</li>
+				</ul>
+	      </div>
+	    </div>
+	  </aside>
+	  <!-- 主页面容器 -->
+	  <div class="mui-inner-wrap" id='mainContainer'>
+	    <!-- 主页面标题 -->
+	    <header class="mui-bar mui-bar-nav">
+	    	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	    	<h1 class="mui-title" id="friNickname">未知</h1>
+	    	<span class="mui-icon mui-icon-settings mui-pull-right"></span>
+	    </header>
+		
+	    <div id="msgOutter" class="mui-content mui-scroll-wrapper" style="background-color: white;width: 100%;">
+			<div id="msg" class="mui-content">
+				
+			</div>
+			
+			<div class="mui-content" style="position:fixed; bottom:0;width:100%">
+				<div class="mui-input-row">
+					<textarea class="mui-input-clear" type="text" id="msg"></textarea>
+					<button type="button" class="mui-btn mui-btn-blue mui-btn-block" id="sendMsg">发送</button>
+				</div>
+			</div>			
+	    </div> 
+		
+	  </div>
+	</div>
+	
+	<script type="text/javascript" charset="utf-8">
+	  	mui.init();
+	</script>
+	<script src="../js/crb_app.js"></script>
+	<script src="../js/lhf_chat.js"></script>
+</body>
+</html>

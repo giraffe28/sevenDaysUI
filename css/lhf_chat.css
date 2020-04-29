@@ -1,0 +1,30 @@
+.lhf_settings{
+	width: 200px;
+	background-color: white;
+}
+
+.chatRecords li{
+	border-style:none;
+}
+
+a:link {color:black;}		
+a:visited {color:black;}	
+a:hover {color:black;}	
+a:active {color:black;}
+
+
+#msg{
+	width:80%;
+	padding: 0;
+	margin:3px 0 0px 3px;
+}
+
+#sendMsg{
+	margin: 10px 7px;
+	padding: 5px 10px;
+}
+
+
+.imgpad{
+	padding: 0;
+}
