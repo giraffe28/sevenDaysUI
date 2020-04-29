@@ -6,14 +6,13 @@ mui.plusReady(function() {
 	});
 
 	function refreshBasicInfo() {
-		var user = app.getBasicInfo();
+		var user = app.getUserGlobalInfo();
 		//用户信息不在缓存，则发送请求给后端请求数据
 		if (user == null) {
 			//后端服务器的url
 			mui.ajax('http://server-name/login.php', {
 				data: {
-					username: '',
-					password: ''
+					userId:user.userId,
 				},
 				dataType: 'json', //服务器返回json格式数据
 				type: 'post', //HTTP请求类型
@@ -22,9 +21,15 @@ mui.plusReady(function() {
 					'Content-Type': 'application/json'
 				},
 				success: function(data) {
-					//服务器返回响应，根据响应结果，分析是否登录成功；
-					if (data.result != null) {
-						app.setBasicInfo(data);
+					//服务器返回响应，根据响应结果，分析是否成功获取用户信息；
+					if (data.status == 200) {
+						//保存全局用户对象到本地缓存
+						var userInfoJson = data.data;
+						app.setUserGlobalInfo(userInfoJson);
+						mui.openWindow("ll_personalCenter.html", "ll_personalCenter.html");
+					}
+					else{
+						app.showToast(data.msg, "error");
 					}
 				},
 				error: function(xhr, type, errorThrown) {
