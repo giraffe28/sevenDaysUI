@@ -152,4 +152,21 @@ window.app = {
 
 	},
 	
+	//保存用户的黑名单
+	setblackList:function(blackList){
+		var blackListStr=JSON.stringify(blackList);
+		plus.storage.setItem("blackList",blackListStr);
+	},
+	
+	//取出黑名单
+	getBlackList:function(){
+		var blackListStr=plus.storage.getItem("blackList");
+		if(blackListStr!=null&&blackListStr.length>0){
+			return JSON.parse(blackListStr);
+		}
+		else{
+			return [];
+		}
+	},
+	
 }
