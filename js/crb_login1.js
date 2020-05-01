@@ -2,7 +2,7 @@ mui.init();
 mui.plusReady(function(){
 	var userInfo=app.getUserGlobalInfo();
 	if(userInfo!=null){
-		mui.openWindow({//跳转到默认首页（后续需更改
+		mui.openWindow({//跳转到默认首页
 		    url:'index.html',
 		    id:'index.html'
 		})
@@ -49,7 +49,7 @@ mui.plusReady(function(){
             return;
         }
 		mui.openWindow("../html/index.html", "index.html");
-		 /*
+		 
         mui.ajax('……',{//后端url
            data:{
                 telephone:telephone.value,
@@ -75,6 +75,6 @@ mui.plusReady(function(){
             		app.showToast(data.msg, "error");
             	}
             }
-        })*/
+        })
     })
 })
