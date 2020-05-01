@@ -4,7 +4,34 @@ mui.plusReady(function() {
 	meWebview.addEventListener("show", function() {
 		refreshBasicInfo();
 	});
-
+	window.addEventListener('refreshBlackList',function(event){
+		//获得事件参数
+		var userId = event.detail.userId;
+		var addedId = event.detail.addedId;
+		mui.ajax('/blacklist/delete', {
+			data: {
+				userId: userId,
+				addedId:addedId,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为10秒；
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			success: function(data) {
+				//服务器返回响应，根据响应结果，分析是否修改成功；
+				if (data.status == 200) {
+					//删除前端黑名单的的缓存
+					plus.storage.removeItem("blackList");
+				}
+			},
+			error: function(xhr, type, errorThrown) {
+				//异常处理；
+				console.log(type);
+			}
+		});
+	});
 	function refreshBasicInfo() {
 		var user = app.getUserGlobalInfo();
 		//用户信息不在缓存，则发送请求给后端请求数据
@@ -83,4 +110,6 @@ mui.plusReady(function() {
 	document.getElementById("addTag").addEventListener('tap', function() {
 		mui.openWindow('ll_addTags.html', 'll_addTags.html');
 	});
+	
+	
 });

@@ -35,7 +35,7 @@ mui.plusReady(function() {
 		mui.ajax('http://server-name/login.php', {
 			data: {
 				nickname: document.getElementById("nickname").value,
-				gender: myselect.options[index].value;,
+				gender: myselect.options[index].value,
 				profile: document.getElementById("profile").value,
 				telephone: document.getElementById("telephone").value,
 			},
@@ -51,7 +51,7 @@ mui.plusReady(function() {
 					//刷新用户信息
 					var userInfoJson = data.data;
 					app.setUserGlobalInfo(userInfoJson);
-					// 页面跳转到默认首页（后续需更改
+					// 跳转到个人中心页
 					mui.openWindow("ll_personalCenter.html", "ll_personalCenter.html");
 				}
 			},

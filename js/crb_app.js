@@ -152,6 +152,11 @@ window.app = {
 
 	},
 	
+	//删除黑名单缓存
+	deleteBlackList:function(){
+		plus.storage.removeItem("blackList");
+	}
+	
 	//保存用户的黑名单
 	setblackList:function(blackList){
 		var blackListStr=JSON.stringify(blackList);
