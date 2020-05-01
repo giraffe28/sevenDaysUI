@@ -15,16 +15,114 @@ a:active {color:black;}
 
 #msg{
 	width:80%;
-	padding: 0;
+	padding: 4px;
 	margin:3px 0 0px 3px;
+	font-size:14px;
 }
 
 #sendMsg{
-	margin: 10px 7px;
-	padding: 5px 10px;
+	margin: 5px 7px;
+	padding: 3px 10px;
 }
 
 
 .imgpad{
 	padding: 0;
+}
+
+.imgMsg{
+	width: 40px;
+	height: 40px;
+}
+
+/*图片气泡*/
+.friLists {
+	margin: 0 50px 0px 10px;
+	position: relative;
+	width:100%;
+	float: left;
+}
+
+.friLists .headerImg {
+	position: absolute;
+	top: 5px;
+}
+
+.myLists {
+	position: relative;
+	margin: 0 10px 0px 50px;
+	float: right;
+	width:100%;
+}
+
+.myLists .headerImg {
+	position: absolute;
+	top: 5px;
+	right: 0px;
+}
+
+/*气泡*/
+.msgLeftWhite {/*朋友的发言*/
+	background-color: #FFFFFF;
+	font-size: 16px;
+	color: black;
+	display: inline-block;
+	padding: 8px;
+	position: relative;
+	border-radius: 5px;
+	float: left;
+	margin:0px 10px 10px 40px;
+}
+
+.msgRightGreen {/*自己的发言*/
+	background-color: #a0e759;
+	font-size: 16px;
+	float: right;
+	margin:0px 40px 10px 10px;
+	color: black;
+	display: inline-block;
+	padding: 8px;
+	position: relative;
+	border-radius: 5px;
+}
+
+.myMsgWrapper{
+	color: black;
+	display: inline-block;
+	padding: 12px;
+	margin:0px;
+	position: relative;
+	float: right;
+	border-radius: 5px;
+}
+
+.friMsgWrapper{
+	color: black;
+	display: inline-block;
+	padding: 12px;
+	margin:0px;
+	position: relative;
+	border-radius: 5px;
+}
+
+
+#msgs {
+	height: 100%;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.red_point{
+  position: relative;
+}
+
+.red_point::before{
+  content: " ";
+  border: 5px solid #C9394A;/*设置红色*/
+  border-radius:5px;/*设置圆角*/
+  position: absolute;
+  z-index: 3000;
+  right: 0%;
+  margin-right: -10px;
+  margin-top: 0px;
 }
