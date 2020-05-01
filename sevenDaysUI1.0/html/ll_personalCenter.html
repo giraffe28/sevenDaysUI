@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <link href="../css/mui.min.css" rel="stylesheet"/>
+	<link href="../css/ll_personalCenter.css" rel="stylesheet"/>
+	<style>
+		.mui-popover {
+			height: 300px;
+		}
+		.mui-content {
+			padding: 10px;
+		}
+	</style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav mui-bar-nav-bg">
+	    <a id='confirmBtn' class="mui-pull-left mui-icon mui-icon-spinner-cycle mui-spin"></a>
+		<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right" href="#topPopover"></a>
+		<h1 class="mui-title">个人中心</h1>
+	</header>
+	<div class="mui-content" style="opacity: 0.6;" >
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell mui-media" >
+				<img id="myImage" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3524525170,1769712432&fm=26&gp=0.jpg" style="height: 200px;width: 200px;margin-left: 100px;">
+			</li>
+		</ul>
+	
+		<ul class="mui-table-view" >
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span id="nickname" class="mui-pull-right"
+						style="color: gray;font-size: 14px;"></span>
+					<div class="mui-media-body" style="font-size:16px">
+						假名
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span id="gender" class="mui-pull-right"
+						style="color: gray;font-size: 14px;"></span>
+					<div class="mui-media-body" style="font-size:16px">
+						性别
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span id="telephone" class="mui-pull-right"
+						style="color: gray;font-size: 14px;"></span>
+					<div class="mui-media-body" style="font-size:16px">
+						手机号
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span id="profile" class="mui-pull-right"
+						style="color: gray;font-size: 14px;"></span>
+					<div class="mui-media-body" style="font-size:16px">
+					    简介
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media" >
+				<a href="javascript:;">
+					<span id="blackList" class="mui-pull-right mui-icon mui-icon-arrowright" style="color:black;margin-left: 3px;" ></span>
+					<div  class="mui-media-body" style="font-size:16px">
+						黑名单
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span id="crossingMemory" class="mui-pull-right mui-icon mui-icon-arrowright" style="color:black;margin-left: 3px;"></span>
+					<div class="mui-media-body" style="font-size:16px">
+						十字记忆
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<div class="mui-media-body" style="font-size:16px">
+						标签过往
+						<span id="past_tags">
+					<label style="background-color: dimgray; margin-left: 5px;border-radius: 7px;">孤独</label>
+					<label style="background-color: pink; margin-left: 5px;border-radius: 7px;">失恋</label>
+					</span>
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span id="addTag" class="mui-pull-right mui-icon mui-icon-plusempty" style="color:black;margin-left: 3px;" ></span>
+					<div class="mui-media-body" style="font-size:16px">
+						本周标签
+						<sapn id="week_tags">
+						<label style="background-color: deeppink; margin-left: 5px;border-radius: 7px;">浪漫</label>
+						</sapn>
+					</div>
+					
+				</a>
+			</li>
+		</ul>
+	</div>
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a href="ll_updateInfo.html">修改个人资料</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a href="ll_purse.html">我的钱包</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a href="">好评鼓励</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a href="">产品建议</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a href="">用户协议</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a href="ll_about.html">关于我们</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a href="ll_help.html">帮助中心</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			</div>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/ll_app.js"></script>
+	<script src="../js/ll_personalCenter.js"></script>
+</body>
+</html>

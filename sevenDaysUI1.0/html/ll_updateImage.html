@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav ">
+			<a href="ll_personalCenter.html" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a id="openMenu" class="mui-icon mui-icon-right-nav mui-pull-right" style="line-height: 20px;">...</a>
+			<h1 class="mui-title ">个人头像</h1>
+		</header>
+		<div class="mui-content">
+				<img id="myImage" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3524525170,1769712432&fm=26&gp=0.jpg" >
+		</div>
+		<div id="sheet-myImage" class="mui-popover mui-popover-bottom mui-popover-action ">
+			<!-- 可选择菜单 -->
+			<ul class="mui-table-view">
+			  <li class="mui-table-view-cell">
+				<a id="choose" href="#">选择照片 </a>
+			  </li>
+			  <li class="mui-table-view-cell">
+				<a id="save" href="#">保存照片</a>
+			  </li>
+			</ul>
+			<!-- 取消菜单 -->
+			<ul class="mui-table-view">
+			  <li class="mui-table-view-cell">
+				<a href="#sheet-myImage"><b>取消</b></a>
+			  </li>
+			</ul>
+		</div>
+		
+		<script src="../js/mui.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			
+			mui.plusReady(function () {
+				var myImage=document.getElementById("myImage");
+			    var imgWidth=document.body.clientWidth;
+				myImage.width=imgWidth;
+				myImage.height=imgWidth;
+				
+				var openMenu=document.getElementById("openMenu");
+				openMenu.addEventListener("tap",function(){
+					mui("#sheet-myImage").popover("toggle");
+				});
+				
+				//选择照片
+				var choose=document.getElementById("choose");
+				choose.addEventListener("tap", function() {
+					alert("选择照片");
+				});
+				//保存照片
+				var save=document.getElementById("save");
+				save.addEventListener("tap",function(){
+					alert("保存照片");
+				});
+			});
+		</script>
+	</body>
+
+</html>
