@@ -63,6 +63,6 @@ var pageStyle={
 function initData() {
 	var lhf_chatRecord = plus.webview.getWebviewById("lhf_chatRecord.html");
 	mui.fire(lhf_chatRecord, "refresh");
-	var ll_personalCenter = plus.webview.getWebviewById("ll_personalCenter");
+	var ll_personalCenter = plus.webview.getWebviewById("ll_personalCenter.html");
 	mui.fire(ll_personalCenter, "refresh");
 }
