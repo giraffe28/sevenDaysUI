@@ -47,8 +47,9 @@ mui.plusReady(function(){
 		return false; 
 		}
 		else{
-			settime(this);
-			textcap=GetCode(telephone);
+			//settime(this);//有错误先注释掉了
+			GetCode(telephone);
+			//textcap=GetCode(telephone);   //GetCode返回后端验证码并给手机发送验证码
 		}
 	});
 	//点击登录按钮事件
@@ -71,24 +72,12 @@ mui.plusReady(function(){
 	    	mui.toast('请填写验证码');
 	    	return false; 
 	    }
-		else{
-				if(captcha==textcap){
-					console.log("登录成功");
-					dduse(telephone,password1);
-					mui.toast('登录成功！！')
-					setTimeout(function() { 
-		    			mui.back();
-		    		}
-		    		,1000)
-				}
-				else{
-					mui.toast('验证码输入不对')
-				}
-			};
-	    mui.ajax('……',{//后端url
+		/*else if(captcha!=textcap){
+				mui.toast('验证码错误');
+			};*/
+	    mui.ajax('http://192.168.18.1:8080/spring/Login2',{//后端url
 	        data:{
-	            telephone:telephone.value,
-	            //password:password.value
+	            telephone:telephone
 	        },
 	        dataType:'json',
 	        type:'POST',
@@ -96,18 +85,18 @@ mui.plusReady(function(){
 			contentType:'application/json;charset=utf-8',
 	        success:function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
-	        //console.log(JSON.stringify(data));
-	        	telephone.blur();
+	        console.log(JSON.stringify(data));
+	        	//telephone.blur();
 	        	//password.blur();
 	        	if (data.status == 200) {
 	        		// 登录成功之后，保存全局用户对象到本地缓存
-	        		var userInfoJson = data.data;
+	        		/*var userInfoJson = data.data;
 	        		app.setUserGlobalInfo(userInfoJson);
 	        		// 页面跳转到默认首页（后续需更改
-	        		mui.openWindow("index.html", "index.html");
+	        		mui.openWindow("index.html", "index.html");*/
 	        	}
 				else{
-	        		app.showToast(data.msg, "error");
+	        		/*app.showToast(data.msg, "error");*/
 	        	}
 	        }
 	    })
@@ -115,20 +104,19 @@ mui.plusReady(function(){
 	//此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
 	function GetCode(telephone){
 		var capt;
-		mui.ajax({
+		mui.ajax('http://192.168.18.1:8080/spring/GetCode',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
-			url:http.......//此处填服务器url，
 			dataType: "json",
 			async: false,
 			data: {
-				telephone:telephone,
-				msg:'',
+				telephone:telephone
 			},
 			success: function(data) {//成功的data函数
-				var json = eval('('+ data.d + ")");
+				console.log(JSON.stringify(data));
+				/*var json = eval('('+ data.d + ")");
 				capt=json.code;
-				console.log("返回的验证："+capt);
+				console.log("返回的验证："+capt);*/
 			}
 		});
 		return capt;

@@ -31,7 +31,7 @@ mui.plusReady(function(){
 	});
     login.addEventListener('tap',function(){
 		var telephone = document.getElementById('telephone').value;
-        var password=document.getElementById("password");
+        var password=document.getElementById("password").value;
         if(telephone==''){
         	mui.toast('手机号不能为空');
         	return false; 
@@ -44,11 +44,20 @@ mui.plusReady(function(){
         	mui.toast("手机号不正确");
         	return false; 
         }
-        if(password.value.length==0){
+        if(password.length==0){
             plus.ui.toast("密码不能为空");
             return;
         }
-        mui.ajax('……',{//后端url
+		
+		var wtf = {};
+		wtf["telephone"] = telephone;
+		console.log(telephone);
+		wtf["password"] = password;
+		console.log(password);
+		var goodJson = JSON.stringify(wtf);
+		alert("封装为json:"+goodJson);
+		
+        mui.ajax('http://192.168.18.1:8080/spring/Login',{//后端url
             data:{
                 telephone:telephone.value,
                 password:password.value
@@ -59,7 +68,7 @@ mui.plusReady(function(){
 			contentType:'application/json;charset=utf-8',
             success:function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
-            //console.log(JSON.stringify(data));
+            console.log(JSON.stringify(data));
             	telephone.blur();
             	password.blur();
             	if (data.status == 200) {
