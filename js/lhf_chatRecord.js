@@ -2,6 +2,8 @@ mui.init();
 
 mui.plusReady(function () {
 	loadingFriendRequests();
+	//从缓存中获取朋友列表，并且渲染到页面
+	renderFriPage();
     var thisWebview=plus.webview.currentWebview();
 	thisWebview.addEventListener("show",function(){
 		loadingRecFriendRequests();//加载推荐好友信息
@@ -205,7 +207,7 @@ function renderFriPage(){
 	var friUlist=document.getElementById("chatFriends");
 	if(friList!=null&&friList.length>0){
 		var friHtml="";
-		for(var i=0;i<frilist.length;i++){
+		for(var i=0;i<friList.length;i++){
 			friHtml+=renderFriends(friList[i]);
 		}
 		friUlist.innerHTML=friHtml;
@@ -268,11 +270,11 @@ function loadingRecFriendRequests(){//发送朋友推荐列表信息的资源请
 			//服务器返回响应
 			console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
-				friRecList=data.data;
+				var friRecList=data.data;
 				var friRecUlist=document.getElementById("recommendFri");
 				if(friRecList!=null&&friRecList.length>0){
 					var friHtml="";
-					for(var i=0;i<friRecUList.length;i++){
+					for(var i=0;i<friRecList.length;i++){
 						friHtml+=renderFriendRecommend(friRecList[i]);
 					}
 					friRecUlist.innerHTML=friHtml;
@@ -327,11 +329,11 @@ mui('.chatRecords').on('tap','.mui-btn-red',function() {
 			//发送消息给后端
 			var user=app.getUserGlobalInfo();//获取用户全局对象
 			var par = elem1.parentNode.parentNode;
-			if(uploadDelFri(user.id,elem.parentNode.parentNode.parentNode.friendId)==true){
+			if(uploadDelFri(user.id,par.friendId)==true){
 				//从缓存中获取朋友列表，并且渲染到页面
 				renderFriPage();
 				//去掉聊天快照
-				app.deleteUserChatSnapshot(user.id,elem.parentNode.parentNode.parentNode.friendId);
+				app.deleteUserChatSnapshot(user.id,par.friendId);
 			}
 			else{
 				mui.toast("发送结束闲聊请求出错啦！QAQ");
@@ -347,7 +349,8 @@ mui('.chatRecords').on('tap','.mui-btn-red',function() {
 });
 
 function uploadDelFri(userId,friendId){//发送删除好友信息到后端
-	mui.ajax(app.serverUrl+"/Friend/delete/userId="+userId+"&deleteId="+friendId,{
+	var status =false;
+	mui.ajax(app.serverUrl+"/Friend/delete/?userId="+userId+"&deleteId="+friendId,{
 		data:{},
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -356,13 +359,13 @@ function uploadDelFri(userId,friendId){//发送删除好友信息到后端
 		success:function(data){
 			//服务器返回响应,进行数据的重新加载
 			var myFriendList = data.data;
-			app.setfriList(myFriendList);//修改缓存内容
+			app.setFriList(myFriendList);//修改缓存内容
 			//重新加载推荐好友列表
 			loadingRecFriendRequests();
-			return true;
+			status=true;
 		},
 	});
-	return false;
+	return status;
 }
 
 
@@ -396,22 +399,26 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 });
 
 function sendMakeFri(userId,friendId){//对推荐好友进行发起聊天时，向后端发送消息
+	var status =false;
 	mui.ajax(app.serverUrl+"/Friend/add/"+userId+"&addedId="+friendId,{
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
+		async:false,
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应,进行数据的重新加载
 			var myFriendList = data.data;
+			console.log("对推荐好友发起闲聊时，得到的返回值：");
+			console.log(JSON.stringify(data.data));
 			app.setfriList(myFriendList);//修改缓存内容
 			//重新加载推荐好友列表
 			loadingRecFriendRequests();
-			return true;
+			status=true;
 		},
 	});
-	return false;
+	return status;
 }
 
 
