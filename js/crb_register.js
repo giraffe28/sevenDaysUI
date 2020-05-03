@@ -38,7 +38,7 @@ mui.plusReady(function(){
 		}
 		else{
 			settime(this);
-			textcap=GetCode(telephone);
+			//textcap=GetCode(telephone);
 		}
 	});
 	
@@ -74,14 +74,14 @@ mui.plusReady(function(){
 			return false;
 		}
 		else{
-			if(captcha==textcap){
+			if(true){//captcha==textcap){
 				console.log("注册成功");
-				dduse(telephone,password1);
-				mui.toast('注册成功！！')
+				adduse(username,telephone,password1);
+				/*mui.toast('注册成功！！')
 				setTimeout(function() { 
 	    			mui.back();
 	    		}
-	    		,1000)
+	    		,1000)*/ //注册成功做的方法，在上面adduse返回的数据做判断就可以了，不用再写
 			}
 			else{
 				mui.toast('验证码输入不对')
@@ -90,20 +90,19 @@ mui.plusReady(function(){
 	});
 	
 	//第四部分；此处为注册接口调用；
-	function adduse(telephone,password){
-	    mui.ajax({
+	function adduse(username,telephone,password){
+	    mui.ajax('http://192.168.18.1:8080/spring/Register',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
-			url:http...//此处填写自己的服务器url地址；
 			dataType: "json",
 			data: {//data携带的参数，根据自己的服务器参数写
 				telephone:telephone,
 				password:password,
-				username:username
+				nickname:username
 			},
 			success:function(data){
 			//服务器返回响应，根据响应结果，分析是否注册成功；
-			//console.log(JSON.stringify(data));
+			console.log(JSON.stringify(data));
 				telephone.blur();
 				password.blur();
 				username.blur();
@@ -122,22 +121,21 @@ mui.plusReady(function(){
 	}
 				
 	//第五部分：此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
-	function GetCode(tels){
+	function GetCode(telephone){
 		var capt;
-		mui.ajax({
+		mui.ajax('http://192.168.18.1:8080/spring/GetCode',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
-			url:http.......//此处填服务器url，
 			dataType: "json",
 			async: false,
 			data: {
-				telephone:telephone,
-				msg:'',
+				telephone:telephone
 			},
 			success: function(data) {//成功的data函数
-				var json = eval('('+ data.d + ")");
+				console.log(JSON.stringify(data));
+				/*var json = eval('('+ data.d + ")");
 				capt=json.code;
-				console.log("返回的验证："+capt);
+				console.log("返回的验证："+capt);*/
 			}
 		});
 		return capt;

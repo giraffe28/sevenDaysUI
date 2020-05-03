@@ -37,8 +37,9 @@ mui.plusReady(function(){
     		return false; 
 		}
 		else{
-			settime(this);
-			textcap=GetCode(telephone);
+			/*settime(this);
+			textcap=GetCode(telephone);*/
+			GetCode(telephone);//这里我也只是返回了一个4位验证码，后面判断写一下（位数和相等判断）然后提示验证码错误即可
 		}
 	});
 	
@@ -69,9 +70,9 @@ mui.plusReady(function(){
 			return false;
 		}
 		else{
-			if(captcha==textcap){
+			if(true){    //if(captcha==textcap)这里验证码判断我先跳过，后续你测试的时候补一下
 				console.log("修改成功");
-				dduse(telephone,password1);
+				adduse(telephone,password1);
 				mui.toast('修改成功！！')
 				setTimeout(function() { 
 	    			mui.back();
@@ -84,24 +85,21 @@ mui.plusReady(function(){
 		};
 	});
 	
-	//第四部分；此处为注册接口调用；	
+	//第四部分；此处为注册接口调用；
 	function adduse(telephone,password){
-	    mui.ajax({
+	    mui.ajax('http://192.168.18.1:8080/spring/ForgetRegister',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
-			url:http...//此处填写自己的服务器url地址；
 			dataType: "json",
 			data: {//data携带的参数，根据自己的服务器参数写
 				telephone:telephone,
 				password:password
 			},
 			success:function(data){
-			//服务器返回响应，根据响应结果，分析是否修改密码成功；
-			//console.log(JSON.stringify(data));
-				telephone.blur();
-				password.blur();
+			//服务器返回响应，根据响应结果，分析是否注册成功；
+			console.log(JSON.stringify(data));
 				if (data.status == 200) {
-					// 修改密码成功之后，保存全局用户对象到本地缓存
+					// 注册成功之后，保存全局用户对象到本地缓存
 					var userInfoJson = data.data;
 					app.setUserGlobalInfo(userInfoJson);
 					// 页面跳转到默认首页（后续需更改
@@ -115,22 +113,21 @@ mui.plusReady(function(){
 	}
 				
 	//第五部分：此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
-	function GetCode(tels){
+	function GetCode(telephone){
 		var capt;
-		mui.ajax({
+		mui.ajax('http://192.168.18.1:8080/spring/GetCode',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
-			url:http.......//此处填服务器url，
 			dataType: "json",
 			async: false,
 			data: {
-				telephone:telephone,
-				msg:'',
+				telephone:telephone
 			},
 			success: function(data) {//成功的data函数
-				var json = eval('('+ data.d + ")");
+				console.log(JSON.stringify(data));
+				/*var json = eval('('+ data.d + ")");
 				capt=json.code;
-				console.log("返回的验证："+capt);
+				console.log("返回的验证："+capt);*/
 			}
 		});
 		return capt;
