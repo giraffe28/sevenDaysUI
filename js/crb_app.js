@@ -1,9 +1,9 @@
 window.app = {
 	
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.1.2:8080',
+	serverUrl: 'http://192.168.1.2:8080/seven_war_exploded',
 	//netty服务后端发布的url地址
-	nettyServerUrl:'ws://192.168.1.2:7888/ws',
+	nettyServerUrl:'ddd',
 	
 	/**
 	 * 判断字符串是否为空
@@ -38,13 +38,8 @@ window.app = {
 	 * 获取用户的全局对象
 	 */
 	getUserGlobalInfo: function() {
-		//var userInfoStr = plus.storage.getItem("userInfo");
-		var user={
-			id:"20"
-			
-		};
-		return user;
-		//return JSON.parse(userInfoStr);
+		var userInfoStr = plus.storage.getItem("userInfo");
+		return JSON.parse(userInfoStr);
 	},
 	
 	
