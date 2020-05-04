@@ -90,9 +90,9 @@ mui.plusReady(function() {
 			if (e.index == 1) {
 				info.innerText = '退出';
 				//清空缓存
-				app.setBasicInfo("");
+				plus.storage.removeItem("userInfo");
 			} else {
-				info.innerText = '不退出'
+				info.innerText = '不退出';
 			}
 		})
 	});
