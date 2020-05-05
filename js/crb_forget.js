@@ -37,9 +37,9 @@ mui.plusReady(function(){
     		return false; 
 		}
 		else{
-			/*settime(this);
-			textcap=GetCode(telephone);*/
-			GetCode(telephone);//这里我也只是返回了一个4位验证码，后面判断写一下（位数和相等判断）然后提示验证码错误即可
+			/*settime(this);*/
+			textcap=GetCode(telephone);
+			//GetCode(telephone);//这里我也只是返回了一个4位验证码，后面判断写一下（位数和相等判断）然后提示验证码错误即可
 		}
 	});
 	
@@ -59,6 +59,10 @@ mui.plusReady(function(){
 		}
 		else if(captcha==''){
 			mui.toast('请填写验证码');
+			return false; 
+		}
+		else if(captcha!=textcap){
+			mui.toast('验证码错误');
 			return false; 
 		}
 		else if(password1==''||password1.length<6){
