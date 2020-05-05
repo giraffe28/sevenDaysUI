@@ -48,19 +48,18 @@ mui.plusReady(function(){
             plus.ui.toast("密码不能为空");
             return;
         }
-		
 		var wtf = {};
-		wtf["telephone"] = telephone;
-		console.log(telephone);
-		wtf["password"] = password;
-		console.log(password);
-		var goodJson = JSON.stringify(wtf);
-		alert("封装为json:"+goodJson);
-		
-        mui.ajax('http://172.17.243.33:8080/sevenDays/Login',{//后端url
+				wtf["telephone"] = telephone;
+				console.log(telephone);
+				wtf["password"] = password;
+				console.log(password);
+				var goodJson = JSON.stringify(wtf);
+				alert("封装为json:"+goodJson);
+		console.log(app.serverUrl+"/user/login");
+        mui.ajax(app.serverUrl+"/user/login",{//后端url
             data:{
-                telephone:telephone.value,
-                password:password.value
+                telephone:telephone,
+                password:password,
             },
             dataType:'json',
             type:'POST',
@@ -68,20 +67,22 @@ mui.plusReady(function(){
 			contentType:'application/json;charset=utf-8',
             success:function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
-            console.log(JSON.stringify(data));
-            	telephone.blur();
-            	password.blur();
+				console.log(JSON.stringify(data));
+				console.log(telephone);
+            	//telephone.blur();
+            	//password.blur();
             	if (data.status == 200) {
+					console.log(JSON.stringify(data));
             		// 登录成功之后，保存全局用户对象到本地缓存
             		var userInfoJson = data.data;
             		app.setUserGlobalInfo(userInfoJson);
             		// 页面跳转到默认首页（后续需更改
-            		mui.openWindow("index.html", "index.html");
+            		mui.openWindow("../html/index.html", "index.html");
             	}
 				else{
             		app.showToast(data.msg, "error");
             	}
             }
-        })
+        });
     })
 })

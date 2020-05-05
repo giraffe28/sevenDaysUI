@@ -11,7 +11,7 @@ mui.plusReady(function () {
 		page.hide();//隐藏窗口
 		indexWebview.append(page);//追加子界面到当前主页面
 	}
-	plus.webview.show(sevenDaysArray[0].pageId);
+	plus.webview.show(sevenDaysArray[4].pageId);
 	
 	//批量绑定页面显示事件
 	mui(".mui-bar-tab").on('tap',"a",function(){

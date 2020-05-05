@@ -37,7 +37,7 @@ mui.plusReady(function() {
 		//用户信息不在缓存，则发送请求给后端请求数据
 		if (user == null) {
 			//后端服务器的url
-			mui.ajax('http://server-name/login.php', {
+			mui.ajax('/blacklist/getBlackList', {
 				data: {
 					userId:user.userId,
 				},
@@ -84,18 +84,33 @@ mui.plusReady(function() {
 	});
 
 	/* 点击“退出登录”按钮 */
-	document.getElementById("confirmBtn").addEventListener('tap', function() {
-		var btnArray = ['是', '否'];
-		mui.confirm('退出登录？', '', btnArray, function(e) {
-			if (e.index == 1) {
-				info.innerText = '退出';
-				//清空缓存
-				plus.storage.removeItem("userInfo");
-			} else {
-				info.innerText = '不退出';
-			}
-		})
-	});
+		document.getElementById("confirmBtn").addEventListener('tap', function() {
+			var btnArray = ['否', '是'];
+			mui.confirm('退出登录？', '', btnArray, function(e) {
+				if (e.index == 1) {
+					//清空缓存
+					plus.storage.removeItem("userInfo");
+					
+					//打开login页面后再关闭setting页面
+					plus.webview.show('login1.html');
+					console.log("执行至跳转到登录页面");
+					
+					var curr = plus.webview.currentWebview();
+					var wvs = plus.webview.all();
+					for (var i = 0,len = wvs.length; i < len; i++) {
+						//关闭除当前页面外的其他页面
+						if (wvs[i].getURL() != curr.getURL()){
+							plus.webview.close(wvs[i]);
+						}
+					}
+					curr.close();
+					
+					mui.toast("退出登录成功！");
+				} else {
+					mui.toast("嘿嘿（`v`）");
+				}
+			})
+		});
 
 	/*点击“黑名单”项*/
 	document.getElementById("blackList").addEventListener('tap', function() {
