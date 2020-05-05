@@ -1,6 +1,7 @@
 mui.init();
 mui.plusReady(function () {
-	document.getElementById('post').addEventListener('tap',function(){
+	var post=document.getElementById("post");
+	post.addEventListener('tap',function(){
 		var content=document.getElementById('post_content').value;
 		if(content==''){
 			mui.toast('内容不能为空');
