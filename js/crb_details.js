@@ -142,9 +142,39 @@ mui.plusReady(function () {
 //点击发送评论按钮
 var send=document.getElementById("send");
 send.addEventListener('tap',function(){
-   var content=document.getElementById("comment").value;
-   if(content.length>40){
-	   mui.toast("正文不得超过20个字");
+   var comment=document.getElementById("comment").value;
+   if(comment.length>40){
+	   mui.toast("评论不得超过20个字");
 	   return false; 
    }
+   var user = app.getUserGlobalInfo();
+   var myDate = new Date();
+   mui.ajax('……', {
+   	data: {
+   		userId:user.userId,
+		comment:'comment',
+		comment_time:myDate.toLocaleString()
+   	},
+   	dataType: 'json', //服务器返回json格式数据
+   	type: 'post', //HTTP请求类型
+   	timeout: 10000, //超时时间设置为10秒；
+   	headers: {
+   		'Content-Type': 'application/json'
+   	},
+   	success: function(data) {
+   		//服务器返回响应，根据响应结果，分析是否成功发送评论；
+   		if (data.status == 200) {
+   			//显示成功信息
+   			mui.toast("评论成功");
+			//需下拉刷新才能显示
+   		}
+   		else{
+   			app.showToast(data.msg, "error");
+   		}
+   	},
+   	error: function(xhr, type, errorThrown) {
+   		//异常处理；
+   		console.log(type);
+   	}
+   });
 });
