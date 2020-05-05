@@ -258,7 +258,7 @@ window.app = {
 	
 	//保存用户的朋友列表
 
-	setfriList:function(friList){
+	setFriList:function(friList){
 
 		var friListStr=JSON.stringify(friList);
 
