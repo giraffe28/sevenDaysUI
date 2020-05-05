@@ -18,18 +18,18 @@ mui.plusReady(function () {
 	friendUserId=chatWebview.friUserId;
 	friendUserNickname=chatWebview.friUserNickname;
 	friendFaceImg=chatWebview.friendFaceImg;
-	me=app.getUserGlobalInfo();//获取用户信息
+	me = app.getUserGlobalInfo();//获取用户信息
 	//标题改为朋友的昵称
-	document.getElementById("friNickname").innerHTML=friendUserNickname;
+	document.getElementById("friNickname").innerHTML = '<b>'+friendUserNickname+'</b>';
 	//渲染初始化的聊天记录
 	initChatHistory()
 	//设置聊天记录在进入页面时自动滚动到最后一条
-	resizeScreen ();
+	resizeScreen();
 });
 
 
 //设置聊天记录滚动到最后一条
-function resizeScreen (){
+function resizeScreen() {
 	areaMsgList.scrollTop=areaMsgList.scrollHeight+areaMsgList.offsetHeight;
 }
 
@@ -92,15 +92,15 @@ send.addEventListener("tap",function(){
 		}
 		
 		// 构建ChatMsg
-		var chatMsg = new app.ChatMsg(me.id, friendUserId, msgTextValue, null);
+		var chatMsg = new app.ChatMsg(me.userId, friendUserId, msgTextValue, null);
 		// 构建DataContent
 		var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
 		//调用websocket发送消息
 		CHAT.chat(JSON.stringify(dataContent));
 		//我发送出去的信息进行保存
-		app.saveUserChatHistory(me.id, friendUserId, msgTextValue, app.ME);
+		app.saveUserChatHistory(me.userId, friendUserId, msgTextValue, app.ME);
 		//保存聊天快照，由于是由自己发送的,所以默认为已读
-		app.saveUserChatSnapshot(me.id, friendUserId, msgTextValue, true);
+		app.saveUserChatSnapshot(me.userId, friendUserId, msgTextValue, true);
 		
 		var msgTextValue=msgText.value;
 		sendMsgFunc(msgTextValue);//渲染发送出去的消息
@@ -140,7 +140,7 @@ function receiveMsgFunc(friMsg){
 
 // 初始化用户的聊天记录
 function initChatHistory() {
-	var myId = me.id;
+	var myId = me.userId;
 	var chatHistoryList = app.getUserChatHistory(myId, friendUserId);//获取缓存中的聊天记录
 	for (var i = 0 ; i < chatHistoryList.length ; i ++) {
 		var singleMsg = chatHistoryList[i];
