@@ -18,22 +18,36 @@ mui.plusReady(function() {
 		var maleOption = document.getElementById("male");
 		var femaleOption = document.getElementById("female");
 		var secretOption = document.getElementById("secret");
-		if (gender.equals("男"))
+		if (gender.isequals("男"))
 			maleOption.selected = "selected";
-		if (gender.equals("女"))
+		if (gender.isequals("女"))
 			femaleOption.selected = "selected";
-		if (gender.equals("保密"))
+		if (gender.isequals("保密"))
 			secretOption.selected = "selected";
 		document.getElementById("profile").innerHTML = profile;
 		document.getElementById("telephone").innerHTML = telephone;
 	};
 
 	document.getElementById("save").addEventListener('tap', function() {
+		var user = app.getUserGlobalInfo();
 		var myselect=document.getElementById("gender");
 		var index=myselect.selectedIndex ;
+		/*var wtf = {};
+				wtf["nickname"] = document.getElementById("nickname").value;
+				//console.log(nickname);
+				wtf["gender"] = document.getElementById("gender").value;
+				//console.log(gender);
+				wtf["telephone"] = document.getElementById("telephone").value;
+				//console.log(telephone);
+				wtf["profile"] = document.getElementById("profile").value;
+				//console.log(profile);
+				var goodJson = JSON.stringify(wtf);
+				alert("封装为json:"+goodJson);*/
 		//向服务器发送请求保存用户信息
-		mui.ajax('http://server-name/login.php', {
+		//console.log(app.serverUrl+"/user/modifyInformation");
+		mui.ajax(app.serverUrl+"/user/modifyInformation", {
 			data: {
+				userId: user.userId,
 				nickname: document.getElementById("nickname").value,
 				gender: myselect.options[index].value,
 				profile: document.getElementById("profile").value,
@@ -46,6 +60,8 @@ mui.plusReady(function() {
 				'Content-Type': 'application/json'
 			},
 			success: function(data) {
+				console.log(data.data);
+				//console.log(app.serverUrl+"/user/modifyInformation");
 				//服务器返回响应，根据响应结果，分析是否修改成功；
 				if (data.status == 200) {
 					//刷新用户信息

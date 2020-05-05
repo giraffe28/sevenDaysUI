@@ -75,7 +75,7 @@ mui.plusReady(function(){
 		/*else if(captcha!=textcap){
 				mui.toast('验证码错误');
 			};*/
-	    mui.ajax('http://192.168.18.1:8080/spring/Login2',{//后端url
+	    mui.ajax(app.serverUrl+"/user/login2",{//后端url
 	        data:{
 	            telephone:telephone
 	        },
@@ -90,10 +90,10 @@ mui.plusReady(function(){
 	        	//password.blur();
 	        	if (data.status == 200) {
 	        		// 登录成功之后，保存全局用户对象到本地缓存
-	        		/*var userInfoJson = data.data;
+	        		var userInfoJson = data.data;
 	        		app.setUserGlobalInfo(userInfoJson);
 	        		// 页面跳转到默认首页（后续需更改
-	        		mui.openWindow("index.html", "index.html");*/
+	        		mui.openWindow("../html/index.html", "index.html");
 	        	}
 				else{
 	        		/*app.showToast(data.msg, "error");*/
@@ -104,7 +104,7 @@ mui.plusReady(function(){
 	//此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
 	function GetCode(telephone){
 		var capt;
-		mui.ajax('http://192.168.18.1:8080/spring/GetCode',{
+		mui.ajax(app.serverUrl+"/user/getCode",{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
 			dataType: "json",

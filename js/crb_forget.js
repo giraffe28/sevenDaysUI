@@ -71,7 +71,6 @@ mui.plusReady(function(){
 		}
 		else{
 			if(true){    //if(captcha==textcap)这里验证码判断我先跳过，后续你测试的时候补一下
-				console.log("修改成功");
 				adduse(telephone,password1);
 				mui.toast('修改成功！！')
 				setTimeout(function() { 
@@ -87,7 +86,7 @@ mui.plusReady(function(){
 	
 	//第四部分；此处为注册接口调用；
 	function adduse(telephone,password){
-	    mui.ajax('http://192.168.18.1:8080/spring/ForgetRegister',{
+	    mui.ajax(app.serverUrl+'/user/forgetRegister',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
 			dataType: "json",
@@ -115,7 +114,7 @@ mui.plusReady(function(){
 	//第五部分：此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
 	function GetCode(telephone){
 		var capt;
-		mui.ajax('http://192.168.18.1:8080/spring/GetCode',{
+		mui.ajax(app.serverUrl+'/user/getCode',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
 			dataType: "json",
