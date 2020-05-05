@@ -57,7 +57,7 @@ mui.plusReady(function(){
 		var goodJson = JSON.stringify(wtf);
 		alert("封装为json:"+goodJson);
 		
-        mui.ajax('http://192.168.18.1:8080/spring/Login',{//后端url
+        mui.ajax('http://172.17.243.33:8080/sevenDays/Login',{//后端url
             data:{
                 telephone:telephone.value,
                 password:password.value
