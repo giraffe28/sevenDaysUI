@@ -112,9 +112,6 @@ mui.plusReady(function(){
 			success:function(data){
 			//服务器返回响应，根据响应结果，分析是否注册成功；
 			console.log(JSON.stringify(data));
-				telephone.blur();
-				password.blur();
-				username.blur();
 				if (data.status == 200) {
 					// 注册成功之后，保存全局用户对象到本地缓存
 					var userInfoJson = data.data;

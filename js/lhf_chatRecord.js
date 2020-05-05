@@ -1,15 +1,13 @@
 mui.init();
 
 mui.plusReady(function () {
-	loadingFriendRequests();
 	//从缓存中获取朋友列表，并且渲染到页面
-	renderFriPage();
-	loadingRecFriendRequests();
     var thisWebview=plus.webview.currentWebview();
 	thisWebview.addEventListener("show",function(){
 		loadingRecFriendRequests();//加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		renderFriPage();
+//		console.log("chatRecord show");
 	});
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
@@ -17,10 +15,8 @@ mui.plusReady(function () {
 	confidant.addEventListener("tap", function() {
 		loadingRecFriendRequests();
 	});
-	window.addEventListener("show", function() {
-		loadingRecFriendRequests();
-	});
 	window.addEventListener("refresh",function(){
+//		console.log("触发chatRecord的refresh事件");
 		loadingRecFriendRequests();//加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		renderFriPage();
@@ -69,7 +65,7 @@ window.CHAT = {
 		CHAT.socket.send(msg);
 	},
 	wsopen: function() {
-		console.log("websocket连接已建立...");
+//		console.log("websocket连接已建立...");
 		var me = app.getUserGlobalInfo();//获取用户信息
 		// 构建ChatMsg
 		var chatMsg = new app.ChatMsg(me.id, null, null, null);
@@ -135,7 +131,7 @@ window.CHAT = {
 		CHAT.chat(JSON.stringify(dataContent));
 		// 定时执行函数
 		fetchUnReadMsg();
-		fetchContactList();
+		//fetchContactList();
 	}
 };
 
@@ -143,7 +139,7 @@ window.CHAT = {
 function fetchUnReadMsg() {
 	var user = app.getUserGlobalInfo();
 	var msgIds = ",";	// 格式：  ,1001,1002,1003,
-	mui.ajax(app.serverUrl + "/u/getUnReadMsgList?acceptUserId=" + user.id,{
+	mui.ajax(app.serverUrl + "/u/getUnReadMsgList?acceptUserId=" + user.userId,{
 		data:{},
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -246,7 +242,7 @@ function renderFriPage(){
 
 function loadingFriendRequests(){//发送朋友列表信息的加载
 	var user=app.getUserGlobalInfo();//获取用户全局对象
-	mui.ajax(app.serverUrl+"/Friends?userId="+user.id,{
+	mui.ajax(app.serverUrl+"/Friends?userId="+user.userId,{
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型

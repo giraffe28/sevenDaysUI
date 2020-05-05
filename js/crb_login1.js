@@ -77,7 +77,7 @@ mui.plusReady(function(){
             		var userInfoJson = data.data;
             		app.setUserGlobalInfo(userInfoJson);
             		// 页面跳转到默认首页（后续需更改
-            		mui.openWindow("../html/index.html", "index.html");
+            		mui.openWindow("index.html", "index.html");
             	}
 				else{
             		app.showToast(data.msg, "error");
