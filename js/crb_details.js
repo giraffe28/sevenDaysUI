@@ -1,4 +1,3 @@
-
 //mui初始化，配置下拉刷新
 mui.init({
 	pullRefresh: {
@@ -65,7 +64,7 @@ function pullupRefresh() {
 		}
 	});
 }
-var posts = new Vue({
+var comments = new Vue({
 	el: '#comments',
 	data: {
 		items: [] //列表信息流数据
@@ -81,29 +80,25 @@ function convert(items) {
 	var commentItems = [];
 	items.forEach(function(item) {
 		commentItems.push({
-			comment_name:item.comment_name,
+			comment_name:item.comment_name;
 			comment_content:item.comment_content
 		});
 	});
 	return commentItems;
 }
-
-
 function getDefaultData() {
 	return {
-		icon:'',
-		nickname:'',
-		date:'',
-		image:'',
-		content:'',
-		like_num:''
+		icon: '',
+		nickname: '',
+		post_date: '',
+		post_content: ''
 	}
 }
 var vm = new Vue({
 	el: '.mui-content',
 	data: getDefaultData(),
-		methods: {
-			resetData: function() {//重置数据
+	methods: {
+		resetData: function() {//重置数据
 			Object.assign(this.$data, getDefaultData());
 		}
 	}
@@ -111,70 +106,93 @@ var vm = new Vue({
 
 //监听自定义事件，获取动态详情
 document.addEventListener('get_detail', function(event) {
-	var guid = event.detail.guid;
+	var image = event.detail.image;
+	var num = event.detail.num;
 			 
-	if(!guid) {
+	if(!image||!num) {
 		return;
-	}
-				
+	}		
 	//前页传入的数据，直接渲染，无需等待ajax请求详情后
 	vm.icon = event.detail.icon;
 	vm.nickname = event.detail.nickname;
 	vm.date = event.detail.date;
-	vm.image = event.detail.image;
 	vm.content = event.detail.content;
-	vm.like_num = event.detail.like_num;
-
-	//重写返回逻辑
-	mui.back = function() {
-		plus.webview.currentWebview().hide("auto", 300);
-	}
-			
-	//窗口隐藏时，重置页面数据
-	mui.plusReady(function () {
-		var self = plus.webview.currentWebview();
-		self.addEventListener("hide",function (e) {
-			window.scrollTo(0, 0);
-			vm.resetData();
-		},false);
-	})
-
-	//点击发送评论按钮
-	var send=document.getElementById("send");
-	send.addEventListener('tap',function(){
-		var comment=document.getElementById("comment").value;
-		if(comment.length>40){
-			mui.toast("评论不得超过20个字");
-			return false; 
-		}
-		var user = app.getUserGlobalInfo();
-		var myDate = new Date();
-		mui.ajax('……', {
-		data: {
-			userId:user.userId,
-			comment:'comment',
-			comment_time:myDate.toLocaleString()
-		},
+	//向服务端请求文章插图
+	mui.ajax('……' + image, {
+		type:'GET',
 		dataType: 'json', //服务器返回json格式数据
-		type: 'post', //HTTP请求类型
-		timeout: 10000, //超时时间设置为10秒；
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		success: function(data) {
-			//服务器返回响应，根据响应结果，分析是否成功发送评论；
-			if (data.status == 200) {
-				//显示成功信息
-				mui.toast("评论成功");
-				//需下拉刷新才能显示
-			}
-			else{
-				app.showToast(data.msg, "error");
-			}
+		timeout: 15000, //15秒超时
+		success: function(rsp) {
+			vm.image = rsp.image;
 		},
 		error: function(xhr, type, errorThrown) {
-			//异常处理；
-			console.log(type);
+			mui.toast('获取动态插图失败');
+			//TODO 此处可以向服务端告警
 		}
-   });
+	});
+	//向服务器请求点赞个数
+	mui.ajax('……' + num, {
+		type:'GET',
+		dataType: 'json', //服务器返回json格式数据
+		timeout: 15000, //15秒超时
+		success: function(rsp) {
+			vm.num = rsp.num;
+		},
+		error: function(xhr, type, errorThrown) {
+			mui.toast('获取点赞数失败');
+			//TODO 此处可以向服务端告警
+		}
+	});
+});
+
+//重写返回逻辑
+mui.back = function() {
+	plus.webview.currentWebview().hide("auto", 300);
+}
+			
+//窗口隐藏时，重置页面数据
+mui.plusReady(function () {
+	var self = plus.webview.currentWebview();
+	self.addEventListener("hide",function (e) {
+		window.scrollTo(0, 0);
+		vm.resetData();
+	},false);
+})
+
+//点击发送评论按钮
+var send=document.getElementById("send");
+send.addEventListener('tap',function(){
+	var comment=document.getElementById("comment").value;
+	if(comment.length>40){
+		mui.toast("评论不得超过20个字");
+		return false; 
+	}
+	var user = app.getUserGlobalInfo();
+	var myDate = new Date();
+	mui.ajax('……', {
+	data: {
+		userId:user.userId,
+		comment:'comment',
+		comment_time:myDate.toLocaleString()
+	},
+	dataType: 'json', //服务器返回json格式数据
+	type: 'post', //HTTP请求类型
+	timeout: 10000, //超时时间设置为10秒；
+	headers: {
+		'Content-Type': 'application/json'
+	},
+	success: function(data) {
+		//服务器返回响应，根据响应结果，分析是否成功发送评论；
+		if (data.status == 200) {
+			//显示成功信息
+			mui.toast("评论成功");
+		}
+		else{
+			app.showToast(data.msg, "error");
+		}
+	},
+		error: function(xhr, type, errorThrown) {
+		//异常处理；
+		console.log(type);
+	}
 })
