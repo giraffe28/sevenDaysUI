@@ -1,13 +1,16 @@
 mui.init();
 mui.plusReady(function () {
-	//
-	var post=document.getElementById("post");
-	post.addEventListener('tap',function(){
-	   var content=document.getElementById("post_content").value;
-	   if(content.length>200){
-		   mui.toast("正文不得超过100个字");
+	document.getElementById('post').addEventListener('tap',function(){
+		var content=document.getElementById('post_content').value;
+		if(content==''){
+			mui.toast('内容不能为空');
+			return false; 
+		}
+		else if(content.length>100){
+		   mui.toast('正文不得超过100个字');
 		   return false; 
 	   }
+	   else{
 	   var user = app.getUserGlobalInfo();
 	   var myDate = new Date();
 	   mui.ajax('……', {
@@ -20,7 +23,7 @@ mui.plusReady(function () {
 	   	type: 'post', //HTTP请求类型
 	   	timeout: 10000, //超时时间设置为10秒；
 	   	headers: {
-	   		'Content-Type': 'application/json'
+	   		'Content-Type': 'application/json;charset:utf-8'
 	   	},
 	   	success: function(data) {
 	   		//服务器返回响应，根据响应结果，分析是否成功发送动态；
@@ -41,5 +44,6 @@ mui.plusReady(function () {
 	   		console.log(type);
 	   	}
 	   });
+	   }
 	});	
 }
