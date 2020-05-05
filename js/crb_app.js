@@ -310,4 +310,20 @@ window.app = {
 		}
 	},
 	
+	//保存用户的十字记忆
+	setMemory:function(memory){
+		var memoryStr=JSON.stringify(memory);
+		plus.storage.setItem("memory",memoryStr);
+	},
+	//取出十字记忆
+	getMemory:function(){
+		var memoryStr=plus.storage.getItem("memory");
+		if(memoryStr!=null&&memoryStr.length>0){
+			return JSON.parse(memoryStr);
+		}
+		else{
+			return [];
+		}
+	}
+	
 }
