@@ -66,6 +66,25 @@ document.getElementById("addTag").addEventListener('tap', function() {
 	mui.openWindow('ll_addTags.html', 'll_addTags.html');
 });
 
+/*点击修改个人资料*/
+document.getElementById('modify').addEventListener('tap',function(){
+	mui.openWindow('ll_updateInfo.html','ll_updateInfo.html');
+});
+
+/*点击进入我的钱包*/
+document.getElementById('purse').addEventListener('tap',function(){
+	mui.openWindow('ll_purse.html','ll_purse.html');
+});
+
+/*点击进入关于我们*/
+document.getElementById('about').addEventListener('tap',function(){
+	mui.openWindow('ll_about.html','ll_about.html');
+});
+
+/*点击进入帮助*/
+document.getElementById('help').addEventListener('tap',function(){
+	mui.openWindow('ll_help.html','ll_help.html');
+});
 
 function refreshBasicInfo() {
 	console.log("请求加载个人中心数据，刷新");
