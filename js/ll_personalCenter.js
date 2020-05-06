@@ -2,6 +2,8 @@ mui.init();
 mui.plusReady(function() {
 	var user = app.getUserGlobalInfo();
 	refreshBasicInfo();	
+	loadThisWeekTags();
+	loadPastTags();
 });
 
 
@@ -24,9 +26,9 @@ document.getElementById("myImage").addEventListener('tap',function(){
 
 /* 点击“退出登录”按钮 */
 document.getElementById("confirmBtn").addEventListener('tap', function() {
-	var btnArray = ['否', '是'];
-	mui.confirm('退出登录？', '', btnArray, function(e) {
-		if (e.index == 1) {
+	var btnArray = ['是', '否'];
+	mui.confirm('你确定要退出登录吗？', '提示', btnArray, function(e) {
+		if (e.index == 0) {
 			//清空缓存
 			plus.storage.removeItem("userInfo");
 			
@@ -113,4 +115,59 @@ function loadPersonalCenter(user){
 	document.getElementById("gender").innerHTML = gender;
 	document.getElementById("profile").innerHTML = profile;
 	document.getElementById("telephone").innerHTML = telephone;
+}
+
+//加载本周标签
+function loadThisWeekTags(){
+	var user=app.getUserGlobalInfo();
+	var tags=user.thisWeekTag;
+	var weekTagsDom=document.getElementById('weekTags');
+	if (tags!= null && tags.length > 0) {
+		var weekTagsHtml = "";
+		for (var i = 0; i <tags.length; i++) {//过往标签目前只显示3个
+			weekTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
+			+tags[i].tagName+'</label>';
+		}
+		weekTagsDom.innerHTML = weekTagsHtml;
+	} else {
+		weekTagsDom.innerHTML = "";
+	}
+}
+
+//加载过往标签
+function loadPastTags(){
+	var user=app.getUserGlobalInfo();
+	mui.ajax(app.serverUrl+'', {//发送请求返回用户的过往标签
+		data: {
+			userId:user.userId,
+		},
+		dataType: 'json', //服务器返回json格式数据
+		type: 'post', //HTTP请求类型
+		timeout: 10000, //超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},	
+		success: function(data) {
+			//服务器返回响应，根据响应结果，分析是否成功获取信息；
+			if (data.status == 200) {
+				var pastTags=JSON.stringify(data.data);
+				var pastTagsDom=document.getElementById('pastTags');
+				if (pastTags!= null && pastTags.length > 0) {
+					var pastTagsHtml = "";
+					for (var i = 0; i <pastTags.length; i++) {
+						pastTagsHtml += '<label style="background-color: dimgray; margin-left: 5px;border-radius: 7px;">'
+						+pastTags[i].tagName+'</label>'
+					}
+					pastTagsDom.innerHTML = weekTagsHtml;
+				} else {
+					pastTagsDom.innerHTML = "";
+				}
+			}
+			else{
+				app.showToast(data.msg, "error");
+			}
+		},
+		error: function(xhr, type, errorThrown) {
+			//异常处理；
+			console.log(JSON.stringify(data.data));
+		}
+	});
 }

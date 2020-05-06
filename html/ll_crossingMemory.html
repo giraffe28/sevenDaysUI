@@ -10,65 +10,51 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav ">
-			<span class="mui-pull-right mui-icon mui-icon-plusempty" style="margin-left: 3px;" onclick="window.open('ll_addMemory.html')"></span>
+			<span id="addMemory" class="mui-pull-right mui-icon mui-icon-plusempty" style="margin-left: 3px;" onclick="window.open('ll_addMemory.html')"></span>
 			<a href="ll_personalCenter.html" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title ">十字记忆</h1>
 		</header>
 		<div class="mui-content">
-			<ul id="OA_task_1" class="mui-table-view">
-				<li class="mui-table-view-cell">
+			<ul id="ulMemory" class="mui-table-view memoryList">
+				<li class="mui-table-view-cell memoryRecord" id="memory1">
 					<div class="mui-slider-right mui-disabled">
-						<a class="mui-btn mui-btn-red">删除</a>
+						<span class="mui-btn mui-btn-red">删除</span>
 					</div>
 					<div class="mui-slider-handle">
-						记忆一
-						<br />
-						<span class="mui-badge mui-badge-inverted" style="font-size: 12px;" >2020.03.18</span>
+						十字记忆1
 					</div>
-				</li>
-				<li class="mui-table-view-cell">
-					<div class="mui-slider-right mui-disabled">
-						<a class="mui-btn mui-btn-red">删除</a>
-					</div>
-					<div class="mui-slider-handle">
-						记忆二
-						<br />
-						<span class="mui-badge mui-badge-inverted" style="font-size: 12px;" >2020.03.18</span>
-					</div>
-				</li>
-				<li class="mui-table-view-cell">
-					<div class="mui-slider-right mui-disabled">
-						<a class="mui-btn mui-btn-red">删除</a>
-					</div>
-					<div class="mui-slider-handle">
-						记忆三
-						<br />
-						<span class="mui-badge mui-badge-inverted" style="font-size: 12px;" >2020.03.18</span>
-					</div>
+					
 				</li>
 			</ul>
-			
+			<!--<ul id="ulMemory" class="mui-table-view">
+				<li class="mui-table-view-cell" value="memory1">
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-red" id="delete">删除</a>
+					</div>
+					<div id="memoryTitle" class="mui-slider-handle">
+						记忆一
+						<br />
+						<span id="memoryDate" class="mui-badge mui-badge-inverted" style="font-size: 12px;" >2020.03.18</span>
+					</div>
+				</li>
+				
+				<ul id="ulBlackList" class="mui-table-view" >
+					<li class="mui-table-view-cell" value="user1">
+						<div class="mui-slider-right mui-disabled">
+							<button type="button" id="delete" class="mui-btn mui-btn-red">删除</button>
+						</div>
+						
+						<div class="mui-slider-handle">
+							张三
+						</div>
+					</li>
+				</ul>
+			</ul>-->
+
 		</div>
-		<script src="../js/mui.js"></script>
-		<script type="text/javascript">
-			mui.init();
-			(function($) {
-				$('#OA_task_1').on('tap', '.mui-btn', function(event) {
-					var elem = this;
-					var li = elem.parentNode.parentNode;
-					mui.confirm('确认删除该条记录？', '', btnArray, function(e) {
-						if (e.index == 0) {
-							li.parentNode.removeChild(li);
-						} else {
-							setTimeout(function() {
-								$.swipeoutClose(li);
-							}, 0);
-						}
-					});
-				});
-				var btnArray = ['确认', '取消'];
-			})(mui);
-		</script>
+		<script src="../js/crb_app.js"></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/ll_crossingMemory.js"></script>
 	</body>
 
 </html>
