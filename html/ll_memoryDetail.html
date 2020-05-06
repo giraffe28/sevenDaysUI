@@ -10,17 +10,18 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav ">
+			<button id="edit" class="mui-pull-right" style="color:red;margin: 4px;">编辑</button>
 			<a href="ll_personalCenter.html" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 		</header>
 		<div class="mui-content" style="margin: 5px;">
 			<form class="mui-input-group">
 			    <div class="mui-input-row">
 			        <label>标题</label>
-					<input id="title" type="text" class="mui-input-clear" placeholder="单行输入">
+					<input id="title" type="text" class="mui-input-clear" disabled="disabled">
 			    </div>
 				<div class="mui-input-row" style="margin: 5px;height: 150px;">
 				    <label>内容</label>
-					<textarea id="content" type="text" class="mui-input-clear" placeholder="多行输入" ></textarea>
+					<textarea id="content" type="text" class="mui-input-clear" disabled="disabled"></textarea>
 		 
 				</div>
 			    <div class="mui-button-row">
@@ -29,7 +30,7 @@
 			</form>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/ll_addMemory.js"></script>
+		<script src="../js/ll_memoryDetail.js"></script>
 	</body>
 
 </html>
