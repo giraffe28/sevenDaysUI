@@ -97,7 +97,7 @@ send.addEventListener("tap",function(){
 		var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
 		//调用websocket发送消息
 		var chatWebview = plus.webview.getWebviewById("lhf_chatRecord.html");
-		chatWebview.evalJS("CHAT.chat(JSON.stringify('" + dataContent + "')");
+		chatWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
 		//我发送出去的信息进行保存
 		app.saveUserChatHistory(me.id, friendUserId, msgTextValue, app.ME);
 		//保存聊天快照，由于是由自己发送的,所以默认为已读

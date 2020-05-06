@@ -68,7 +68,7 @@ window.CHAT = {
 //		console.log("websocket连接已建立...");
 		var me = app.getUserGlobalInfo();//获取用户信息
 		// 构建ChatMsg
-		var chatMsg = new app.ChatMsg(me.id, null, null, null);
+		var chatMsg = new app.ChatMsg(me.userId, null, null, null);
 		// 构建DataContent
 		var dataContent = new app.DataContent(app.CONNECT, chatMsg, null);
 		// 发送websocket
@@ -174,16 +174,16 @@ function fetchUnReadMsg() {
 // 展示聊天快照，渲染列表
 function loadingChatSnapshot() {
 	var user = app.getUserGlobalInfo();
-	var chatSnapshotList = app.getUserChatSnapshot(user.id);
+	var chatSnapshotList = app.getUserChatSnapshot(user.userId);
 	var chatFriendsList = document.getElementById("chatFriends");//获取朋友列表
 	var snapshotNode=null;//表示显示聊天快照的项
 	var chatItem,friendId,friendItem,friNicknameNode;
 	for (var i = 0 ; i < chatSnapshotList.length ; i ++) {//根据缓存中的快照表进行聊天列表的渲染
 		chatItem = chatSnapshotList[i];
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
-		friendItem = chatFriendsList.querySelector('"li[friendId='+friendId+']"');//获取指定id朋友的项
+		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+']"');//获取指定id朋友的项
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
-		friNicknameNode = friendItem.querySelector('"span[friId='+friendId+']"');//获取朋友的关于昵称的项
+		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+']"');//获取朋友的关于昵称的项
 		// 判断消息的已读或未读状态
 		var isRead = chatItem.isRead;
 		if (!isRead) {
@@ -341,7 +341,7 @@ mui('.chatRecords').on('tap','.mui-btn-red',function() {
 				//从缓存中获取朋友列表，并且渲染到页面
 				renderFriPage();
 				//去掉聊天快照
-				app.deleteUserChatSnapshot(user.id,par1);
+				app.deleteUserChatSnapshot(user.userId,par1);
 				// 没有回退
 				
 			}
