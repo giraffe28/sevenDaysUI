@@ -132,7 +132,7 @@ function sendMsgFunc(myMsg){
 function receiveMsgFunc(friMsg){
 	var friMsgHtml='<div class="friLists">'+
 					'<div class="headerImg">'+
-						'<img src="'+friendFaceImg+'" class="imgMsg" />'+
+						'<img src="'+"../images/1.jpg"+'" class="imgMsg" />'+
 					'</div>'+
 					'<div class="friMsgWrapper">'+
 						'<p class="msgLeftWhite">'+friMsg+'</p>'+
@@ -144,8 +144,9 @@ function receiveMsgFunc(friMsg){
 
 // 初始化用户的聊天记录
 function initChatHistory() {
-	var myId = me.id;
+	var myId = me.userId;
 	var chatHistoryList = app.getUserChatHistory(myId, friendUserId);//获取缓存中的聊天记录
+	console.log("初始化聊天内容" + JSON.stringify(chatHistoryList));
 	for (var i = 0 ; i < chatHistoryList.length ; i ++) {
 		var singleMsg = chatHistoryList[i];
 		if (singleMsg.flag == app.ME) {

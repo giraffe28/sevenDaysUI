@@ -139,7 +139,7 @@ function loadThisWeekTags(){
 //加载过往标签
 function loadPastTags(){
 	var user=app.getUserGlobalInfo();
-	mui.ajax(app.serverUrl+'', {//发送请求返回用户的过往标签
+	mui.ajax(app.serverUrl+'/user/getThisTags', {//发送请求返回用户的过往标签
 		data: {
 			userId:user.userId,
 		},
@@ -167,9 +167,9 @@ function loadPastTags(){
 				app.showToast(data.msg, "error");
 			}
 		},
-		error: function(xhr, type, errorThrown) {
-			//异常处理；
-			console.log(JSON.stringify(data.data));
-		}
+		// error: function(xhr, type, errorThrown) {
+		// 	//异常处理；
+		// 	console.log(JSON.stringify(data.data));
+		// }
 	});
 }

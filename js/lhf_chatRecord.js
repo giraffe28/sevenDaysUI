@@ -5,10 +5,12 @@ mui.plusReady(function () {
     var thisWebview = plus.webview.currentWebview();
 	
 	thisWebview.addEventListener("show",function(){
+		fetchUnReadMsg();
 		loadingFriendRequests();
 		loadingRecFriendRequests(); //加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		renderFriPage();
+		
 	});
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
@@ -20,9 +22,10 @@ mui.plusReady(function () {
 		console.log("触发chatRecord的refresh事件");
 		loadingRecFriendRequests();//加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
+		fetchContactList();
 		renderFriPage();
 		//加载聊天快照
-		// loadingChatSnapshot();
+		loadingChatSnapshot();
 		CHAT.init();
 	});
 });
@@ -32,7 +35,6 @@ mui.plusReady(function () {
 window.CHAT = {
 	socket: null,
 	init: function() {
-		// console.log("CHAT.sokcet" + CHAT.socket);
 		if (window.WebSocket) {
 			// 如果当前的状态已经连接，那就不需要重复初始化websocket
 			if (CHAT.socket != null && CHAT.socket != undefined 
@@ -41,7 +43,7 @@ window.CHAT = {
 			}
 		
 			CHAT.socket = new WebSocket(app.nettyServerUrl);
-			// console.log("CHAT.sokcet" + CHAT.socket);
+		
 			CHAT.socket.onopen = CHAT.wsopen,
 			CHAT.socket.onclose = CHAT.wsclose,
 			CHAT.socket.onerror = CHAT.wserror,
@@ -55,14 +57,14 @@ window.CHAT = {
 		// 如果当前websocket的状态是已打开，则直接发送， 否则重连
 		// console.log("发送的消息" + msg);
 		if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
-			// console.log("发送的消息" + msg);
+			console.log("发送的消息" + msg);
 			CHAT.socket.send(msg);
 		} 
-		// else {
-		// 	// 重连websocket
-		// 	CHAT.init();
-		// 	setTimeout("CHAT.reChat('" + msg + "')", "1000");//延时一秒重新发送
-		// }
+		else {
+			// 重连websocket
+			CHAT.init();
+			setTimeout("CHAT.reChat('" + msg + "')", "1000");//延时一秒重新发送
+		}
 		// 渲染快照列表进行展示
 		loadingChatSnapshot();
 	},
@@ -78,8 +80,7 @@ window.CHAT = {
 		// 构建DataContent
 		var dataContent = new app.DataContent(app.CONNECT, chatMsg, null);
 		// 发送websocket
-		console.log("连接建立的时候获取未读的消息");
-		console.log(JSON.stringify(dataContent));
+		
 		CHAT.chat(JSON.stringify(dataContent));
 		// 每次连接之后，获取用户的未读未签收消息列表
 		console.log("连接建立的时候获取未读的消息");
@@ -129,6 +130,7 @@ window.CHAT = {
 	},
 	signMsgList: function(unSignedMsgIds) {
 		// 构建批量签收对象的模型
+		console.log("进入了签收消息的方法");
 		var dataContentSign = new app.DataContent(app.SIGNED,null,unSignedMsgIds);
 		// 发送批量签收的请求
 		CHAT.chat(JSON.stringify(dataContentSign));
@@ -140,7 +142,7 @@ window.CHAT = {
 		CHAT.chat(JSON.stringify(dataContent));
 		// 定时执行函数
 		fetchUnReadMsg();
-		//fetchContactList();
+		fetchContactList();
 	}
 };
 
@@ -166,7 +168,7 @@ function fetchUnReadMsg() {
 					var msgObj = unReadMsgList[i];
 					// 逐条存入聊天记录
 					app.saveUserChatHistory(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, app.FRIEND);
-					console.log("cunchu的聊天消息" + JSON.stringify(app.getUserChatHistory(msgObj.receiveUser.userId,msgObj.sendUser.userId)));
+					
 					// 存入聊天快照
 					app.saveUserChatSnapshot(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, false);
 					// 拼接批量接受的消息id字符串，逗号间隔
@@ -176,7 +178,7 @@ function fetchUnReadMsg() {
 				// 调用批量签收的方法
 				CHAT.signMsgList(msgIds);
 				// 刷新快照
-				// loadingChatSnapshot();
+				loadingChatSnapshot();
 			}
 		}
 	});
@@ -187,15 +189,14 @@ function loadingChatSnapshot() {
 	var user = app.getUserGlobalInfo();
 	var chatSnapshotList = app.getUserChatSnapshot(user.userId);
 	var chatFriendsList = document.getElementById("chatFriends");//获取朋友列表
-	
-	var snapshotNode = null;//表示显示聊天快照的项
+	// 表示显示聊天快照的项
+	var snapshotNode = null;
 	var chatItem,friendId,friendItem,friNicknameNode;
 	//根据缓存中的快照表进行聊天列表的渲染
 	for (var i = 0 ; i < chatSnapshotList.length ; i ++) {
 		chatItem = chatSnapshotList[i];
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
 		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+']"');//获取指定id朋友的项
-		
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
 		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+']"');//获取朋友的关于昵称的项
 		// 判断消息的已读或未读状态
@@ -232,8 +233,8 @@ function renderFriPage(){
 		friUlist.innerHTML=friHtml;
 		//批量绑定点击事件
 		mui("#chatFriends").on("tap",".chatWithFriend",function(e){
-			var friendUserId=this.getAttribute("friendId");
-			var friendUserNickname=this.getAttribute("friendNickname");
+			var friendUserId = this.getAttribute("friendId");
+			var friendUserNickname = this.getAttribute("friendNickname");
 			//打开聊天子页面
 			mui.openWindow({
 				url:"lhf_chat.html",
