@@ -122,8 +122,8 @@ function loadThisWeekTags(){
 	var user=app.getUserGlobalInfo();
 	var tags=user.thisWeekTag;
 	var weekTagsDom=document.getElementById('weekTags');
-	console.log(JSON.stringify(user));
-	console.log(user.thisWeekTag.length);
+	tags = tags.split(",");
+	console.log(tags);
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		var weekTagsHtml = "";
 		for (var i = 0; i <tags.length; i++) {//过往标签目前只显示3个
