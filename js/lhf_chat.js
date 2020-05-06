@@ -30,13 +30,13 @@ mui.plusReady(function () {
 
 //设置聊天记录滚动到最后一条
 function resizeScreen (){
-	areaMsgList.scrollTop=areaMsgList.scrollHeight+areaMsgList.offsetHeight;
+	areaMsgList.scrollTop = areaMsgList.scrollHeight+areaMsgList.offsetHeight;
 }
 
 //对当前窗口监听resize事件
 window.addEventListener("resize",function(){
 	resizeScreen ();
-	document.getElementById("msgOutter").style.paddingBottom="36px";
+	document.getElementById("msgOutter").style.paddingBottom = "36px";
 });
 
 
@@ -107,11 +107,12 @@ send.addEventListener("tap",function(){
 		//保存聊天快照，由于是由自己发送的,所以默认为已读
 		app.saveUserChatSnapshot(me.userId, friendUserId, msgTextValue, true);
 		
-		chatWebview.evalJS("loadingChatSnapshot()");
+		
 		sendMsgFunc(msgTextValue);//渲染发送出去的消息
 		msgText.value="";//清空文本框中的内容
 		send.setAttribute("class","mui-btn mui-btn-block mui-btn-gray");//重置发送按钮的状态
 		mui.toast("测试用：已发送");
+		chatWebview.evalJS("loadingChatSnapshot()");
 	}
 });
 

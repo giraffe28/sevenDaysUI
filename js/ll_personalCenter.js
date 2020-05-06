@@ -139,9 +139,8 @@ function loadPersonalCenter(user){
 //加载本周标签
 function loadThisWeekTags(){
 	var user=app.getUserGlobalInfo();
-	var tags=user.thisWeekTag.spilt(" ");
+	var tags = user.thisWeekTag.spilt(" ");
 	var weekTagsDom=document.getElementById('weekTags');
-	tags = tags.split(",");
 	console.log(tags);
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		var weekTagsHtml = "";
