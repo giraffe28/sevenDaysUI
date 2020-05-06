@@ -2,9 +2,10 @@ mui.init();
 
 mui.plusReady(function () {
 	//从缓存中获取朋友列表，并且渲染到页面
-    var thisWebview=plus.webview.currentWebview();
+    var thisWebview = plus.webview.currentWebview();
+	
 	thisWebview.addEventListener("show",function(){
-		loadingRecFriendRequests();//加载推荐好友信息
+		loadingRecFriendRequests(); //加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		renderFriPage();
 //		console.log("chatRecord show");
@@ -16,12 +17,12 @@ mui.plusReady(function () {
 		loadingRecFriendRequests();
 	});
 	window.addEventListener("refresh",function(){
-//		console.log("触发chatRecord的refresh事件");
+		console.log("触发chatRecord的refresh事件");
 		loadingRecFriendRequests();//加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		renderFriPage();
 		//加载聊天快照
-		loadingChatSnapshot();
+		// loadingChatSnapshot();
 		CHAT.init();
 	});
 });
@@ -52,11 +53,11 @@ window.CHAT = {
 		if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
 			CHAT.socket.send(msg);
 		} 
-		else {
-			// 重连websocket
-			CHAT.init();
-			setTimeout("CHAT.reChat('" + msg + "')", "1000");//延时一秒重新发送
-		}
+		// else {
+		// 	// 重连websocket
+		// 	CHAT.init();
+		// 	setTimeout("CHAT.reChat('" + msg + "')", "1000");//延时一秒重新发送
+		// }
 		// 渲染快照列表进行展示
 		loadingChatSnapshot();
 	},
@@ -65,7 +66,7 @@ window.CHAT = {
 		CHAT.socket.send(msg);
 	},
 	wsopen: function() {
-//		console.log("websocket连接已建立...");
+		console.log("websocket连接已建立...");
 		var me = app.getUserGlobalInfo();//获取用户信息
 		// 构建ChatMsg
 		var chatMsg = new app.ChatMsg(me.userId, null, null, null);
@@ -74,9 +75,10 @@ window.CHAT = {
 		// 发送websocket
 		CHAT.chat(JSON.stringify(dataContent));
 		// 每次连接之后，获取用户的未读未签收消息列表
+		console.log("连接建立的时候获取未读的消息");
 		fetchUnReadMsg();
 		// 定时发送心跳
-		setInterval("CHAT.keepalive()", 10000);
+		// setInterval("CHAT.keepalive()", 10000);
 	},
 	wsmessage: function(e) {
 		console.log("接受到消息：" + e.data);	
@@ -139,7 +141,7 @@ window.CHAT = {
 function fetchUnReadMsg() {
 	var user = app.getUserGlobalInfo();
 	var msgIds = ",";	// 格式：  ,1001,1002,1003,
-	mui.ajax(app.serverUrl + "/u/getUnReadMsgList?acceptUserId=" + user.userId,{
+	mui.ajax(app.serverUrl + "/unreadMsgs?acceptUserId=" + user.userId,{
 		data:{},
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -148,18 +150,18 @@ function fetchUnReadMsg() {
 		success:function(data){
 			if (data.status == 200) {
 				var unReadMsgList = data.data;
-				console.log(JSON.stringify(unReadMsgList));
+				console.log("获取未读的消息" + JSON.stringify(unReadMsgList));
 				// 1. 保存聊天记录到本地
 				// 2. 保存聊天快照到本地
 				// 3. 对这些未签收的消息，批量签收
 				for (var i = 0 ; i < unReadMsgList.length ; i ++) {
 					var msgObj = unReadMsgList[i];
 					// 逐条存入聊天记录
-					app.saveUserChatHistory(msgObj.acceptUserId,msgObj.sendUserId,msgObj.content, app.FRIEND);
+					app.saveUserChatHistory(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, app.FRIEND);
 					// 存入聊天快照
-					app.saveUserChatSnapshot(msgObj.acceptUserId,msgObj.sendUserId,msgObj.content, false);
+					app.saveUserChatSnapshot(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, false);
 					// 拼接批量接受的消息id字符串，逗号间隔
-					msgIds += msgObj.id;
+					msgIds += msgObj.msgId;
 					msgIds += ",";
 				}
 				// 调用批量签收的方法
@@ -176,12 +178,15 @@ function loadingChatSnapshot() {
 	var user = app.getUserGlobalInfo();
 	var chatSnapshotList = app.getUserChatSnapshot(user.userId);
 	var chatFriendsList = document.getElementById("chatFriends");//获取朋友列表
-	var snapshotNode=null;//表示显示聊天快照的项
+	
+	var snapshotNode = null;//表示显示聊天快照的项
 	var chatItem,friendId,friendItem,friNicknameNode;
-	for (var i = 0 ; i < chatSnapshotList.length ; i ++) {//根据缓存中的快照表进行聊天列表的渲染
+	//根据缓存中的快照表进行聊天列表的渲染
+	for (var i = 0 ; i < chatSnapshotList.length ; i ++) {
 		chatItem = chatSnapshotList[i];
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
 		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+']"');//获取指定id朋友的项
+		
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
 		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+']"');//获取朋友的关于昵称的项
 		// 判断消息的已读或未读状态
@@ -305,7 +310,7 @@ function renderFriendRecommend(friend) {//设置推荐朋友的html项内容
 		        '<a href="lhf_chat.html">'+friend.nickname+'</a>'+
 		    '</div>'+
 		'</li>';
-	//console.log(html);
+	// console.log(html);
 	return html;
 }
 

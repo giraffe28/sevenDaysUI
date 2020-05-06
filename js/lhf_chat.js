@@ -18,7 +18,7 @@ mui.plusReady(function () {
 	friendUserId=chatWebview.friUserId;
 	friendUserNickname=chatWebview.friUserNickname;
 	friendFaceImg=chatWebview.friendFaceImg;
-	me=app.getUserGlobalInfo();//获取用户信息
+	me = app.getUserGlobalInfo();//获取用户信息
 	//标题改为朋友的昵称
 	document.getElementById("friNickname").innerHTML=friendUserNickname;
 	//渲染初始化的聊天记录
@@ -85,23 +85,23 @@ send.addEventListener("tap",function(){
 	}
 	else{
 		//发送前判断网络状态
-		var connectionStatus=plus.networkinfo.getCurrentType();
-		if(connectionStatus==0||connectionStatus==1){
+		var connectionStatus = plus.networkinfo.getCurrentType();
+		if(connectionStatus==0 || connectionStatus==1){
 			mui.toast("请打开网络连接！QAQ");
 			return;
 		}
 		
 		// 构建ChatMsg
-		var chatMsg = new app.ChatMsg(me.id, friendUserId, msgTextValue, null);
+		var chatMsg = new app.ChatMsg(me.userId, friendUserId, msgTextValue, null);
 		// 构建DataContent
 		var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
 		//调用websocket发送消息
 		var chatWebview = plus.webview.getWebviewById("lhf_chatRecord.html");
 		chatWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
 		//我发送出去的信息进行保存
-		app.saveUserChatHistory(me.id, friendUserId, msgTextValue, app.ME);
+		app.saveUserChatHistory(me.userId, friendUserId, msgTextValue, app.ME);
 		//保存聊天快照，由于是由自己发送的,所以默认为已读
-		app.saveUserChatSnapshot(me.id, friendUserId, msgTextValue, true);
+		app.saveUserChatSnapshot(me.userId, friendUserId, msgTextValue, true);
 		
 		var msgTextValue=msgText.value;
 		sendMsgFunc(msgTextValue);//渲染发送出去的消息
