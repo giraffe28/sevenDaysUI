@@ -2,8 +2,6 @@ mui.init();
 mui.plusReady(function() {
 	var user = app.getUserGlobalInfo();
 	refreshBasicInfo();	
-	loadThisWeekTags();
-	loadPastTags();
 });
 
 
@@ -100,6 +98,8 @@ function refreshBasicInfo() {
 		}
 	});
 	loadPersonalCenter(user);
+	loadThisWeekTags();
+	loadPastTags();
 };
 
 
@@ -120,7 +120,7 @@ function loadPersonalCenter(user){
 //加载本周标签
 function loadThisWeekTags(){
 	var user=app.getUserGlobalInfo();
-	var tags=user.thisWeekTag;
+	var tags=user.thisWeekTag.spilt(" ");
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0) {
 		var weekTagsHtml = "";
