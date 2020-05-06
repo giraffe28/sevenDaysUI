@@ -1,5 +1,5 @@
 //dom定位
-var areaMsgList=document.getElementById("msgs");
+var areaMsgList = document.getElementById("msgs");
 var msgText=document.getElementById("msg");
 var send=document.getElementById("sendMsg");
 var setObj=document.getElementsByClassName('mui-icon-settings');
@@ -20,11 +20,11 @@ mui.plusReady(function () {
 	friendFaceImg=chatWebview.friendFaceImg;
 	me = app.getUserGlobalInfo();//获取用户信息
 	//标题改为朋友的昵称
-	document.getElementById("friNickname").innerHTML=friendUserNickname;
+	document.getElementById("friNickname").innerHTML = friendUserNickname;
 	//渲染初始化的聊天记录
 	initChatHistory()
 	//设置聊天记录在进入页面时自动滚动到最后一条
-	resizeScreen ();
+	resizeScreen();
 });
 
 
@@ -75,7 +75,7 @@ setObj[0].addEventListener("tap",function () {
 
 //发送消息时的处理
 send.addEventListener("tap",function(){
-	var msgTextValue=msgText.value;
+	var msgTextValue = msgText.value;
 	if(msgTextValue.length>128){
 		mui.toast("您输入的字数超过了128字节，请进行分批次发送");
 	}
@@ -90,6 +90,7 @@ send.addEventListener("tap",function(){
 			mui.toast("请打开网络连接！QAQ");
 			return;
 		}
+		
 		
 		// 构建ChatMsg
 		var chatMsg = new app.ChatMsg(me.userId, friendUserId, msgTextValue, null);
