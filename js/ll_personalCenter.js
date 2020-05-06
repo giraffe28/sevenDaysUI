@@ -3,6 +3,7 @@ mui.plusReady(function() {
 	var user = app.getUserGlobalInfo();
 	refreshBasicInfo();	
 	loadThisWeekTags();
+	loadPastTags();
 });
 
 
@@ -120,17 +121,53 @@ function loadPersonalCenter(user){
 function loadThisWeekTags(){
 	var user=app.getUserGlobalInfo();
 	var tags=user.thisWeekTag;
-	var weekTags=document.getElementById('weekTags');
+	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0) {
 		var weekTagsHtml = "";
-		for (var i = 0; i <tags.length; i++) {
+		for (var i = 0; i <tags.length; i++) {//过往标签目前只显示3个
 			weekTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
 			+tags[i].tagName+'</label>';
 		}
-		weekTags.innerHTML = weekTagsHtml;
+		weekTagsDom.innerHTML = weekTagsHtml;
 	} else {
-		weekTags.innerHTML = "";
+		weekTagsDom.innerHTML = "";
 	}
 }
 
 //加载过往标签
+function loadPastTags(){
+	var user=app.getUserGlobalInfo();
+	mui.ajax(app.serverUrl+'', {//发送请求返回用户的过往标签
+		data: {
+			userId:user.userId,
+		},
+		dataType: 'json', //服务器返回json格式数据
+		type: 'post', //HTTP请求类型
+		timeout: 10000, //超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},	
+		success: function(data) {
+			//服务器返回响应，根据响应结果，分析是否成功获取信息；
+			if (data.status == 200) {
+				var pastTags=JSON.stringify(data.data);
+				var pastTagsDom=document.getElementById('pastTags');
+				if (pastTags!= null && pastTags.length > 0) {
+					var pastTagsHtml = "";
+					for (var i = 0; i <pastTags.length; i++) {
+						pastTagsHtml += '<label style="background-color: dimgray; margin-left: 5px;border-radius: 7px;">'
+						+pastTags[i].tagName+'</label>'
+					}
+					pastTagsDom.innerHTML = weekTagsHtml;
+				} else {
+					pastTagsDom.innerHTML = "";
+				}
+			}
+			else{
+				app.showToast(data.msg, "error");
+			}
+		},
+		error: function(xhr, type, errorThrown) {
+			//异常处理；
+			console.log(JSON.stringify(data.data));
+		}
+	});
+}
