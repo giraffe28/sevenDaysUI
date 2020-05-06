@@ -5,10 +5,10 @@ mui.plusReady(function () {
     var thisWebview = plus.webview.currentWebview();
 	
 	thisWebview.addEventListener("show",function(){
+		loadingFriendRequests();
 		loadingRecFriendRequests(); //加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		renderFriPage();
-//		console.log("chatRecord show");
 	});
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
@@ -32,13 +32,16 @@ mui.plusReady(function () {
 window.CHAT = {
 	socket: null,
 	init: function() {
+		// console.log("CHAT.sokcet" + CHAT.socket);
 		if (window.WebSocket) {
 			// 如果当前的状态已经连接，那就不需要重复初始化websocket
 			if (CHAT.socket != null && CHAT.socket != undefined 
 				&& CHAT.socket.readyState == WebSocket.OPEN) {
 				return false;
 			}
+		
 			CHAT.socket = new WebSocket(app.nettyServerUrl);
+			// console.log("CHAT.sokcet" + CHAT.socket);
 			CHAT.socket.onopen = CHAT.wsopen,
 			CHAT.socket.onclose = CHAT.wsclose,
 			CHAT.socket.onerror = CHAT.wserror,
@@ -50,7 +53,9 @@ window.CHAT = {
 	},
 	chat: function(msg) {
 		// 如果当前websocket的状态是已打开，则直接发送， 否则重连
+		// console.log("发送的消息" + msg);
 		if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
+			// console.log("发送的消息" + msg);
 			CHAT.socket.send(msg);
 		} 
 		// else {
@@ -73,6 +78,8 @@ window.CHAT = {
 		// 构建DataContent
 		var dataContent = new app.DataContent(app.CONNECT, chatMsg, null);
 		// 发送websocket
+		console.log("连接建立的时候获取未读的消息");
+		console.log(JSON.stringify(dataContent));
 		CHAT.chat(JSON.stringify(dataContent));
 		// 每次连接之后，获取用户的未读未签收消息列表
 		console.log("连接建立的时候获取未读的消息");
@@ -140,6 +147,7 @@ window.CHAT = {
 // 每次重连后获取服务器的未签收消息
 function fetchUnReadMsg() {
 	var user = app.getUserGlobalInfo();
+	console.log("获取后端未读消息");
 	var msgIds = ",";	// 格式：  ,1001,1002,1003,
 	mui.ajax(app.serverUrl + "/unreadMsgs?acceptUserId=" + user.userId,{
 		data:{},
@@ -158,6 +166,7 @@ function fetchUnReadMsg() {
 					var msgObj = unReadMsgList[i];
 					// 逐条存入聊天记录
 					app.saveUserChatHistory(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, app.FRIEND);
+					console.log("cunchu的聊天消息" + JSON.stringify(app.getUserChatHistory(msgObj.receiveUser.userId,msgObj.sendUser.userId)));
 					// 存入聊天快照
 					app.saveUserChatSnapshot(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, false);
 					// 拼接批量接受的消息id字符串，逗号间隔
@@ -167,7 +176,7 @@ function fetchUnReadMsg() {
 				// 调用批量签收的方法
 				CHAT.signMsgList(msgIds);
 				// 刷新快照
-				loadingChatSnapshot();
+				// loadingChatSnapshot();
 			}
 		}
 	});
@@ -194,7 +203,7 @@ function loadingChatSnapshot() {
 		if (!isRead) {
 			friNicknameNode.setAttribute("class","red_point");//未读消息标记红点
 		}
-		snapshotNode.innerHTML=chatItem;//对html的对应区域赋值
+		snapshotNode.innerHTML=chatItem.msg;//对html的对应区域赋值
 	}
 }
 
@@ -209,11 +218,12 @@ function fetchContactList() {
 //从缓存中获取朋友列表，并且渲染到页面
 function renderFriPage(){
 	//获取用户对象
-	var me=app.getUserGlobalInfo();
+	var me = app.getUserGlobalInfo();
 	//获取好友列表
-	var friList=app.getFriList();
+	var friList = app.getFriList();
+	// console.log("从后端获取到的好友列表" + JSON.stringify(friList));
 	//显示好友列表
-	var friUlist=document.getElementById("chatFriends");
+	var friUlist = document.getElementById("chatFriends");
 	if(friList!=null&&friList.length>0){
 		var friHtml="";
 		for(var i=0;i<friList.length;i++){
@@ -247,6 +257,7 @@ function renderFriPage(){
 
 function loadingFriendRequests(){//发送朋友列表信息的加载
 	var user=app.getUserGlobalInfo();//获取用户全局对象
+	// console.log("发送朋友的请求"+user.userId);
 	mui.ajax(app.serverUrl+"/Friends?userId="+user.userId,{
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
@@ -255,9 +266,9 @@ function loadingFriendRequests(){//发送朋友列表信息的加载
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
-			console.log(JSON.stringify(data.data));//输出返回的数据
+			// console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
-				frilist=data.data;
+				frilist = data.data;
 				app.setFriList(frilist);//缓存朋友数据
 			}
 			else{

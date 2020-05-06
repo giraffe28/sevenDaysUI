@@ -38,7 +38,7 @@ mui.plusReady(function(){
         }
         // else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
         // 	mui.toast("手机号不正确");
-        // 	return false; 
+        // 	return false; 	
         // }
         // else if(telephone.length!=11){
         // 	mui.toast("手机号不正确");
