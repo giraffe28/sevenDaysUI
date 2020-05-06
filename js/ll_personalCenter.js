@@ -122,11 +122,13 @@ function loadThisWeekTags(){
 	var user=app.getUserGlobalInfo();
 	var tags=user.thisWeekTag;
 	var weekTagsDom=document.getElementById('weekTags');
-	if (tags!= null && tags.length > 0) {
+	console.log(JSON.stringify(user));
+	console.log(user.thisWeekTag.length);
+	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		var weekTagsHtml = "";
 		for (var i = 0; i <tags.length; i++) {//过往标签目前只显示3个
 			weekTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
-			+tags[i].tagName+'</label>';
+			+tags[i]+'</label>';
 		}
 		weekTagsDom.innerHTML = weekTagsHtml;
 	} else {

@@ -95,14 +95,17 @@ send.addEventListener("tap",function(){
 		var chatMsg = new app.ChatMsg(me.userId, friendUserId, msgTextValue, null);
 		// 构建DataContent
 		var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
-		//调用websocket发送消息
+		// 调用websocket发送消息
 		var chatWebview = plus.webview.getWebviewById("lhf_chatRecord.html");
 		console.log("CHAT.chat('" + JSON.stringify(dataContent) + "')");
 		chatWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
+		
 		//我发送出去的信息进行保存
 		app.saveUserChatHistory(me.userId, friendUserId, msgTextValue, app.ME);
+		
 		//保存聊天快照，由于是由自己发送的,所以默认为已读
 		app.saveUserChatSnapshot(me.userId, friendUserId, msgTextValue, true);
+		
 		chatWebview.evalJS("loadingChatSnapshot()");
 		sendMsgFunc(msgTextValue);//渲染发送出去的消息
 		msgText.value="";//清空文本框中的内容
