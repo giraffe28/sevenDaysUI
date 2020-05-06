@@ -11,12 +11,12 @@ mui.plusReady(function () {
 		page.hide();//隐藏窗口
 		indexWebview.append(page);//追加子界面到当前主页面
 	}
-	plus.webview.show(sevenDaysArray[0].pageId);
+	plus.webview.getWebviewById(sevenDaysArray[4].pageId).show();
 	
 	//批量绑定页面显示事件
 	mui(".mui-bar-tab").on('tap',"a",function(){
 		var tabindex=this.getAttribute("tabindex");
-		plus.webview.show(sevenDaysArray[tabindex].pageId,"fade-in",200);//显示页面
+		plus.webview.getWebviewById(sevenDaysArray[tabindex].pageId).show("fade-in",200);//显示页面
 		for(var i=0;i<sevenDaysArray.length;i++){//隐藏其他不需要的页面
 			if(i!=tabindex){
 				plus.webview.hide(sevenDaysArray[i].pageId,"fade-out",200);

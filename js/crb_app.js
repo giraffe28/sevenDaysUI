@@ -1,9 +1,9 @@
 window.app = {
 	
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.1.2:8080/seven_war_exploded',
+	serverUrl: 'http://192.168.1.2:8080/spring',
 	//netty服务后端发布的url地址
-	nettyServerUrl:'ddd',
+	nettyServerUrl:'ws://192.168.1.2:7888/ws',
 	
 	/**
 	 * 判断字符串是否为空
@@ -302,28 +302,7 @@ window.app = {
 	//取出黑名单
 	getBlackList:function(){
 		var blackListStr=plus.storage.getItem("blackList");
-		if(blackListStr!=null&&blackListStr.length>0){
-			return JSON.parse(blackListStr);
-		}
-		else{
-			return [];
-		}
+		return JSON.parse(blackListStr);
 	},
-	
-	//保存用户的十字记忆
-	setMemory:function(memory){
-		var memoryStr=JSON.stringify(memory);
-		plus.storage.setItem("memory",memoryStr);
-	},
-	//取出十字记忆
-	getMemory:function(){
-		var memoryStr=plus.storage.getItem("memory");
-		if(memoryStr!=null&&memoryStr.length>0){
-			return JSON.parse(memoryStr);
-		}
-		else{
-			return [];
-		}
-	}
 	
 }

@@ -37,9 +37,9 @@ mui.plusReady(function(){
     		return false; 
 		}
 		else{
-			/*settime(this);
-			textcap=GetCode(telephone);*/
-			GetCode(telephone);//这里我也只是返回了一个4位验证码，后面判断写一下（位数和相等判断）然后提示验证码错误即可
+			/*settime(this);*/
+			textcap=GetCode(telephone);
+			//GetCode(telephone);//这里我也只是返回了一个4位验证码，后面判断写一下（位数和相等判断）然后提示验证码错误即可
 		}
 	});
 	
@@ -61,6 +61,10 @@ mui.plusReady(function(){
 			mui.toast('请填写验证码');
 			return false; 
 		}
+		else if(captcha!=textcap){
+			mui.toast('验证码错误');
+			return false; 
+		}
 		else if(password1==''||password1.length<6){
 			mui.toast('密码不能为空并且不能少于6个字符');
 			return false;
@@ -71,7 +75,6 @@ mui.plusReady(function(){
 		}
 		else{
 			if(true){    //if(captcha==textcap)这里验证码判断我先跳过，后续你测试的时候补一下
-				console.log("修改成功");
 				adduse(telephone,password1);
 				mui.toast('修改成功！！')
 				setTimeout(function() { 
@@ -87,7 +90,7 @@ mui.plusReady(function(){
 	
 	//第四部分；此处为注册接口调用；
 	function adduse(telephone,password){
-	    mui.ajax('http://192.168.18.1:8080/spring/ForgetRegister',{
+	    mui.ajax(app.serverUrl+'/user/forgetRegister',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
 			dataType: "json",
@@ -115,7 +118,7 @@ mui.plusReady(function(){
 	//第五部分：此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
 	function GetCode(telephone){
 		var capt;
-		mui.ajax('http://192.168.18.1:8080/spring/GetCode',{
+		mui.ajax(app.serverUrl+'/user/getCode',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
 			dataType: "json",

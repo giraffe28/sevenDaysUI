@@ -1,14 +1,13 @@
 mui.init();
 
 mui.plusReady(function () {
-	loadingFriendRequests();
 	//从缓存中获取朋友列表，并且渲染到页面
-	renderFriPage();
     var thisWebview=plus.webview.currentWebview();
 	thisWebview.addEventListener("show",function(){
 		loadingRecFriendRequests();//加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		renderFriPage();
+//		console.log("chatRecord show");
 	});
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
@@ -16,10 +15,8 @@ mui.plusReady(function () {
 	confidant.addEventListener("tap", function() {
 		loadingRecFriendRequests();
 	});
-	window.addEventListener("show", function() {
-		loadingRecFriendRequests();
-	});
 	window.addEventListener("refresh",function(){
+//		console.log("触发chatRecord的refresh事件");
 		loadingRecFriendRequests();//加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		renderFriPage();
@@ -68,10 +65,10 @@ window.CHAT = {
 		CHAT.socket.send(msg);
 	},
 	wsopen: function() {
-		console.log("websocket连接已建立...");
+//		console.log("websocket连接已建立...");
 		var me = app.getUserGlobalInfo();//获取用户信息
 		// 构建ChatMsg
-		var chatMsg = new app.ChatMsg(me.id, null, null, null);
+		var chatMsg = new app.ChatMsg(me.userId, null, null, null);
 		// 构建DataContent
 		var dataContent = new app.DataContent(app.CONNECT, chatMsg, null);
 		// 发送websocket
@@ -134,7 +131,7 @@ window.CHAT = {
 		CHAT.chat(JSON.stringify(dataContent));
 		// 定时执行函数
 		fetchUnReadMsg();
-		fetchContactList();
+		//fetchContactList();
 	}
 };
 
@@ -142,7 +139,7 @@ window.CHAT = {
 function fetchUnReadMsg() {
 	var user = app.getUserGlobalInfo();
 	var msgIds = ",";	// 格式：  ,1001,1002,1003,
-	mui.ajax(app.serverUrl + "/u/getUnReadMsgList?acceptUserId=" + user.id,{
+	mui.ajax(app.serverUrl + "/u/getUnReadMsgList?acceptUserId=" + user.userId,{
 		data:{},
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -177,16 +174,16 @@ function fetchUnReadMsg() {
 // 展示聊天快照，渲染列表
 function loadingChatSnapshot() {
 	var user = app.getUserGlobalInfo();
-	var chatSnapshotList = app.getUserChatSnapshot(user.id);
+	var chatSnapshotList = app.getUserChatSnapshot(user.userId);
 	var chatFriendsList = document.getElementById("chatFriends");//获取朋友列表
 	var snapshotNode=null;//表示显示聊天快照的项
 	var chatItem,friendId,friendItem,friNicknameNode;
 	for (var i = 0 ; i < chatSnapshotList.length ; i ++) {//根据缓存中的快照表进行聊天列表的渲染
 		chatItem = chatSnapshotList[i];
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
-		friendItem = chatFriendsList.querySelector('"li[friendId='+friendId+']"');//获取指定id朋友的项
+		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+']"');//获取指定id朋友的项
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
-		friNicknameNode = friendItem.querySelector('"span[friId='+friendId+']"');//获取朋友的关于昵称的项
+		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+']"');//获取朋友的关于昵称的项
 		// 判断消息的已读或未读状态
 		var isRead = chatItem.isRead;
 		if (!isRead) {
@@ -224,7 +221,7 @@ function renderFriPage(){
 			var friendUserNickname=this.getAttribute("friendNickname");
 			//打开聊天子页面
 			mui.openWindow({
-				url:"../html/lhf_chat.html",
+				url:"lhf_chat.html",
 				id:"lhf_chat_"+friendUserId,//每个朋友的聊天页面独立
 				extras:{
 					friUserId:friendUserId,
@@ -245,7 +242,7 @@ function renderFriPage(){
 
 function loadingFriendRequests(){//发送朋友列表信息的加载
 	var user=app.getUserGlobalInfo();//获取用户全局对象
-	mui.ajax(app.serverUrl+"/Friends?userId="+user.id,{
+	mui.ajax(app.serverUrl+"/Friends?userId="+user.userId,{
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -275,7 +272,7 @@ function loadingRecFriendRequests(){//发送朋友推荐列表信息的资源请
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
-			console.log(JSON.stringify(data.data));//输出返回的数据
+			//console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
 				var friRecList=data.data;
 				var friRecUlist=document.getElementById("recommendFri");
@@ -301,14 +298,14 @@ function renderFriendRecommend(friend) {//设置推荐朋友的html项内容
 	var html="";
 	// console.log("friend的信息"+JSON.stringify(friend));
 	html='<li class="mui-table-view-cell" friendId="'+friend.userId+'" friendNickname="'+friend.nickname+'">'+
-		    '<div class="mui-slider-right mui-disabled">'+
+		    '<div class="mui-slider-right mui-disabled" friendId="'+friend.userId+'">'+
 		        '<span class="mui-btn mui-btn-blue">发起闲聊</span>'+
 		    '</div>'+
 		    '<div class="mui-slider-handle">'+
 		        '<a href="lhf_chat.html">'+friend.nickname+'</a>'+
 		    '</div>'+
 		'</li>';
-	console.log(html);
+	//console.log(html);
 	return html;
 }
 
@@ -333,18 +330,20 @@ function renderFriends(friend){ //设置好友列表的html项内容
 var btnArray = ['确认', '取消'];
 mui('.chatRecords').on('tap','.mui-btn-red',function() {
     //获取当前DOM对象<a>
-	var elem = this;
+	var elem1 = this;
     mui.confirm('确定结束与对方的闲聊？', '提示', btnArray, function(e) {
 		if (e.index == 0) {
 			//发送消息给后端
 			var user=app.getUserGlobalInfo();//获取用户全局对象
-			var par = elem1.parentNode.parentNode;
-			if(uploadDelFri(user.id,par.friendId)==true){
+			var par = elem1.parentElement.parentNode;
+			var par1=par.getAttribute("friendId");
+			if(uploadDelFri(user.userId,par1)==true){
 				//从缓存中获取朋友列表，并且渲染到页面
 				renderFriPage();
 				//去掉聊天快照
-				app.deleteUserChatSnapshot(user.id,par.friendId);
+				app.deleteUserChatSnapshot(user.userId,par1);
 				// 没有回退
+				
 			}
 			else{
 				mui.toast("发送结束闲聊请求出错啦！QAQ");
@@ -364,6 +363,7 @@ function uploadDelFri(userId,friendId){//发送删除好友信息到后端
 	mui.ajax(app.serverUrl+"/Friend/delete/?userId="+userId+"&deleteId="+friendId,{
 		data:{},
 		dataType:'json',//服务器返回json格式数据
+		async:false,
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		headers:{'Content-Type':'application/json'},	              
@@ -388,13 +388,19 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 	//获取当前DOM对象<a>
 	var elem1 = this;
 	//获取DOM对象
-	var par = elem1.parentNode.parentNode;
-    mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
+	var par = elem1.parentElement.parentNode;
+	mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
+		if (e.index == 0) {
+		var user=app.getUserGlobalInfo();//获取用户全局对象
+		var par1=par.getAttribute("friendId");
+		console.log(par1);
 		if (e.index == 0) {
 			var user=app.getUserGlobalInfo();//获取用户全局对象
-			if(sendMakeFri(user.id,par.friendId)==true){
-				//从缓存中获取朋友列表，并且渲染到页面
+			if(sendMakeFri(user.userId,par1)==true){
+				//从缓存中获取朋友列表，并且渲染到页面i
 				renderFriPage();
+				loadingRecFriendRequests();
+				//页面跳转至对应的聊天页面
 			}
 			else{
 				mui.toast("发送闲聊请求出错啦！QAQ");
@@ -405,13 +411,13 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 		else {
 			//取消：关闭滑动列表
 			mui.swipeoutClose(par);
-		}
+		}}
 	});
 });
 
 function sendMakeFri(userId,friendId){//对推荐好友进行发起聊天时，向后端发送消息
 	var status =false;
-	mui.ajax(app.serverUrl+"/Friend/add/"+userId+"&addedId="+friendId,{
+	mui.ajax(app.serverUrl+"/Friend/add?userId="+userId+"&friendUserId="+friendId,{
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		async:false,
@@ -423,7 +429,7 @@ function sendMakeFri(userId,friendId){//对推荐好友进行发起聊天时，�
 			var myFriendList = data.data;
 			console.log("对推荐好友发起闲聊时，得到的返回值：");
 			console.log(JSON.stringify(data.data));
-			app.setfriList(myFriendList);//修改缓存内容
+			app.setFriList(myFriendList);//修改缓存内容
 			//重新加载推荐好友列表
 			loadingRecFriendRequests();
 			status = true;
@@ -447,4 +453,4 @@ function netChangeSwitch(){
 			chatRecordTitle.innerHTML="相遇的朋友(未连接QAQ)";
 		}
 	});
-}
+	}

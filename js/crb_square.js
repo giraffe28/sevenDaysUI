@@ -25,7 +25,7 @@ function pulldownRefresh() {
 		return;
 	}
 	var data = {
-		column: "icon,nickname,post_date,post_image,post_content,like_num" //需要的字段名
+		column: "icon,nickname,post_date,post_content" //需要的字段名
 	}
 	if(lastId) { //说明已有数据，目前处于下拉刷新，增加时间戳，触发服务端立即刷新，返回最新数据
 		data.lastId = lastId;
@@ -48,7 +48,7 @@ function pulldownRefresh() {
  */
 function pullupRefresh() {
 	var data = {
-		column: "icon,nickname,post_date,post_image,post_content,like_num" //需要的字段名
+		column: "icon,nickname,post_date,post_content" //需要的字段名
 	};
 	if(minId) { //说明已有数据，目前处于上拉加载，传递当前minId 返回历史数据
 		data.minId = minId;
@@ -88,9 +88,7 @@ function open_detail(item) {
 		icon:item.icon,
 		nickname:item.nickname,
 		date:item.post_date,
-		image:item.post_image,
-		content:item.post_content,
-		like_num:item.like_num
+		content:item.post_content
 	});
 }
 /**
@@ -106,9 +104,7 @@ function convert(items) {
 			icon:item.icon,
 			nickname:item.nickname,
 			date:item.post_date,
-			image:item.post_image,
-			content:item.post_content,
-			like_num:item.like_num
+			content:item.post_content
 		});
 	});
 	return postItems;

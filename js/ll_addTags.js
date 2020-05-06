@@ -1,15 +1,15 @@
 mui.init();
 mui.plusReady(function(){
-	String thisWeekTagStr="";
+	var thisWeekTagStr="";
 	var selectedTags=document.getElementsByTagName("input");
-	for(int i=0;i<selectedTags.length;i++){
+	for(var i=0;i<selectedTags.length;i++){
 		if(selectedTags[i].type=="checkbox"&&selectedTags[i].checked)
 			thisWeekTagStr+=selectedTags[i].value+' ';
 	}
 	document.getElementById("save").addEventListener('tap',function(){
 		mui.ajax(app.serverUrl+"/user/setThisWeekTag",{
 			data:{
-				thisWeekTag:thisWeekTagStr;
+				thisWeekTag:thisWeekTagStr
 			},
 			dataType:'json',//服务器返回json格式数据
 			type:'post',//HTTP请求类型

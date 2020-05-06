@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
 		<script src="../js/mui.min.js"></script>
+		<script src="../js/vue.min.js"></script>
 		<link href="../css/mui.min.css" rel="stylesheet"/>
 		<link href="../css/crb_util.css" rel="stylesheet"/>
 		<link href="../css/crb_square.css" rel="stylesheet"/>
@@ -27,7 +28,7 @@
 					</div>
 				</div>
 				<div class="mui-card-content">
-					<img :src="post_image" id="post_image" width="100%">
+					<img v-html="image" id="post_image" width="100%">
 					<p id="content">
 						{{post_content}}
 					</p>
@@ -35,7 +36,7 @@
 				<div class="mui-card-footer" id="commentlist">
 					<div>
 						赞
-						<span class="mui-badge mui-badge-warning mui-badge-inverted">{{like_num}}</span>
+						<span class="mui-badge mui-badge-warning mui-badge-inverted" v-html="num"></span>
 					</div>
 				</div>
 			</div>
