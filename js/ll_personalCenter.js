@@ -2,6 +2,7 @@ mui.init();
 mui.plusReady(function() {
 	var user = app.getUserGlobalInfo();
 	refreshBasicInfo();	
+	loadThisWeekTags();
 });
 
 
@@ -114,3 +115,22 @@ function loadPersonalCenter(user){
 	document.getElementById("profile").innerHTML = profile;
 	document.getElementById("telephone").innerHTML = telephone;
 }
+
+//加载本周标签
+function loadThisWeekTags(){
+	var user=app.getUserGlobalInfo();
+	var tags=user.thisWeekTag;
+	var weekTags=document.getElementById('weekTags');
+	if (tags!= null && tags.length > 0) {
+		var weekTagsHtml = "";
+		for (var i = 0; i <tags.length; i++) {
+			weekTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
+			+tags[i].tagName+'</label>';
+		}
+		weekTags.innerHTML = weekTagsHtml;
+	} else {
+		weekTags.innerHTML = "";
+	}
+}
+
+//加载过往标签
