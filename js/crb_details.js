@@ -1,164 +1,73 @@
-//mui初始化，配置下拉刷新
-mui.init({
-	pullRefresh: {
-		container: '#commentlist',
-		down: {
-			style: 'circle',
-			offset: '0px',
-			auto: true,
-			callback: pulldownRefresh
-		},
-		up: {
-			contentrefresh: '正在加载...',
-			callback: pullupRefresh
-		}
-	}
-});
-/**
- *  下拉刷新获取最新列表 
- */
-function pulldownRefresh() {
-	if(window.plus && plus.networkinfo.getCurrentType() === plus.networkinfo.CONNECTION_NONE) {
-		plus.nativeUI.toast('似乎已断开与互联网的连接', {
-			verticalAlign: 'top'
-		});
-		return;
-	}
-	var data = {
-		column: "comment_name,comment_content" //需要的字段名
-	}
-	if(lastId) { //说明已有数据，目前处于下拉刷新，增加时间戳，触发服务端立即刷新，返回最新数据
-		data.lastId = lastId;
-		data.time = new Date().getTime() + "";
-	}
-	//请求最新列表信息流
-	mui.getJSON("……", data, function(rsp) {
-		mui('#commentlist').pullRefresh().endPulldownToRefresh();
-		if(rsp && rsp.length > 0) {
-			lastId = rsp[0].id; //保存最新消息的id，方便下拉刷新时使用
-			if(!minId) {//首次拉取列表时保存最后一条消息的id，方便上拉加载时使用
-				minId = rsp[rsp.length - 1].id; 										
+mui.init();
+window.addEventListener('newsId',function(event){
+	//获得事件参数
+	var id = event.detail.id;
+	var postlist=document.getElementById("postlist");
+	//根据id向服务器请求新闻详情
+	mui.ajax('……',{//获取详情
+		dataType:'json',
+		type:'get',
+		timeout:10000,
+		contentType:'application/json;charset=utf-8',
+		success:function(data){
+			var listdata=data["rows"];
+			var flist="";
+			for(i=0;i<listdata.length;i++){
+				if(listdata[i].postId==id){
+					var ndata='<div class="mui-card">'+
+								'<div class="mui-card-header mui-card-media">'+
+									//'<img src="'+listdata[i].user.icon+'" id="icon">'+  显示用户头像、可能会出错
+									'<div class="mui-media-body">'
+										'<p id="name">'+listdata[i].user.nickname+'</p>'+
+										'<p id="time">'+listdata[i].date+'</p>'+
+									'</div>'+
+								'</div>'+
+								'<div class="mui-card-content">'+
+									'<p id="post_content">'+
+										listdata[i].content+
+									'</p>'+
+								'</div>'+
+							'</div>'
+							'<div class="mui-card-footer">'+
+								'<div>赞'+//获赞个数的名字可能有误，麻烦修改
+									'<span class="mui-badge mui-badge-warning mui-badge-inverted">'+listdata[i].postlike+'</span>'+
+								'</div>'+
+							'</div>';
+					console.info(ndata);
+					flist=flist+ndata;
+				}
 			}
-			comments.items = convert(rsp).concat(comments.items);
-		}
-	});
-}
-/**
- * 上拉加载拉取历史列表 
- */
-function pullupRefresh() {
-	var data = {
-		column: "comment_name,comment_content" //需要的字段名
-	};
-	if(minId) { //说明已有数据，目前处于上拉加载，传递当前minId 返回历史数据
-		data.minId = minId;
-		data.time = new Date().getTime() + "";
-		data.pageSize = 10;
-	}
-	//请求历史列表信息流
-	mui.getJSON("……", data, function(rsp) {
-		mui('#commentlist').pullRefresh().endPullupToRefresh();
-		if(rsp && rsp.length > 0) {
-			minId = rsp[rsp.length - 1].id; //保存最后一条消息的id，上拉加载时使用
-			comments.items = comments.items.concat(convert(rsp));
-		}
-	});
-}
-var comments = new Vue({
-	el: '#comments',
-	data: {
-		items: [] //列表信息流数据
-	}
-});
-/**
- * 1、将服务端返回数据，转换成前端需要的格式
- * 2、若服务端返回格式和前端所需格式相同，则不需要改功能
- * 
- * @param {Array} items 
- */
-function convert(items) {
-	var commentItems = [];
-	items.forEach(function(item) {
-		commentItems.push({
-			comment_name:item.comment_name;
-			comment_content:item.comment_content
-		});
-	});
-	return commentItems;
-}
-function getDefaultData() {
-	return {
-		icon: '',
-		nickname: '',
-		post_date: '',
-		post_content: ''
-	}
-}
-var vm = new Vue({
-	el: '.mui-content',
-	data: getDefaultData(),
-	methods: {
-		resetData: function() {//重置数据
-			Object.assign(this.$data, getDefaultData());
-		}
-	}
-});
-
-//监听自定义事件，获取动态详情
-document.addEventListener('get_detail', function(event) {
-	var image = event.detail.image;
-	var num = event.detail.num;
-			 
-	if(!image||!num) {
-		return;
-	}		
-	//前页传入的数据，直接渲染，无需等待ajax请求详情后
-	vm.icon = event.detail.icon;
-	vm.nickname = event.detail.nickname;
-	vm.date = event.detail.date;
-	vm.content = event.detail.content;
-	//向服务端请求文章插图
-	mui.ajax('……' + image, {
-		type:'GET',
-		dataType: 'json', //服务器返回json格式数据
-		timeout: 15000, //15秒超时
-		success: function(rsp) {
-			vm.image = rsp.image;
+			postlist.innerHTML+=flist;
 		},
 		error: function(xhr, type, errorThrown) {
-			mui.toast('获取动态插图失败');
-			//TODO 此处可以向服务端告警
+		//异常处理；
+			console.log(type);
 		}
 	});
-	//向服务器请求点赞个数
-	mui.ajax('……' + num, {
-		type:'GET',
-		dataType: 'json', //服务器返回json格式数据
-		timeout: 15000, //15秒超时
-		success: function(rsp) {
-			vm.num = rsp.num;
+	mui.ajax('……',{//获取评论
+		dataType:'json',
+		type:'get',
+		timeout:10000,
+		contentType:'application/json;charset=utf-8',
+		success:function(data){
+			var listdata=data["rows"];
+			var flist="";
+			for(i=0;i<listdata.length;i++){//显示所有评论的评论者名字与内容，名字可能有误，麻烦修改
+				var ndata='<ul class="mui-table-view m-r-10 m-l-10">'+
+							'<li class="mui-table-view-cell">'+listdata[i].nickname+':'+listdata[i].content+'</li>'+
+						'</ul>';
+				//console.info(ndata);
+				flist=flist+ndata;
+			}
+			postlist.innerHTML+=flist;
 		},
 		error: function(xhr, type, errorThrown) {
-			mui.toast('获取点赞数失败');
-			//TODO 此处可以向服务端告警
+		//异常处理；
+			console.log(type);
 		}
 	});
+	
 });
-
-//重写返回逻辑
-mui.back = function() {
-	plus.webview.currentWebview().hide("auto", 300);
-}
-			
-//窗口隐藏时，重置页面数据
-mui.plusReady(function () {
-	var self = plus.webview.currentWebview();
-	self.addEventListener("hide",function (e) {
-		window.scrollTo(0, 0);
-		vm.resetData();
-	},false);
-})
-
 mui.plusReady(function(){
 	//点击发送评论按钮
 	var send=document.getElementById("send");
@@ -171,30 +80,31 @@ mui.plusReady(function(){
 		var user = app.getUserGlobalInfo();
 		var myDate = new Date();
 		mui.ajax('……', {
-		data: {
-			userId:user.userId,
-			comment:'comment',
-			comment_time:myDate.toLocaleString()
-		},
-		dataType: 'json', //服务器返回json格式数据
-		type: 'post', //HTTP请求类型
-		timeout: 10000, //超时时间设置为10秒；
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		success: function(data) {
-			//服务器返回响应，根据响应结果，分析是否成功发送评论；
-			if (data.status == 200) {
-				//显示成功信息
-				mui.toast("评论成功");
-			}
-			else{
-				app.showToast(data.msg, "error");
-			}
-		},
+			data: {
+				userId:user.userId,
+				comment:'comment',
+				//comment_time:myDate.toLocaleString()
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为10秒；
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			success: function(data) {
+				//服务器返回响应，根据响应结果，分析是否成功发送评论；
+				if (data.status == 200) {
+					//显示成功信息
+					mui.toast("评论成功");
+				}
+				else{
+					app.showToast(data.msg, "error");
+				}
+			},
 			error: function(xhr, type, errorThrown) {
 			//异常处理；
-			console.log(type);
-		}
+				console.log(type);
+			}
+		});
 	});
-})
+});
