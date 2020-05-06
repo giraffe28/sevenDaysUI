@@ -126,7 +126,7 @@ function loadThisWeekTags(){
 	console.log(tags);
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		var weekTagsHtml = "";
-		for (var i = 0; i <tags.length; i++) {//过往标签目前只显示3个
+		for (var i = 0; i <tags.length; i++) {
 			weekTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
 			+tags[i]+'</label>';
 		}
@@ -154,7 +154,7 @@ function loadPastTags(){
 				var pastTagsDom=document.getElementById('pastTags');
 				if (pastTags!= null && pastTags.length > 0) {
 					var pastTagsHtml = "";
-					for (var i = 0; i <pastTags.length; i++) {
+					for (var i = 0; i <pastTags.length; i++) {//过往标签目前只显示3个
 						pastTagsHtml += '<label style="background-color: dimgray; margin-left: 5px;border-radius: 7px;">'
 						+pastTags[i].tagName+'</label>'
 					}
