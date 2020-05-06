@@ -49,12 +49,12 @@ mui.plusReady(function(){
             return;
         }
 		var wtf = {};
-				wtf["telephone"] = telephone;
-				console.log(telephone);
-				wtf["password"] = password;
-				console.log(password);
-				var goodJson = JSON.stringify(wtf);
-				alert("封装为json:"+goodJson);
+		wtf["telephone"] = telephone;
+		console.log(telephone);
+		wtf["password"] = password;
+		console.log(password);
+		var goodJson = JSON.stringify(wtf);
+		alert("封装为json:"+goodJson);
 		console.log(app.serverUrl+"/user/login");
         mui.ajax(app.serverUrl+"/user/login",{//后端url
             data:{
