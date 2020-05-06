@@ -3,7 +3,7 @@ mui.plusReady(function() {
 	//发送请求到后端，返回十字记忆
 	requestMemory();
 	//从缓存中获取十字记忆，并且渲染到页面
-	//renderMemoryPage();
+	renderMemoryPage();
 })
 //从缓存中获取十字记忆，并且渲染到页面
 function renderMemoryPage() {
