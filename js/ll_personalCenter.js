@@ -25,9 +25,9 @@ document.getElementById("myImage").addEventListener('tap',function(){
 
 /* 点击“退出登录”按钮 */
 document.getElementById("confirmBtn").addEventListener('tap', function() {
-	var btnArray = ['否', '是'];
-	mui.confirm('退出登录？', '', btnArray, function(e) {
-		if (e.index == 1) {
+	var btnArray = ['是', '否'];
+	mui.confirm('你确定要退出登录吗？', '提示', btnArray, function(e) {
+		if (e.index == 0) {
 			//清空缓存
 			plus.storage.removeItem("userInfo");
 			
