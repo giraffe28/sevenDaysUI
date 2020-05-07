@@ -1,5 +1,6 @@
 var user;
 var thisWeekTags;
+var tagFormDom;
 mui.init();
 mui.plusReady(function() {
 	user = app.getUserGlobalInfo();
@@ -7,12 +8,14 @@ mui.plusReady(function() {
 	var thisWeekTagStr = "";
 	thisWeekTags = user.thisWeekTag;
 	var selectedTags = document.getElementsByTagName("input");
-	var tagFormDom = document.getElementById("tagForm");
+	tagFormDom = document.getElementById("tagForm");
+	
 	var tagNum = 0;
 	document.getElementById("save").addEventListener('tap', function() {
 		for (var i = 0; i < selectedTags.length; i++) {
 			if (selectedTags[i].type == "checkbox" && selectedTags[i].checked) {
 				thisWeekTagStr += selectedTags[i].value + ',';
+				console.log(thisWeekTagStr);
 				tagNum++;
 			}
 		}
@@ -23,7 +26,8 @@ mui.plusReady(function() {
 				},
 				dataType: 'json', //服务器返回json格式数据
 				type: 'post', //HTTP请求类型
-				timeout: 10000, //超时时间设置为10秒；
+				timeout: 10000, //超时时间设置为10秒
+				headers:{'Content-Type':'application/json'},
 				success: function(data) {
 					console.log(JSON.stringify(data));
 				},
@@ -39,25 +43,25 @@ mui.plusReady(function() {
 
 //从后台获取标签，渲染页面
 function renderTagPage() {
-	mui.ajax(app.serverUrl + '', { //发送请求返回系统标签
+	console.log("渲染标签列表");
+	mui.ajax(app.serverUrl + '/tag/getTag', { //发送请求返回系统标签
 		data: {},
 		dataType: 'json', //服务器返回json格式数据
 		type: 'post', //HTTP请求类型
 		timeout: 10000, //超时时间设置为10秒；
-		headers: {
-			'Content-Type': 'application/json'
-		},
+		headers:{'Content-Type':'application/json'},   
 		success: function(data) {
 			//服务器返回响应，根据响应结果，分析是否成功获取信息；
 			if (data.status == 200) {
 				var flag;
-				var tags = JSON.stringify(data.data);
+				var tags = data.data;
+				console.log(JSON.stringify(tags));
 				if (tags != null && tags.length > 0) {
 					var tagsHtml = "";
 					for (var i = 0; i < tags.length; i++) {
 						flag = false;
 						for (var j = 0; j < thisWeekTags.length; j++) {
-							if (tags[i].tagName.equals(thisWeekTags[j].tagName))
+							if (tags[i].tagName===(thisWeekTags[j].tagName))
 								flag = true;
 						}
 						//如果是本周标签，默认被选中
