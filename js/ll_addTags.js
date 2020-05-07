@@ -1,16 +1,18 @@
-var user = app.getUserGlobalInfo();
-var thisWeekTags = user.thisWeekTag;
+var user;
+var thisWeekTags;
 mui.init();
 mui.plusReady(function() {
+	user = app.getUserGlobalInfo();
 	renderTagPage();
 	var thisWeekTagStr = "";
+	thisWeekTags = user.thisWeekTag;
 	var selectedTags = document.getElementsByTagName("input");
 	var tagFormDom = document.getElementById("tagForm");
 	var tagNum = 0;
 	document.getElementById("save").addEventListener('tap', function() {
 		for (var i = 0; i < selectedTags.length; i++) {
 			if (selectedTags[i].type == "checkbox" && selectedTags[i].checked) {
-				thisWeekTagStr += selectedTags[i].value + ' ';
+				thisWeekTagStr += selectedTags[i].value + ',';
 				tagNum++;
 			}
 		}
@@ -80,7 +82,7 @@ function renderTagPage() {
 		},
 		error: function(xhr, type, errorThrown) {
 			//异常处理；
-			console.log(JSON.stringify(data.data));
+			// console.log(JSON.stringify(data.data));
 		}
 	});
 }
