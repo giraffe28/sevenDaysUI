@@ -19,8 +19,8 @@ mui.plusReady(function () {
 		loadingRecFriendRequests();
 	});
 	window.addEventListener("refresh",function(){
-		console.log("触发chatRecord的refresh事件");
-		loadingRecFriendRequests();//加载推荐好友信息
+		// console.log("触发chatRecord的refresh事件");
+		// loadingRecFriendRequests();//加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		fetchContactList();
 		renderFriPage();
@@ -103,6 +103,7 @@ window.CHAT = {
 		var friendUserId = chatMsg.senderId;
 		var myId = chatMsg.receiverId;
 		// 调用聊天webview的receiveMsg方法
+		console.log("获取到的朋友id" + friendUserId);
 		var chatWebview = plus.webview.getWebviewById("lhf_chat_" + friendUserId);
 		var isRead = true;	// 设置消息的默认状态为已读
 		if (chatWebview != null) {
@@ -196,9 +197,9 @@ function loadingChatSnapshot() {
 	for (var i = 0 ; i < chatSnapshotList.length ; i ++) {
 		chatItem = chatSnapshotList[i];
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
-		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+']"');//获取指定id朋友的项
+		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+'"]');//获取指定id朋友的项
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
-		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+']"');//获取朋友的关于昵称的项
+		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+'"]');//获取朋友的关于昵称的项
 		// 判断消息的已读或未读状态
 		var isRead = chatItem.isRead;
 		if (!isRead) {
@@ -281,6 +282,7 @@ function loadingFriendRequests(){//发送朋友列表信息的加载
 
 function loadingRecFriendRequests(){//发送朋友推荐列表信息的资源请求以及加载
 	var user=app.getUserGlobalInfo();//获取用户全局对象
+	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/Friend/getInterest/?userId="+user.userId,{
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
@@ -289,8 +291,9 @@ function loadingRecFriendRequests(){//发送朋友推荐列表信息的资源请
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
-			//console.log(JSON.stringify(data.data));//输出返回的数据
+			console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
+				plus.nativeUI.closeWaiting();
 				var friRecList=data.data;
 				var friRecUlist=document.getElementById("recommendFri");
 				if(friRecList!=null&&friRecList.length>0){
