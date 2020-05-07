@@ -165,6 +165,9 @@ function fetchUnReadMsg() {
 				// 1. 保存聊天记录到本地
 				// 2. 保存聊天快照到本地
 				// 3. 对这些未签收的消息，批量签收
+				if (unReadMsgList.length == 0 || unReadMsgList==null || unReadMsgList==undefined) {
+					return false;
+				}
 				for (var i = 0 ; i < unReadMsgList.length ; i ++) {
 					var msgObj = unReadMsgList[i];
 					// 逐条存入聊天记录
