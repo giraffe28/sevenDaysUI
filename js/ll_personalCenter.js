@@ -29,12 +29,12 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 		if (e.index == 0) {
 			//清空缓存
 			plus.storage.removeItem("userInfo");
-			
+						
 			//打开login页面后再关闭setting页面
-			plus.webview.show('login1.html');
+						
+			window.open('crb_login1.html');
 			console.log("执行至跳转到登录页面");
-			plus.webview.open("../html/crb_login1.html");//待测试
-			
+						
 			mui.toast("退出登录成功！");
 		} else {
 			mui.toast("嘿嘿（`v`）");
