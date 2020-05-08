@@ -36,25 +36,19 @@ mui.plusReady(function(){
         	mui.toast('手机号不能为空');
         	return false; 
         }
-        // else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
-        // 	mui.toast("手机号不正确");
-        // 	return false; 	
-        // }
-        // else if(telephone.length!=11){
-        // 	mui.toast("手机号不正确");
-        // 	return false; 
-        // }
+        else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
+        	mui.toast("手机号不正确");
+        	return false; 	
+        }
+        else if(telephone.length!=11){
+        	mui.toast("手机号不正确");
+        	return false; 
+        }
         if(password.length==0){
             plus.ui.toast("密码不能为空");
             return;
         }
-		var wtf = {};
-		// wtf["telephone"] = telephone;
-		// console.log(telephone);
-		// wtf["password"] = password;
-		// console.log(password);
-		// var goodJson = JSON.stringify(wtf);
-		// alert("封装为json:"+goodJson);
+
 		console.log(app.serverUrl+"/user/login");
         mui.ajax(app.serverUrl+"/user/login",{//后端url
             data:{
@@ -64,13 +58,11 @@ mui.plusReady(function(){
             dataType:'json',
             type:'POST',
             timeout:10000,
-			contentType:'application/json;charset=utf-8',
+			headers: {"Content-Type":"application/json;charset=utf-8"},
             success:function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
 				console.log(JSON.stringify(data));
 				console.log(telephone);
-            	//telephone.blur();
-            	//password.blur();
             	if (data.status == 200) {
 					console.log(JSON.stringify(data));
             		// 登录成功之后，保存全局用户对象到本地缓存

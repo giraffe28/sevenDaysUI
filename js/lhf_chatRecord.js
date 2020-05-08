@@ -6,7 +6,17 @@ mui.plusReady(function () {
 	
 	thisWebview.addEventListener("show",function(){
 		fetchUnReadMsg();
+<<<<<<< HEAD
 		fetchContactList();
+=======
+		loadingFriendRequests();
+		
+		loadingRecFriendRequests(); //加载推荐好友信息
+		//从缓存中获取朋友列表，并且渲染到页面
+		
+		renderFriPage();
+		
+>>>>>>> ccc85f570f4f16a6b72046e4eafe09acd23d74a0
 	});
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
@@ -15,7 +25,12 @@ mui.plusReady(function () {
 		loadingRecFriendRequests();
 	});
 	window.addEventListener("refresh",function(){
+<<<<<<< HEAD
 		// console.log("触发chatRecord的refresh事件");
+=======
+		console.log("触发chatRecord的refresh事件");
+		loadingRecFriendRequests();//加载推荐好友信息
+>>>>>>> ccc85f570f4f16a6b72046e4eafe09acd23d74a0
 		//从缓存中获取朋友列表，并且渲染到页面
 		fetchContactList();
 		CHAT.init();
@@ -153,10 +168,11 @@ function fetchUnReadMsg() {
 		success:function(data){
 			if (data.status == 200) {
 				var unReadMsgList = data.data;
-				console.log("获取未读的消息" + JSON.stringify(unReadMsgList));
+				
 				// 1. 保存聊天记录到本地
 				// 2. 保存聊天快照到本地
 				// 3. 对这些未签收的消息，批量签收
+
 				if (unReadMsgList==null || unReadMsgList==undefined) {
 					return false;
 				}
@@ -165,9 +181,11 @@ function fetchUnReadMsg() {
 				} 
 				for (var i = 0 ; i < unReadMsgList.length ; i ++) {
 					var msgObj = unReadMsgList[i];
+					
 					// 逐条存入聊天记录
 					app.saveUserChatHistory(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, app.FRIEND);
-					
+					var t = new app.ChatHistory(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, app.FRIEND);
+					console.log("获取未读的消息" + JSON.stringify(t));
 					// 存入聊天快照
 					app.saveUserChatSnapshot(msgObj.receiveUser.userId,msgObj.sendUser.userId,msgObj.msgContent, false);
 					// 拼接批量接受的消息id字符串，逗号间隔
@@ -475,4 +493,4 @@ function netChangeSwitch(){
 			chatRecordTitle.innerHTML="相遇的朋友(未连接QAQ)";
 		}
 	});
-	}
+}

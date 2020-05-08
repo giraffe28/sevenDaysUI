@@ -1,9 +1,10 @@
 window.app = {
 	
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.244.1:8080/spring',
+	serverUrl: 'http://192.168.0.101:8080/sevenDays',
 	//netty服务后端发布的url地址
-	nettyServerUrl:'ws://192.168.244.1:7888/ws',
+	nettyServerUrl:'ws://192.168.0.101:7888/ws', //172.17.243.33
+
 	
 	/**
 	 * 判断字符串是否为空
