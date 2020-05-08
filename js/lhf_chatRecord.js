@@ -11,7 +11,7 @@ mui.plusReady(function () {
 
 		loadingFriendRequests();
 		
-		loadingRecFriendRequests(); //加载推荐好友信息
+		// loadingRecFriendRequests(); //加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		
 		renderFriPage();
@@ -22,7 +22,11 @@ mui.plusReady(function () {
 	//刷新页面
 	var confidant = document.getElementById("confidant");
 	confidant.addEventListener("tap", function() {
-		loadingRecFriendRequests();
+		var reco = document.getElementById("recomendBtn").getAttribute("class");
+
+		if(reco.search("mui-active")===-1) {
+			loadingRecFriendRequests();
+		}	
 	});
 	window.addEventListener("refresh",function(){
 
@@ -212,6 +216,7 @@ function loadingChatSnapshot() {
 	//根据缓存中的快照表进行聊天列表的渲染
 	for (var i = 0 ; i < chatSnapshotList.length ; i ++) {
 		chatItem = chatSnapshotList[i];
+		console.log(JSON.stringify(chatItem));
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
 		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+'"]');//获取指定id朋友的项
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
@@ -429,6 +434,7 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 	var elem1 = this;
 	//获取DOM对象
 	var par = elem1.parentElement.parentNode;
+	
 	mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
 		if (e.index == 0) {
 		var user=app.getUserGlobalInfo();//获取用户全局对象
