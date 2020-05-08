@@ -6,9 +6,9 @@ mui.plusReady(function () {
 	
 	thisWebview.addEventListener("show",function(){
 		fetchUnReadMsg();
-<<<<<<< HEAD
+
 		fetchContactList();
-=======
+
 		loadingFriendRequests();
 		
 		loadingRecFriendRequests(); //加载推荐好友信息
@@ -16,7 +16,7 @@ mui.plusReady(function () {
 		
 		renderFriPage();
 		
->>>>>>> ccc85f570f4f16a6b72046e4eafe09acd23d74a0
+
 	});
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
@@ -25,12 +25,12 @@ mui.plusReady(function () {
 		loadingRecFriendRequests();
 	});
 	window.addEventListener("refresh",function(){
-<<<<<<< HEAD
+
 		// console.log("触发chatRecord的refresh事件");
-=======
+
 		console.log("触发chatRecord的refresh事件");
 		loadingRecFriendRequests();//加载推荐好友信息
->>>>>>> ccc85f570f4f16a6b72046e4eafe09acd23d74a0
+
 		//从缓存中获取朋友列表，并且渲染到页面
 		fetchContactList();
 		CHAT.init();
