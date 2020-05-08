@@ -14,6 +14,10 @@ mui.plusReady(function() {
 		var profile = user.profile; //简介
 		var telephone = user.telephone; //手机号，暂时不允许更改
 		//document.getElementById("myImage").src=myImage;
+		console.log(nickname);
+		console.log(gender);
+		console.log(profile);
+		console.log(telephone);
 		document.getElementById("nickname").innerHTML = nickname;
 		var maleOption = document.getElementById("male");
 		var femaleOption = document.getElementById("female");
@@ -66,6 +70,9 @@ mui.plusReady(function() {
 			}
 		});
 		alert("保存成功");
-		window.open('ll_personalCenter.html');
+		
+		var chatWebview = plus.webview.getWebviewById("ll_personalCenter.html");
+		chatWebview.evalJS("refreshBasicInfo()");
+		mui.back();
 	})
 });

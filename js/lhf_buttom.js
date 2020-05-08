@@ -35,8 +35,8 @@ var sevenDaysArray=[
 		pageUrl:"../html/lhf_chatRecord.html"
 	},
 	{
-		pageId:"test1.html",
-		pageUrl:"../html/test.html"
+			pageId:"crb_square.html",
+			pageUrl:"../html/crb_square.html"
 	},
 	{
 		pageId:"test2.html",

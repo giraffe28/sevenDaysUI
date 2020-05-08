@@ -6,11 +6,7 @@ mui.plusReady(function () {
 	
 	thisWebview.addEventListener("show",function(){
 		fetchUnReadMsg();
-		loadingFriendRequests();
-		loadingRecFriendRequests(); //加载推荐好友信息
-		//从缓存中获取朋友列表，并且渲染到页面
-		renderFriPage();
-		
+		fetchContactList();
 	});
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
@@ -20,12 +16,8 @@ mui.plusReady(function () {
 	});
 	window.addEventListener("refresh",function(){
 		// console.log("触发chatRecord的refresh事件");
-		// loadingRecFriendRequests();//加载推荐好友信息
 		//从缓存中获取朋友列表，并且渲染到页面
 		fetchContactList();
-		renderFriPage();
-		//加载聊天快照
-		loadingChatSnapshot();
 		CHAT.init();
 	});
 });
@@ -86,7 +78,7 @@ window.CHAT = {
 		console.log("连接建立的时候获取未读的消息");
 		fetchUnReadMsg();
 		// 定时发送心跳
-		// setInterval("CHAT.keepalive()", 10000);
+		//setInterval("CHAT.keepalive()", 10000);
 	},
 	wsmessage: function(e) {
 		console.log("接受到消息：" + e.data);	
@@ -142,8 +134,8 @@ window.CHAT = {
 		// 发送心跳
 		CHAT.chat(JSON.stringify(dataContent));
 		// 定时执行函数
-		fetchUnReadMsg();
 		fetchContactList();
+		fetchUnReadMsg();
 	}
 };
 
@@ -165,9 +157,12 @@ function fetchUnReadMsg() {
 				// 1. 保存聊天记录到本地
 				// 2. 保存聊天快照到本地
 				// 3. 对这些未签收的消息，批量签收
-				if (unReadMsgList.length == 0 || unReadMsgList==null || unReadMsgList==undefined) {
+				if (unReadMsgList==null || unReadMsgList==undefined) {
 					return false;
 				}
+				if(unReadMsgList.length == 0 ) {
+					return false;
+				} 
 				for (var i = 0 ; i < unReadMsgList.length ; i ++) {
 					var msgObj = unReadMsgList[i];
 					// 逐条存入聊天记录
@@ -217,6 +212,8 @@ function loadingChatSnapshot() {
 function fetchContactList() {
 	loadingFriendRequests();
 	renderFriPage();
+	//加载聊天快照
+	loadingChatSnapshot();
 }
 
 
@@ -237,8 +234,10 @@ function renderFriPage(){
 		friUlist.innerHTML=friHtml;
 		//批量绑定点击事件
 		mui("#chatFriends").on("tap",".chatWithFriend",function(e){
-			var friendUserId = this.getAttribute("friendId");
+			var friendUserId = this.getAttribute("friId");
 			var friendUserNickname = this.getAttribute("friendNickname");
+			var friNicknameNode = this.getElementsByTagName('span');//获取朋友的关于昵称的项
+			friNicknameNode[0].setAttribute("class","");
 			//打开聊天子页面
 			mui.openWindow({
 				url:"lhf_chat.html",
@@ -250,9 +249,9 @@ function renderFriPage(){
 				}
 			});
 			//点击进入聊天页面后，标记未读状态为已读
-			app.readUserChatSnapshot(me.userId,friendUserId);
+			//app.readUserChatSnapshot(me.userId,friendUserId);
 			//重新渲染快照列表
-			loadingChatSnapshot();
+			//loadingChatSnapshot();
 		});
 	}
 	else{

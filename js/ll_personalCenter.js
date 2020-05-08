@@ -33,16 +33,7 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 			//打开login页面后再关闭setting页面
 			plus.webview.show('login1.html');
 			console.log("执行至跳转到登录页面");
-			
-			var curr = plus.webview.currentWebview();
-			var wvs = plus.webview.all();
-			for (var i = 0,len = wvs.length; i < len; i++) {
-				//关闭除当前页面外的其他页面
-				if (wvs[i].getURL() != curr.getURL()){
-					plus.webview.close(wvs[i]);
-				}
-			}
-			curr.close();
+			plus.webview.open("../html/crb_login1.html");//待测试
 			
 			mui.toast("退出登录成功！");
 		} else {
@@ -89,6 +80,7 @@ document.getElementById('help').addEventListener('tap',function(){
 function refreshBasicInfo() {
 	console.log("请求加载个人中心数据，刷新");
 	var user = app.getUserGlobalInfo();
+	var thisWeekTag1;
 	//发送请求给后端请求数据
 	//后端服务器的url
 	mui.ajax(app.serverUrl+'/user/getUser', {
@@ -103,9 +95,10 @@ function refreshBasicInfo() {
 			//服务器返回响应，根据响应结果，分析是否成功获取用户信息；
 			if (data.status == 200) {
 				//保存全局用户对象到本地缓存
-				var userInfoJson = data.data;
-				app.setUserGlobalInfo(userInfoJson);
-				mui.openWindow("ll_personalCenter.html", "ll_personalCenter.html");
+				//console.log(data.data.thisWeekTag);
+				app.setUserGlobalInfo(data.data);
+				thisWeekTag1=data.data.thisWeekTag;
+				loadThisWeekTags(thisWeekTag1);
 			}
 			else{
 				app.showToast(data.msg, "error");
@@ -116,9 +109,10 @@ function refreshBasicInfo() {
 			// console.log(JSON.stringify(data.data));
 		}
 	});
-	loadPersonalCenter(user);
-	loadThisWeekTags();
-	loadPastTags();
+	var user1=app.getUserGlobalInfo();
+	loadPersonalCenter(user1);
+	//此处不知为何，始终执行会快过过响应的处理
+//	console.log(user.thisWeekTag);
 };
 
 
@@ -134,13 +128,13 @@ function loadPersonalCenter(user){
 	document.getElementById("gender").innerHTML = gender;
 	document.getElementById("profile").innerHTML = profile;
 	document.getElementById("telephone").innerHTML = telephone;
+	loadPastTags();
 }
 
 //加载本周标签
-function loadThisWeekTags(){
-	var user = app.getUserGlobalInfo();
-	var tags = user.thisWeekTag;
-	var tags = tags.split(",");
+function loadThisWeekTags(tags){
+	//console.log("加载本周标签");
+	var tags = tags.split(" ");
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		var weekTagsHtml = "";

@@ -14,11 +14,12 @@ mui.plusReady(function () {
 	   else{
 	   var user = app.getUserGlobalInfo();
 	   var myDate = new Date();
-	   mui.ajax('……', {
+	   mui.ajax(app.serverUrl+"/corner/talk", {
 	   	data: {
-	   		userId:user.userId,
-	   		content:'content',
-	   		comment_time:myDate.toLocaleString()
+			user:{
+				userId:user.userId
+			},
+	   		postContent:content
 	   	},
 	   	dataType: 'json', //服务器返回json格式数据
 	   	type: 'post', //HTTP请求类型
@@ -31,10 +32,10 @@ mui.plusReady(function () {
 	   		if (data.status == 200) {
 	   			//显示成功信息
 	   			//mui.toast("发送动态成功");
-				mui.openWindow({//跳转到广场页面
-				    url:'../html/crb_square.html',
-				    id:'crb_square.html'
-				})
+				console.log(data.data);
+				var chatWebview = plus.webview.getWebviewById("crb_square.html");
+				chatWebview.evalJS("pulldownRefresh()");
+				mui.back();
 	   		}
 	   		else{
 	   			app.showToast(data.msg, "error");
@@ -47,4 +48,4 @@ mui.plusReady(function () {
 	   });
 	   }
 	});	
-}
+})

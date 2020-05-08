@@ -14,7 +14,7 @@ mui.plusReady(function() {
 	document.getElementById("save").addEventListener('tap', function() {
 		for (var i = 0; i < selectedTags.length; i++) {
 			if (selectedTags[i].type == "checkbox" && selectedTags[i].checked) {
-				thisWeekTagStr += selectedTags[i].value + ',';
+				thisWeekTagStr += selectedTags[i].value + ' ';
 				console.log(thisWeekTagStr);
 				tagNum++;
 			}
@@ -22,6 +22,7 @@ mui.plusReady(function() {
 		if (tagNum <= 3) {
 			mui.ajax(app.serverUrl + "/user/setThisWeekTag", {
 				data: {
+					userId:user.userId,
 					thisWeekTag: thisWeekTagStr
 				},
 				dataType: 'json', //服务器返回json格式数据
@@ -30,10 +31,15 @@ mui.plusReady(function() {
 				headers:{'Content-Type':'application/json'},
 				success: function(data) {
 					console.log(JSON.stringify(data));
+					user.thisWeekTag = thisWeekTagStr;
+					alert("保存成功");
+					var chatWebview = plus.webview.getWebviewById("ll_personalCenter.html");
+					chatWebview.evalJS("refreshBasicInfo()");
+					mui.back();
 				},
 				error: function(xhr, type, errorThrown) {
 
-				}
+				},
 			});
 		} else {
 			mui.toast('保存失败啦=.= 最多只能选择三个哦！');
