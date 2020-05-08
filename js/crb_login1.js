@@ -69,7 +69,9 @@ mui.plusReady(function(){
             		var userInfoJson = data.data;
             		app.setUserGlobalInfo(userInfoJson);
             		// 页面跳转到默认首页（后续需更改
-            		mui.openWindow("index.html", "index.html");
+            		plus.webview.open("../html/index.html", "index.html");
+            		plus.webview.currentWebview().close();
+            		console.log("登录结束");
             	}
 				else{
             		app.showToast(data.msg, "error");
