@@ -98,15 +98,17 @@ send.addEventListener("tap",function(){
 		var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
 		// 调用websocket发送消息
 		var chatWebview = plus.webview.getWebviewById("lhf_chatRecord.html");
-		console.log("CHAT.chat('" + JSON.stringify(dataContent) + "')");
+		// console.log("CHAT.chat('" + JSON.stringify(dataContent) + "')");
 		chatWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
 		
 		//我发送出去的信息进行保存
 		app.saveUserChatHistory(me.userId, friendUserId, msgTextValue, app.ME);
 		
+		var aaa = new app.ChatHistory(me.userId, friendUserId, msgTextValue, app.ME);
+		console.log("我发送的消息" + JSON.stringify(aaa));
 		//保存聊天快照，由于是由自己发送的,所以默认为已读
 		app.saveUserChatSnapshot(me.userId, friendUserId, msgTextValue, true);
-		chatWebview.evalJS("loadingChatSnapshot()");
+		// chatWebview.evalJS("loadingChatSnapshot()");
 		sendMsgFunc(msgTextValue);//渲染发送出去的消息
 		msgText.value="";//清空文本框中的内容
 		send.setAttribute("class","mui-btn mui-btn-block mui-btn-gray");//重置发送按钮的状态
@@ -126,6 +128,7 @@ function sendMsgFunc(myMsg){
 			'<p class="msgRightGreen">'+myMsg+'</p>'+
 		'</div>'+
 	'</div>';
+	console.log("渲染发送出去的消息" + myMsg);
 	areaMsgList.insertAdjacentHTML("beforeend",myMsgHtml);
 }
 
@@ -147,9 +150,9 @@ function receiveMsgFunc(friMsg){
 function initChatHistory() {
 	var myId = me.userId;
 	var chatHistoryList = app.getUserChatHistory(myId, friendUserId);//获取缓存中的聊天记录
-	console.log("初始化聊天内容" + JSON.stringify(chatHistoryList));
 	for (var i = 0 ; i < chatHistoryList.length ; i ++) {
 		var singleMsg = chatHistoryList[i];
+		// console.log("初始化单条消息" + JSON.stringify(singleMsg));
 		if (singleMsg.flag == app.ME) {
 			sendMsgFunc(singleMsg.msg);//渲染发送出去的消息
 		} 

@@ -12,6 +12,8 @@ mui.plusReady(function() {
 	
 	var tagNum = 0;
 	document.getElementById("save").addEventListener('tap', function() {
+		tagNum = 0;//置零
+		thisWeekTagStr = "";
 		for (var i = 0; i < selectedTags.length; i++) {
 			if (selectedTags[i].type == "checkbox" && selectedTags[i].checked) {
 				thisWeekTagStr += selectedTags[i].value + ',';
