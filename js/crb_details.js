@@ -1,5 +1,4 @@
 //mui初始化，配置下拉刷新
-//mui初始化，配置下拉刷新
 var head;
 var max;
 mui.init({
@@ -18,11 +17,7 @@ mui.init({
 	}
 });
 
-
-
 function pulldownRefresh() {
-	
-	
 	mui.ajax(app.serverUrl+"/corner/getpost",{
 		data:{
 			postId:postid
@@ -43,8 +38,7 @@ function pulldownRefresh() {
 	document.getElementById("time").innerHTML=date;
 	document.getElementById("content").innerHTML=content;
 	document.getElementById("postlike").innerHTML=postlike;
-	
-	
+		
 	head = 0;
 	max = 1;
 	var data = {
@@ -65,16 +59,13 @@ function pulldownRefresh() {
 			posts.items = convert(rsp);
 			
 			var list=document.getElementById("commentlist");
-
-				var postHtml="";
-				for(var i=0;i<posts.items.length;i++){
-					postHtml+=addpost(posts.items[i]);
-				}
-				list.innerHTML=postHtml;
+			var postHtml="";
+			for(var i=0;i<posts.items.length;i++){
+				postHtml+=addpost(posts.items[i]);
+			}
+			list.innerHTML=postHtml;
 		}
-		}
-		
-		
+	}	
 	},'json'
 	);
 	
@@ -82,18 +73,12 @@ function pulldownRefresh() {
 
 function addpost(post) {
 	var html="";
-	html='<li id="commentItem">'+
-			
-		   '<div class="mui-card">'+
-		        post.commentId+'<br/>'+
-				post.postContent+'<br/>'+
-				post.sendUser+'<br/>'+
-				
-				'</div>'+
-				
-		'</li>';
+	html='<div class="mui-card" id="commentItem">'+
+			post.commentId+'<br/>'+
+			post.postContent+'<br/>'+
+			post.sendUser+'<br/>'+
+		'</div>';
 		
-
 	return html;
 }
 
