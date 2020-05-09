@@ -32,7 +32,7 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 						
 			//打开login页面后再关闭setting页面
 						
-			window.open('crb_login1.html');
+			mui.openWindow("crb_login1.html","crb_login1.html");
 			console.log("执行至跳转到登录页面");
 						
 			mui.toast("退出登录成功！");
