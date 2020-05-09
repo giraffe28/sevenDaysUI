@@ -69,19 +69,24 @@ function pulldownRefresh() {
 	);
 }
 
-
 function addpost(post) {
 	var html="";
-	html='<li class="postItem" id="'+post.postId+'">'+
-			
-		   '<div class="mui-card">'+
-		        post.nickname+'<br/>'+
-				post.content+'<br/>'+
-				post.date+'<br/>'+
-				post.postlike+'<br/>'+
+	html=//'<li class="postItem" id="'+post.postId+'">'+
+		   '<div class="mui-card postItem" id="'+post.postId+'">'+
+				'<div class="mui-card-header mui-card-media">'+
+					'<div class="mui-media-body">'+
+						post.nickname+
+						'<p>发表于'+post.date+'</p>'+
+					'</div>'+
 				'</div>'+
-				
-		'</li>';	
+				'<div class="mui-card-content">'+
+					'<p class="line-limit-length">'+post.content+'</p>'+
+				'</div>'+
+				'<div class="mui-card-footer">'+
+					'赞:'+post.postlike+
+				'</div>'+
+			'</div>'+				
+		//'</li>';	
 	return html;
 }
 
