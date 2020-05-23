@@ -1,19 +1,22 @@
 mui.init();
 mui.plusReady(function() {
 	var user = app.getUserGlobalInfo();
-	refreshBasicInfo();	
+	//refreshBasicInfo();	
+	loadPersonalCenter(user);
 });
 
 
 window.addEventListener("show", function() {
 	console.log("触发个人中心的show事件");
-	refreshBasicInfo();
+	//refreshBasicInfo();
+	loadPersonalCenter(user);
 });
 
 
 window.addEventListener("refresh",function(){
 	console.log("触发个人中心的refresh事件");
-	refreshBasicInfo();
+	//refreshBasicInfo();
+	loadPersonalCenter(user);
 });
 
 
@@ -84,10 +87,10 @@ document.getElementById('help').addEventListener('tap',function(){
 	mui.openWindow('ll_help.html','ll_help.html');
 });
 
-function refreshBasicInfo() {
+/*function refreshBasicInfo() {
 	console.log("请求加载个人中心数据，刷新");
 	var user = app.getUserGlobalInfo();
-	var thisWeekTag1;
+	//var thisWeekTag1;
 	//发送请求给后端请求数据
 	//后端服务器的url
 	mui.ajax(app.serverUrl+'/user/getUser', {
@@ -104,8 +107,8 @@ function refreshBasicInfo() {
 				//保存全局用户对象到本地缓存
 				//console.log(data.data.thisWeekTag);
 				app.setUserGlobalInfo(data.data);
-				thisWeekTag1=data.data.thisWeekTag;
-				loadThisWeekTags(thisWeekTag1);
+				//thisWeekTag1=data.data.thisWeekTag;
+				//loadThisWeekTags(thisWeekTag1);
 			}
 			else{
 				app.showToast(data.msg, "error");
@@ -120,10 +123,11 @@ function refreshBasicInfo() {
 	loadPersonalCenter(user1);
 	//此处不知为何，始终执行会快过过响应的处理
 //	console.log(user.thisWeekTag);
-};
+};*/
 
 
 function loadPersonalCenter(user){
+	console.log('加载缓存中的用户数据');
 	//用户基本信息已经在缓存中
 	//var myImage=user.icon;//头像
 	var nickname = user.nickname; //假名
@@ -136,11 +140,12 @@ function loadPersonalCenter(user){
 	document.getElementById("profile").innerHTML = profile;
 	document.getElementById("telephone").innerHTML = telephone;
 	loadPastTags();
+	loadThisWeekTags(user.thisWeekTag);
 }
 
 //加载本周标签
 function loadThisWeekTags(tags){
-	console.log("加载本周标签");
+	console.log("加载缓存中的本周标签");
 	var tags = tags.split(" ");
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
@@ -158,7 +163,7 @@ function loadThisWeekTags(tags){
 //加载过往标签
 function loadPastTags(){
 	var user=app.getUserGlobalInfo();
-//	console.log("加载过往标签");
+	console.log("从后端加载过往标签");
 	mui.ajax(app.serverUrl+'/user/pastTag', {//发送请求返回用户的过往标签
 		data: {
 			userId:user.userId,
