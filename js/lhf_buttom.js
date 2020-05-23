@@ -5,6 +5,7 @@ mui.plusReady(function () {
 	mui.back=function(){
 		return false;
 	}
+	
 	var indexWebview=plus.webview.currentWebview();//获得当前的webview
 	for(var i=0;i<sevenDaysArray.length;i++){//创建webview窗口
 		var page=plus.webview.create(sevenDaysArray[i].pageUrl,sevenDaysArray[i].pageId,pageStyle);
@@ -65,4 +66,12 @@ function initData() {
 	mui.fire(lhf_chatRecord, "refresh");
 	var ll_personalCenter = plus.webview.getWebviewById("ll_personalCenter.html");
 	mui.fire(ll_personalCenter, "refresh");
+	CHAT.init();
 }
+
+
+// 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+window.onbeforeunload = function() {
+	console.log("关闭窗口引发的链接关闭");
+    CHAT.socket.close();
+}  

@@ -1,9 +1,9 @@
 window.app = {
 	
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.0.101:8080/sevenDays',
+	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays1_1_war_exploded',
 	//netty服务后端发布的url地址
-	nettyServerUrl:'ws://192.168.0.101:7888/ws', //172.17.243.33
+	nettyServerUrl:'ws://192.168.1.2:7888/ws', //172.17.243.33
 
 	
 	/**
@@ -50,6 +50,7 @@ window.app = {
 	SIGNED: 3, 		// 消息签收
 	KEEPALIVE: 4, 	// 客户端保持心跳
 	PULL_FRIEND:5,	// 重新拉取好友
+	
 	
 	/*
 	 * 和后端的 ChatMsg 聊天模型对象保持一致
