@@ -29,13 +29,20 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 		if (e.index == 0) {
 			//清空缓存
 			plus.storage.removeItem("userInfo");
-						
-			//打开login页面后再关闭setting页面
-						
+			
+			var webviews= plus.webview.all();
+			
+			//打开login页面		
 			mui.openWindow("crb_login1.html","crb_login1.html");
 			console.log("执行至跳转到登录页面");
 						
 			mui.toast("退出登录成功！");
+			setTimeout(function(){
+				for(var i=0;i<webviews.length;i++){
+					webviews[i].close();
+				}
+			},1000);
+			
 		} else {
 			mui.toast("嘿嘿（`v`）");
 		}
@@ -133,7 +140,7 @@ function loadPersonalCenter(user){
 
 //加载本周标签
 function loadThisWeekTags(tags){
-	//console.log("加载本周标签");
+	console.log("加载本周标签");
 	var tags = tags.split(" ");
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
@@ -151,7 +158,7 @@ function loadThisWeekTags(tags){
 //加载过往标签
 function loadPastTags(){
 	var user=app.getUserGlobalInfo();
-	console.log("加载国王标签");
+//	console.log("加载过往标签");
 	mui.ajax(app.serverUrl+'/user/pastTag', {//发送请求返回用户的过往标签
 		data: {
 			userId:user.userId,
@@ -163,7 +170,7 @@ function loadPastTags(){
 		success: function(data) {
 			//服务器返回响应，根据响应结果，分析是否成功获取信息；
 			if (data.status == 200) {
-				console.log(JSON.stringify(data.data));
+//				console.log(JSON.stringify(data.data));
 				var pastTags = data.data;
 				var pastTagsDom=document.getElementById('pastTags');
 				if (pastTags!= null && pastTags.length > 0) {

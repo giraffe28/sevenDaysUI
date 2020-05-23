@@ -50,9 +50,9 @@ mui.plusReady(function () {
 			// 构建DataContent
 			var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
 			// 调用websocket发送消息
-			var chatWebview = plus.webview.getWebviewById("lhf_chatRecord.html");
+			var chatWebSocket = plus.webview.getWebviewById("lhf_index.html");
 			console.log("CHAT.chat('" + JSON.stringify(dataContent) + "')");
-			chatWebview.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
+			chatWebSocket.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
 			
 			//我发送出去的信息进行保存
 			app.saveUserChatHistory(me.userId, friendUserId, msgTextValue, app.ME);
@@ -60,6 +60,7 @@ mui.plusReady(function () {
 			//保存聊天快照，由于是由自己发送的,所以默认为已读
 			console.log(friendUserId);
 			app.saveUserChatSnapshot(me.userId, friendUserId, msgTextValue, true);
+			var chatWebSocket = plus.webview.getWebviewById("lhf_chatRecord.html");
 			chatWebview.evalJS("loadingChatSnapshot()");
 			sendMsgFunc(msgTextValue);//渲染发送出去的消息
 			msgText.value="";//清空文本框中的内容
@@ -161,3 +162,16 @@ function initChatHistory() {
 		}
 	}
 }
+
+//监听是否信赖的开关动作
+document.getElementById("trustSwitch").addEventListener("toggle",function(event){
+	if(event.detail.isActive){
+		console.log("你选择了信赖");
+		//向后端发送消息，并更新缓存
+	
+	}
+	else{
+		console.log("你选择了不信赖");
+		//向后端发送消息，并更新缓存
+	}
+});
