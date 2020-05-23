@@ -307,4 +307,14 @@ window.app = {
 		return JSON.parse(blackListStr);
 	},
 	
+	//保存十字记忆
+	setMemory:function(memory){
+		var memoryStr=JSON.stringify(memory);
+		plus.storage.setItem("memory",memoryStr);
+	},
+	//取出十字记忆
+	getMemory:function(){
+		var memoryStr=plus.storage.getItem("memory");
+		return JSON.parse(memoryStr);
+	},
 }
