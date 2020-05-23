@@ -4,12 +4,11 @@ var tagFormDom;
 mui.init();
 mui.plusReady(function() {
 	user = app.getUserGlobalInfo();
-	renderTagPage();
 	var thisWeekTagStr = "";
-	thisWeekTags = user.thisWeekTag;
+	thisWeekTags = user.thisWeekTag.split(" ");
+	renderTagPage();
 	var selectedTags = document.getElementsByTagName("input");
 	tagFormDom = document.getElementById("tagForm");
-	
 	var tagNum = 0;
 	document.getElementById("save").addEventListener('tap', function() {
 		tagNum = 0;//置零
@@ -69,7 +68,8 @@ function renderTagPage() {
 					for (var i = 0; i < tags.length; i++) {
 						flag = false;
 						for (var j = 0; j < thisWeekTags.length; j++) {
-							if (tags[i].tagName===(thisWeekTags[j].tagName))
+							//console.log(thisWeekTags[j]);
+							if (tags[i].tagName==thisWeekTags[j])
 								flag = true;
 						}
 						//如果是本周标签，默认被选中
