@@ -9,6 +9,7 @@ mui.plusReady(function() {
 window.addEventListener("show", function() {
 	console.log("触发个人中心的show事件");
 	//refreshBasicInfo();
+	var user = app.getUserGlobalInfo();
 	loadPersonalCenter(user);
 });
 
@@ -16,6 +17,7 @@ window.addEventListener("show", function() {
 window.addEventListener("refresh",function(){
 	console.log("触发个人中心的refresh事件");
 	//refreshBasicInfo();
+	var user = app.getUserGlobalInfo();
 	loadPersonalCenter(user);
 });
 
