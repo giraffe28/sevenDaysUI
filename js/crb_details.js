@@ -269,7 +269,7 @@ mui.plusReady(function () {
 	   }
 	   else{
 	   var myDate = new Date();
-	   mui.ajax(app.serverUrl+"/corner/talk", {
+	   mui.ajax(……, {//后端url，需更改
 	   	data: {
 			user:{
 				userId:user.userId
