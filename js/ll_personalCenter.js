@@ -147,7 +147,8 @@ function loadPersonalCenter(user){
 
 //加载本周标签
 function loadThisWeekTags(tags){
-	console.log("加载缓存中的本周标签");
+	user=app.getUserGlobalInfo();
+	console.log("加载缓存中的本周标签:"+tags);
 	var tags = tags.split(" ");
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
@@ -160,6 +161,12 @@ function loadThisWeekTags(tags){
 	} else {
 		weekTagsDom.innerHTML = "";
 	}
+}
+
+//刷新本周标签
+function refreshThisWeekTags(tags){
+	console.log("刷新本周标签：");
+	loadThisWeekTags(tags);
 }
 
 //加载过往标签

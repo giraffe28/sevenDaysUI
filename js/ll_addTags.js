@@ -6,7 +6,7 @@ mui.plusReady(function() {
 	user = app.getUserGlobalInfo();
 	var thisWeekTagStr = "";
 	thisWeekTags = user.thisWeekTag.split(" ");
-	renderTagPage();
+	renderTagPage(thisWeekTags);
 	var selectedTags = document.getElementsByTagName("input");
 	tagFormDom = document.getElementById("tagForm");
 	var tagNum = 0;
@@ -33,9 +33,11 @@ mui.plusReady(function() {
 				success: function(data) {
 					console.log(JSON.stringify(data));
 					user.thisWeekTag = thisWeekTagStr;
+					plus.storage.setItem("userInfo",JSON.stringify(user));
+					//console.log("thisweektag"+user.thisWeekTag);
 					alert("保存成功");
 					var chatWebview = plus.webview.getWebviewById("ll_personalCenter.html");
-					chatWebview.evalJS("refreshBasicInfo()");
+					chatWebview.evalJS("refreshThisWeekTags('"+user.thisWeekTag+"')");
 					mui.back();
 				},
 				error: function(xhr, type, errorThrown) {
@@ -49,7 +51,7 @@ mui.plusReady(function() {
 });
 
 //从后台获取标签，渲染页面
-function renderTagPage() {
+function renderTagPage(thisWeekTags) {
 	console.log("渲染标签列表");
 	mui.ajax(app.serverUrl + '/tag/getTag', { //发送请求返回系统标签
 		data: {},
