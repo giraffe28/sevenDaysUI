@@ -96,7 +96,7 @@ function addpost(post) {
 					'</div>'+
 				'</div>'+
 				'<div class="mui-card-content">'+
-					'<p class="line-limit-length">'+post.content+'</p>'+
+					'<p class="line-limit-length content">'+post.content+'</p>'+
 				'</div>'+
 				'<div class="mui-card-footer">'+
 					'赞:'+post.postlike+
