@@ -75,9 +75,9 @@ document.getElementById('modify').addEventListener('tap',function(){
 });
 
 /*点击进入我的钱包*/
-document.getElementById('purse').addEventListener('tap',function(){
+/*document.getElementById('purse').addEventListener('tap',function(){
 	mui.openWindow('ll_purse.html','ll_purse.html');
-});
+});*/
 
 /*点击进入关于我们*/
 document.getElementById('about').addEventListener('tap',function(){
@@ -89,7 +89,7 @@ document.getElementById('help').addEventListener('tap',function(){
 	mui.openWindow('ll_help.html','ll_help.html');
 });
 
-/*function refreshBasicInfo() {
+function refreshBasicInfo() {
 	console.log("请求加载个人中心数据，刷新");
 	var user = app.getUserGlobalInfo();
 	//var thisWeekTag1;
@@ -125,7 +125,7 @@ document.getElementById('help').addEventListener('tap',function(){
 	loadPersonalCenter(user1);
 	//此处不知为何，始终执行会快过过响应的处理
 //	console.log(user.thisWeekTag);
-};*/
+};
 
 
 function loadPersonalCenter(user){
