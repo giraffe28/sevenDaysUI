@@ -12,8 +12,6 @@ mui.plusReady(function () {
 			mui.toast('内容不能为空哦');
 		}
 		else{
-			console.log(memoryTitle);
-			console.log(memoryContent);
 			mui.ajax(app.serverUrl+'/memory/create',{
 				data:{
 					userId:app.getUserGlobalInfo().userId,
@@ -26,8 +24,16 @@ mui.plusReady(function () {
 				headers:{'Content-Type':'application/json'},
 				success:function(data){
 					if(data.status==200){
+						var memoryJson=app.getMemory();
+						//console.log(JSON.stringify(data.data));
+						memoryJson.push(data.data);
+						//console.log(JSON.stringify(memoryJson));
+						plus.storage.setItem("memory",JSON.stringify(memoryJson));
+						var chatWebview = plus.webview.getWebviewById("ll_crossingMemory.html");
+						chatWebview.evalJS("requestMemory()");
+						chatWebview.evalJS("renderMemoryPage()");
 						mui.toast('保存成功！');
-						mui.openWindow("ll_crossingMemory.html", "ll_crossingMemory.html");
+						mui.back();
 					}
 				},
 				error:function(xhr,type,errorThrown){
