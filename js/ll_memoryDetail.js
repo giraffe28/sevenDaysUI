@@ -57,7 +57,7 @@ mui.plusReady(function() {
 						var memoryJson = app.getMemory();
 						//console.log(JSON.stringify(data.data));
 						memoryJson.splice(index, 1, data.data);
-						console.log(JSON.stringify(memoryJson));
+						//console.log(JSON.stringify(memoryJson));
 						plus.storage.setItem("memory", JSON.stringify(memoryJson));
 						var chatWebview = plus.webview.getWebviewById("ll_crossingMemory.html");
 						chatWebview.evalJS("requestMemory()");
