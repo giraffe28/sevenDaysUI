@@ -1,5 +1,4 @@
 //mui初始化，配置下拉刷新
-//mui初始化，配置下拉刷新
 var head;
 var max;
 mui.init({
@@ -18,11 +17,7 @@ mui.init({
 	}
 });
 
-
-
 function pulldownRefresh() {
-	
-	
 	mui.ajax(app.serverUrl+"/corner/getpost",{
 		data:{
 			postId:postid
@@ -43,8 +38,7 @@ function pulldownRefresh() {
 	document.getElementById("time").innerHTML=date;
 	document.getElementById("content").innerHTML=content;
 	document.getElementById("postlike").innerHTML=postlike;
-	
-	
+		
 	head = 0;
 	max = 1;
 	var data = {
@@ -65,16 +59,13 @@ function pulldownRefresh() {
 			posts.items = convert(rsp);
 			
 			var list=document.getElementById("commentlist");
-
-				var postHtml="";
-				for(var i=0;i<posts.items.length;i++){
-					postHtml+=addpost(posts.items[i]);
-				}
-				list.innerHTML=postHtml;
+			var postHtml="";
+			for(var i=0;i<posts.items.length;i++){
+				postHtml+=addpost(posts.items[i]);
+			}
+			list.innerHTML=postHtml;
 		}
-		}
-		
-		
+	}	
 	},'json'
 	);
 	
@@ -82,13 +73,12 @@ function pulldownRefresh() {
 
 function addpost(post) {
 	var html="";
-	html='<div class="mui-card" id="commentItem">'+
-				post.commentId+'<br/>'+
-				post.postContent+'<br/>'+
-				post.sendUser+'<br/>'+
-			'</div>';
+	html='<div class="mui-card comment" id="commentItem">'+
+			post.commentId+'<br/>'+
+			post.postContent+'<br/>'+
+			post.sendUser+'<br/>'+
+		'</div>';
 		
-
 	return html;
 }
 
@@ -149,7 +139,6 @@ function pullupRefresh() {
 	);
 }
 
-			
 //窗口隐藏时，重置页面数据
 mui.plusReady(function () {
 	
@@ -169,116 +158,168 @@ mui.plusReady(function () {
 	mui.ajax(app.serverUrl+"/corner/likeornot",{//后端url
 	//前端默认赞,,,查询后端数据库是否有userid对于post的点赞，
 	//若有，改变为已赞，若无，不做操作
-	        data:{
-	            postId:postid,
-	            userId:user.userId
-	        },
-	        dataType:'json',
-	        type:'POST',
-	        timeout:10000,
-	    	contentType:'application/json;charset=utf-8',
-	        success:function(data){
-	        	if (data.status == 200) {
-	    			console.log(JSON.stringify(data));
-					if(data.data=="已经点赞"){
-						like.innerHTML="已赞";
-					}else if(data.data=="尚未点赞"){
-						like.innerHTML="赞";
-					}
-	        	}
-	    		else{
-	        		app.showToast(data.msg, "error");
-	        	}
-	        }
-	});
-	
-	
-	
-	
-	like=document.getElementById("like");
-	like.addEventListener('tap',function(){
-		var likeCnt = document.getElementById("postlike").innerHTML;
-		document.getElementById("postlike").innerHTML=postlike;
-		if(like.innerHTML=="赞"){
-			mui.ajax(app.serverUrl+"/corner/like",{//后端url
-			        data:{
-			            postId:postid,
-			            userId:user.userId
-			        },
-			        dataType:'json',
-			        type:'POST',
-			        timeout:10000,
-			    	contentType:'application/json;charset=utf-8',
-			        success:function(data){
-			        	if (data.status == 200) {
-			    			console.log(JSON.stringify(data));
-							like.innerHTML="已赞";
-							likeCnt = parseInt(likeCnt) + 1;
-							//console.log(likeCnt);
-							document.getElementById("postlike").innerHTML = likeCnt;
-			        	}
-			    		else{
-			        		app.showToast(data.msg, "error");
-			        	}
-			        }
-			});
-			
-		}else if(like.innerHTML=="已赞"){
-			mui.ajax(app.serverUrl+"/corner/notlike",{//后端url
-			        data:{
-			            postId:postid,
-			            userId:user.userId
-			        },
-			        dataType:'json',
-			        type:'POST',
-			        timeout:10000,
-			    	contentType:'application/json;charset=utf-8',
-			        success:function(data){
-			        	if (data.status == 200) {
-			    			console.log(JSON.stringify(data));
-							like.innerHTML="赞";
-							likeCnt = parseInt(likeCnt) - 1;
-							//console.log(likeCnt);
-							document.getElementById("postlike").innerHTML = likeCnt;
-			        	}
-			    		else{
-			        		app.showToast(data.msg, "error");
-			        	}
-			        }
-			});
-			
-		}else{
-			console.log("发生异常");
-		}
-		
-	});
-	
-	refreshPage();
-	
-	
-	
-})
-
-function refreshPage(){
-	console.log("flag222222");
-	mui.ajax(app.serverUrl+"/corner/getpost",{
 		data:{
-			postId:postid
-		},
+			postId:postid,
+			userId:user.userId
+	    },
 		dataType:'json',
 		type:'POST',
 		timeout:10000,
 		contentType:'application/json;charset=utf-8',
 		success:function(data){
-			nickname=data.data.user.userId;
-			date=new Date(data.data.postDate);
-			content=data.data.postContent;
-			postlike=data.data.postLike;
+			if (data.status == 200) {
+				console.log(JSON.stringify(data));
+				if(data.data=="已经点赞"){
+					like.innerHTML="已赞";
+				}else if(data.data=="尚未点赞"){
+					like.innerHTML="赞";
+				}
+	        }
+	    	else{
+	        	app.showToast(data.msg, "error");
+	        }
+	    }
+	});
+	
+	
+	like=document.getElementById("like");
+	like.addEventListener('tap',function(){
+		if(like.innerHTML=="赞"){
+			mui.ajax(app.serverUrl+"/corner/like",{//后端url
+		        data:{
+		            postId:postid,
+		            userId:user.userId
+		        },
+		        dataType:'json',
+		        type:'POST',
+		        timeout:10000,
+		    	contentType:'application/json;charset=utf-8',
+		        success:function(data){
+		        	if (data.status == 200) {
+		    			console.log(JSON.stringify(data));
+						like.innerHTML="已赞";
+		        	}
+		    		else{
+		        		app.showToast(data.msg, "error");
+		        	}
+		        }
+			});
+		}else if(like.innerHTML=="已赞"){
+			mui.ajax(app.serverUrl+"/corner/notlike",{//后端url
+		        data:{
+		            postId:postid,
+		            userId:user.userId
+		        },
+		        dataType:'json',
+		        type:'POST',
+		        timeout:10000,
+		    	contentType:'application/json;charset=utf-8',
+		        success:function(data){
+		        	if (data.status == 200) {
+		    			console.log(JSON.stringify(data));
+						like.innerHTML="赞";
+		        	}
+		    		else{
+		        		app.showToast(data.msg, "error");
+		        	}
+		        }
+			});
+		}else{
+			console.log("发生异常");
 		}
-	})
-	document.getElementById("title").innerHTML=nickname;
-	document.getElementById("time").innerHTML=date;
-	document.getElementById("content").innerHTML=content;
-	document.getElementById("postlike").innerHTML=postlike;
-	console.log("postlike:"+postlike);
-}
+			
+		console.log("我改好了");
+		mui.ajax(app.serverUrl+"/corner/getpost",{
+			data:{
+				postId:postid
+			},
+			dataType:'json',
+			type:'POST',
+			timeout:10000,
+			contentType:'application/json;charset=utf-8',
+			success:function(data){
+				nickname=data.data.user.userId;
+				date=new Date(data.data.postDate);
+				content=data.data.postContent;
+				postlike=data.data.postLike;
+			}
+		})
+		
+		
+		document.getElementById("title").innerHTML=nickname;
+		document.getElementById("time").innerHTML=date;
+		document.getElementById("content").innerHTML=content;
+		document.getElementById("postlike").innerHTML=postlike;
+		console.log("postid"+postid);
+		console.log(postlike);
+		
+		
+	});
+	
+	var send=document.getElementById("send-btn");
+	send.addEventListener('tap',function(){
+		var content=document.getElementById('comment-text').value;
+		if(content==''){
+			mui.toast('内容不能为空');
+			return false; 
+		}
+		else if(content.length>50){
+		   mui.toast('评论不得超过50个字');
+		   return false; 
+	   }
+	   else{
+	   var myDate = new Date();
+	   mui.ajax(……, {//后端url，需更改
+	   	data: {
+			user:{
+				userId:user.userId
+			},
+	   		commentcontent:content
+	   	},
+	   	dataType: 'json', //服务器返回json格式数据
+	   	type: 'post', //HTTP请求类型
+	   	timeout: 10000, //超时时间设置为10秒；
+	   	headers: {
+	   		'Content-Type': 'application/json;charset:utf-8'
+	   	},
+	   	success: function(data) {
+	   		//服务器返回响应，根据响应结果，分析是否成功发送动态；
+	   		if (data.status == 200) {
+	   			//显示成功信息
+	   			//mui.toast("发送评论成功");
+				console.log(data.data);
+				var chatWebview = plus.webview.getWebviewById("crb_details.html");
+				chatWebview.evalJS("pulldownRefresh()");
+				mui.back();
+	   		}
+	   		else{
+	   			app.showToast(data.msg, "error");
+	   		}
+	   	},
+	   	error: function(xhr, type, errorThrown) {
+	   		//异常处理；
+	   		console.log(type);
+	   	}
+	   });
+	   }
+	});	
+	
+	
+	//me=app.getUserGlobalInfo();//获取用户信息	
+	//标题改为朋友的昵称
+	//渲染初始化的聊天记录
+	//initChatHistory()
+	//设置聊天记录在进入页面时自动滚动到最后一条
+	//resizeScreen ();
+	
+	/*
+	var self = plus.webview.currentWebview();
+	self.addEventListener("hide",function (e) {
+		window.scrollTo(0, 0);
+		vm.resetData();
+	},false);*/
+	
+	
+	
+	
+})

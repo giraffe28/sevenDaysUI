@@ -4,12 +4,11 @@ var tagFormDom;
 mui.init();
 mui.plusReady(function() {
 	user = app.getUserGlobalInfo();
-	renderTagPage();
 	var thisWeekTagStr = "";
-	thisWeekTags = user.thisWeekTag;
+	thisWeekTags = user.thisWeekTag.split(" ");
+	renderTagPage(thisWeekTags);
 	var selectedTags = document.getElementsByTagName("input");
 	tagFormDom = document.getElementById("tagForm");
-	
 	var tagNum = 0;
 	document.getElementById("save").addEventListener('tap', function() {
 		tagNum = 0;//置零
@@ -34,9 +33,11 @@ mui.plusReady(function() {
 				success: function(data) {
 					console.log(JSON.stringify(data));
 					user.thisWeekTag = thisWeekTagStr;
+					plus.storage.setItem("userInfo",JSON.stringify(user));
+					//console.log("thisweektag"+user.thisWeekTag);
 					alert("保存成功");
 					var chatWebview = plus.webview.getWebviewById("ll_personalCenter.html");
-					chatWebview.evalJS("refreshBasicInfo()");
+					chatWebview.evalJS("refreshThisWeekTags('"+user.thisWeekTag+"')");
 					mui.back();
 				},
 				error: function(xhr, type, errorThrown) {
@@ -50,7 +51,7 @@ mui.plusReady(function() {
 });
 
 //从后台获取标签，渲染页面
-function renderTagPage() {
+function renderTagPage(thisWeekTags) {
 	console.log("渲染标签列表");
 	mui.ajax(app.serverUrl + '/tag/getTag', { //发送请求返回系统标签
 		data: {},
@@ -69,7 +70,8 @@ function renderTagPage() {
 					for (var i = 0; i < tags.length; i++) {
 						flag = false;
 						for (var j = 0; j < thisWeekTags.length; j++) {
-							if (tags[i].tagName===(thisWeekTags[j].tagName))
+							//console.log(thisWeekTags[j]);
+							if (tags[i].tagName==thisWeekTags[j])
 								flag = true;
 						}
 						//如果是本周标签，默认被选中
