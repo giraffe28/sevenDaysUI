@@ -17,9 +17,14 @@ mui.plusReady(function () {
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
 	var confidant = document.getElementById("confidant");
+	var num=0;
 	confidant.addEventListener("tap", function() {
-		loadingRecFriendRequests();
+		if(num==0){//避免关闭时也刷新
+			loadingRecFriendRequests();
+		}
+		num=Math.abs(num-1);
 	});
+	
 	window.addEventListener("refresh",function(){
 		 console.log("触发chatRecord的refresh事件");
 		//从缓存中获取朋友列表，并且渲染到页面
@@ -41,8 +46,9 @@ function loadingChatSnapshot() {
 		chatItem = chatSnapshotList[i];
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
 	//	console.log(JSON.stringify(chatItem));
-//		console.log(friendId);
+		console.log(friendId);
 		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+'"]');//获取指定id朋友的项
+		console.log(friendId);
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
 		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+'"]');//获取朋友的关于昵称的项
 		// 判断消息的已读或未读状态
@@ -55,23 +61,23 @@ function loadingChatSnapshot() {
 }
 
 
-// websocket中,获取后端所有好友列表，并渲染
+// 获取后端所有好友列表，并渲染
 function fetchContactList() {
 	console.log("刷新加载好友列表所有内容");
 	loadingFriendRequests();
 	renderFriPage();
 	//加载聊天快照
-	loadingChatSnapshot();
+	//loadingChatSnapshot();
 }
 
 
 //从缓存中获取朋友列表，并且渲染到页面
 function renderFriPage(){
+	//console.log("到达从缓存中获取数据加载到页面");
 	//获取用户对象
 	var me = app.getUserGlobalInfo();
 	//获取好友列表
 	var friList = app.getFriList();
-	// console.log("从后端获取到的好友列表" + JSON.stringify(friList));
 	//显示好友列表
 	var friUlist = document.getElementById("chatFriends");
 	if(friList!=null&&friList.length>0){
@@ -84,7 +90,15 @@ function renderFriPage(){
 		mui("#chatFriends").on("tap",".chatWithFriend",function(e){
 			var friendUserId = this.getAttribute("friendId");
 			var friendUserNickname = this.getAttribute("friendNickname");
+			var friendNoteName = this.getAttribute("friendNoteName");
+			var friendLevel = this.getAttribute("friendLevel");
 			var friNicknameNode = this.getElementsByTagName('span');//获取朋友的关于昵称的项
+			
+			var friName=friendUserNickname;
+			if(app.isNotNull(friendNoteName)){
+				friName=friendNoteName;
+			}
+			
 			friNicknameNode[0].setAttribute("class","");
 			console.log(friendUserId);
 			//打开聊天子页面
@@ -93,9 +107,11 @@ function renderFriPage(){
 				id:"lhf_chat_"+friendUserId,//每个朋友的聊天页面独立
 				extras:{
 					friUserId:friendUserId,
-					friUserNickname:friendUserNickname,
+					friendLevel:friendLevel,
+					friName:friName,
 					friFaceImage:"../images/1.jpg"
-				}
+				},
+				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 			});
 			//点击进入聊天页面后，标记未读状态为已读
 			app.readUserChatSnapshot(me.userId,friendUserId);
@@ -112,8 +128,9 @@ function renderFriPage(){
 //发送朋友列表信息的加载
 function loadingFriendRequests(){
 	var user=app.getUserGlobalInfo();//获取用户全局对象
-	// console.log("发送朋友的请求"+user.userId);
+	//console.log("发送朋友的请求"+user.userId);
 	mui.ajax(app.serverUrl+"/Friends?userId="+user.userId,{
+		async:false, 
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -123,7 +140,7 @@ function loadingFriendRequests(){
 			//服务器返回响应
 			// console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
-				frilist = data.data;
+				var frilist = data.data;
 				app.setFriList(frilist);//缓存朋友数据
 			}
 			else{
@@ -138,6 +155,7 @@ function loadingRecFriendRequests(){
 	var user=app.getUserGlobalInfo();//获取用户全局对象
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/Friend/getInterest/?userId="+user.userId,{
+		async:true, 
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -145,7 +163,7 @@ function loadingRecFriendRequests(){
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
-			console.log(JSON.stringify(data.data));//输出返回的数据
+			//console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
 				plus.nativeUI.closeWaiting();
 				var friRecList=data.data;
@@ -177,6 +195,7 @@ function renderFriendRecommend(friend) {
 		        '<span class="mui-btn mui-btn-blue">发起闲聊</span>'+
 		    '</div>'+
 		    '<div class="mui-slider-handle">'+
+				'<img class="mui-media-object mui-pull-left" src="../images/1.jpg">'+
 		        '<a href="lhf_chat.html">'+friend.nickname+'</a>'+
 		    '</div>'+
 		'</li>';
@@ -188,17 +207,22 @@ function renderFriendRecommend(friend) {
 //设置好友列表的html项内容
 function renderFriends(friend){ 
 	var html="";
+	var nameShow=friend.nickname;
+	if(app.isNotNull(friend.remark)){
+		nameShow=friend.remark;
+	}
 	// console.log("这是朋友"+JSON.stringify(friend));
-	html='<li class="chatWithFriend mui-table-view-cell mui-media" friendId="'+friend.userId+'" friendNickname="'+friend.nickname+'">'+
+	html='<li class="chatWithFriend mui-table-view-cell mui-media" friendId="'+friend.userId+'" friendNickname="'+friend.nickname+'" friendLevel="'+friend.level+'" friendNoteName="'+friend.remark+'">'+
 				'<div class="mui-slider-right mui-disabled">'+
 					'<span class="mui-btn mui-btn-red">删除</span>'+
 				'</div>'+
 				'<div class="mui-slider-handle">'+
 					'<img class="mui-media-object mui-pull-left" src="../images/1.jpg">'+
-					'<span friId="'+friend.userId+'">'+friend.nickname+'</span>'+
+					'<span friId="'+friend.userId+'">'+nameShow+'</span>'+
 					'<p class="mui-ellipsis"></p>'+
 				'</div>'+
 			'</li>';
+	//console.log(html);
 	return html;
 }
 
@@ -214,16 +238,14 @@ mui('.chatRecords').on('tap','.mui-btn-red',function() {
 			var par = elem1.parentElement.parentNode;
 			var par1=par.getAttribute("friendId");
 			if(uploadDelFri(user.userId,par1)==true){
-				//从缓存中获取朋友列表，并且渲染到页面
-				renderFriPage();
 				//去掉聊天快照
 				app.deleteUserChatSnapshot(user.userId,par1);
-				// 没有回退
-				
+				//重新获取朋友列表，并且渲染到页面
+				fetchContactList();
 			}
 			else{
-				mui.toast("发送结束闲聊请求出错啦！QAQ");
-				//取消：关闭滑动列表
+				//关闭滑动列表
+				mui.toast("缘分未尽？好像出了一些问题QAQ");
 				mui.swipeoutClose(par);
 			}
 		} 
@@ -247,11 +269,13 @@ function uploadDelFri(userId,friendId){
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应,进行数据的重新加载
-			var myFriendList = data.data;
-			app.setFriList(myFriendList);//修改缓存内容
-			//重新加载推荐好友列表
-			loadingRecFriendRequests();
-			status=true;
+			if(data.status==200){
+				status=true;
+				mui.toast("Σ(っ °Д °;)っ 刚刚那个家伙，原地消失了!!!");
+			}
+			else{
+				mui.toast("发送结束闲聊请求出错啦！QAQ");
+			}
 		},
 	});
 	return status;
@@ -271,14 +295,14 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 		if (e.index == 0) {
 		var user=app.getUserGlobalInfo();//获取用户全局对象
 		var par1=par.getAttribute("friendId");
-		console.log(par1);
+//		console.log(par1);
 		if (e.index == 0) {
 			var user=app.getUserGlobalInfo();//获取用户全局对象
 			if(sendMakeFri(user.userId,par1)==true){
-				//从缓存中获取朋友列表，并且渲染到页面i
-				renderFriPage();
-				loadingRecFriendRequests();
-				//页面跳转至对应的聊天页面
+				//获取朋友列表，并且渲染到页面
+				fetchContactList();
+				setTimeout("loadingRecFriendRequests()",500);
+				//页面跳转至对应的聊天页面todo
 			}
 			else{
 				mui.toast("发送闲聊请求出错啦！QAQ");
@@ -306,13 +330,9 @@ function sendMakeFri(userId,friendId){
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应,进行数据的重新加载
-			var myFriendList = data.data;
-			console.log("对推荐好友发起闲聊时，得到的返回值：");
-			console.log(JSON.stringify(data.data));
-			app.setFriList(myFriendList);//修改缓存内容
-			//重新加载推荐好友列表
-			loadingRecFriendRequests();
-			status = true;
+			if(data.status==200){
+				status = true;
+			}
 		},
 	});
 	return status;
