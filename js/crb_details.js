@@ -1,6 +1,7 @@
 //mui初始化，配置下拉刷新
 var head;
 var max;
+var index;
 mui.init({
 	pullRefresh: {
 		container: '#comment',
@@ -12,6 +13,7 @@ mui.init({
 		},
 		up: {
 			contentrefresh: '正在加载...',
+			contentnomore:'评论到底了',
 			callback: pullupRefresh
 		}
 	}
@@ -50,26 +52,29 @@ function pulldownRefresh() {
 		if(rsp.data==""){
 			mui('#comment').pullRefresh().endPulldownToRefresh();
 		}else{
-		/*console.log(rsp.data[0].commentId);
-		console.log(JSON.stringify(rsp.data));*/
-		mui('#comment').pullRefresh().endPulldownToRefresh();
-		rsp=rsp.data;
-		if(rsp && rsp.length > 0) {
-			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
-			posts.items = convert(rsp);
+			/*console.log(rsp.data[0].commentId);
+			console.log(JSON.stringify(rsp.data));*/
+			mui('#comment').pullRefresh().endPulldownToRefresh();
+			rsp=rsp.data;
+			if(rsp && rsp.length > 0) {
+				lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
+				posts.items = convert(rsp);
 			
-			var list=document.getElementById("commentlist");
-			var postHtml="";
-			for(var i=0;i<posts.items.length;i++){
-				var j=parseInt(i)+parseInt(1);
-				postHtml+=addpost(posts.items[i],j);
+				var list=document.getElementById("commentlist");
+				var postHtml="";
+				for(var i=0;i<posts.items.length;i++){
+					var j=parseInt(i)+parseInt(1);
+					postHtml+=addpost(posts.items[i],j);
+				}
+				if(max>posts.items.length){
+					index=posts.items.length;
+				}else{
+					index=max;
+				}
+				list.innerHTML=postHtml;
 			}
-			list.innerHTML=postHtml;
-		}
-	}	
-	},'json'
-	);
-	
+		}	
+	},'json');
 }
 
 function addpost(post,j) {
@@ -103,7 +108,7 @@ function convert(items) {
 	return postItems;
 }
 
-//上拉
+//上拉(！！有问题，仍在修改中！！必须先下拉刷新才能正常显示上拉加载的功能)
 function pullupRefresh() {
 	head += 1;
 	max = 1;
@@ -113,31 +118,45 @@ function pullupRefresh() {
 		postId:postid,
 	}
 	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
-		if(rsp.data==""){
+		rsp=rsp.data;
+		posts.items = posts.items.concat(convert(rsp));
+		console.log(posts.items.length);
+		console.log(index);
+		if(posts.items.length>parseInt(index)+1){
+			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
+			var list=document.getElementById("commentlist");
+			var postHtml="";
+			console.log(index);
+			for(var i=index;i<posts.items.length;i++){
+				var j=parseInt(i)+parseInt(1)
+				postHtml+=addpost(posts.items[i],j);
+				index++;
+			}
+			list.innerHTML+=postHtml;
+		}
+		/*if(rsp.data==""){
 			mui('#comment').pullRefresh().endPullupToRefresh();
 		}else{
-		/*console.log(rsp.data[0].commentId);
-		console.log(JSON.stringify(rsp.data));*/
-		//this.endPullupToRefresh(true|false);
-		mui('#comment').pullRefresh().endPullupToRefresh();
-		rsp=rsp.data;
-		if(rsp && rsp.length > 0) {
-			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
-			//posts.items = convert(rsp);
-						posts.items = posts.items.concat(convert(rsp));
-			var list=document.getElementById("commentlist");
+			/*console.log(rsp.data[0].commentId);
+			console.log(JSON.stringify(rsp.data));*/
+			/*mui('#comment').pullRefresh().endPullupToRefresh();
+			rsp=rsp.data;
+			if(rsp && rsp.length > 0) {
+				lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
+				//posts.items = convert(rsp);
+				posts.items = posts.items.concat(convert(rsp));
+				var list=document.getElementById("commentlist");
 				var postHtml="";
-				for(var i=0;i<posts.items.length;i++){
+				console.log(index);
+				for(var i=index;i<posts.items.length;i++,index++){
 					var j=parseInt(i)+parseInt(1)
 					postHtml+=addpost(posts.items[i],j);
 				}
-				list.innerHTML=postHtml;
-		}
-		}
-		
-		
-	},'json'
-	);
+				list.innerHTML+=postHtml;
+			}
+		}*/
+	},'json');
+	this.endPullupToRefresh(true);
 }
 
 //窗口隐藏时，重置页面数据
