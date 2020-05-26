@@ -61,7 +61,8 @@ function pulldownRefresh() {
 			var list=document.getElementById("commentlist");
 			var postHtml="";
 			for(var i=0;i<posts.items.length;i++){
-				postHtml+=addpost(posts.items[i]);
+				var j=parseInt(i)+parseInt(1);
+				postHtml+=addpost(posts.items[i],j);
 			}
 			list.innerHTML=postHtml;
 		}
@@ -71,12 +72,11 @@ function pulldownRefresh() {
 	
 }
 
-function addpost(post) {
+function addpost(post,j) {
 	var html="";
 	html='<div class="mui-card comment" id="commentItem">'+
-			post.commentId+'<br/>'+
-			post.postContent+'<br/>'+
-			post.sendUser+'<br/>'+
+			'评论'+j+'<br/>'+
+			post.sendUser+':'+post.postContent+
 		'</div>';
 		
 	return html;
@@ -269,13 +269,16 @@ mui.plusReady(function () {
 	   }
 	   else{
 	   var myDate = new Date();
-	   mui.ajax(……, {//后端url，需更改
+	   mui.ajax(app.serverUrl+"/corner/comment", {//后端url
 	   	data: {
-			user:{
+			sendUser:{
 				userId:user.userId
 			},
-	   		commentcontent:content
-	   	},
+			post:{
+				postId:postid
+			},
+			postContent:content
+		},
 	   	dataType: 'json', //服务器返回json格式数据
 	   	type: 'post', //HTTP请求类型
 	   	timeout: 10000, //超时时间设置为10秒；
@@ -289,7 +292,7 @@ mui.plusReady(function () {
 	   			//mui.toast("发送评论成功");
 				console.log(data.data);
 				var chatWebview = plus.webview.getWebviewById("crb_details.html");
-				chatWebview.evalJS("pulldownRefresh()");
+				//chatWebview.evalJS("pulldownRefresh()");
 				mui.back();
 	   		}
 	   		else{
