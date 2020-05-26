@@ -71,7 +71,7 @@ function initData() {
 
 
 // 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-window.onbeforeunload = function() {
+window.addEventListener("close",function(){
 	console.log("关闭窗口引发的链接关闭");
-    CHAT.socket.close();
-}  
+	CHAT.socket.close();
+});

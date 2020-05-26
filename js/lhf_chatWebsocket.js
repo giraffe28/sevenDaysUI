@@ -63,10 +63,10 @@ window.CHAT = {
 		CHAT.chat(JSON.stringify(dataContent));
 		// 每次连接之后，获取用户的未读未签收消息列表
 		console.log("连接建立的时候获取未读的消息");
-		fetchUnReadMsg();
+		//fetchUnReadMsg();
 		// 定时发送心跳
 		clearInterval();//先清空心跳
-		setInterval("CHAT.keepalive()", 5000);
+		//setInterval("CHAT.keepalive()", 10000);
 	},
 	wsmessage: function(e) {
 		console.log("接受到消息：" + e.data);	
@@ -104,7 +104,7 @@ window.CHAT = {
 		reloadChatSnapshot();
 	},
 	wsclose: function(e) {
-		console.log("连接关闭QAQ"+e.code);
+		console.log("连接关闭QAQ"+e.code+"reason:"+e.reason);
 	},
 	wserror: function() {
 		mui.toast("发生错误QAQ");

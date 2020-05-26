@@ -1,0 +1,26 @@
+body {
+    background-image: url("../images/background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.mui-content {
+	padding: 10px;
+}
+
+.msgNoteFont{
+	font-size: 16px;
+}
+
+.msgStyle{
+	font-size: 14px;
+	color:gray;
+	padding-left:10px;
+}
+
+#confirmNoteName{
+	margin: 0px;
+	padding: 3px;
+	font-size: 16px;
+}
