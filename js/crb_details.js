@@ -27,7 +27,7 @@ function pulldownRefresh() {
 		timeout:10000,
 		contentType:'application/json;charset=utf-8',
 		success:function(data){
-			nickname=data.data.user.userId;
+			nickname=data.data.user.nickname;
 			date=new Date(data.data.postDate);
 			content=data.data.postContent;
 			postlike=data.data.postLike;
@@ -40,10 +40,10 @@ function pulldownRefresh() {
 	document.getElementById("postlike").innerHTML=postlike;
 		
 	head = 0;
-	max = 1;
+	max = 10;
 	var data = {
 		start:0,
-		max:1,//需要的字段名
+		max:max,//需要的字段名
 		postId:postid,
 	}
 	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
@@ -109,7 +109,7 @@ function pullupRefresh() {
 	max = 1;
 	var data = {
 		start:0,
-		max:1,//需要的字段名
+		max:max,//需要的字段名
 		postId:postid,
 	}
 	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
@@ -118,6 +118,7 @@ function pullupRefresh() {
 		}else{
 		/*console.log(rsp.data[0].commentId);
 		console.log(JSON.stringify(rsp.data));*/
+		//this.endPullupToRefresh(true|false);
 		mui('#comment').pullRefresh().endPullupToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
@@ -125,10 +126,10 @@ function pullupRefresh() {
 			//posts.items = convert(rsp);
 						posts.items = posts.items.concat(convert(rsp));
 			var list=document.getElementById("commentlist");
-	
 				var postHtml="";
 				for(var i=0;i<posts.items.length;i++){
-					postHtml+=addpost(posts.items[i]);
+					var j=parseInt(i)+parseInt(1)
+					postHtml+=addpost(posts.items[i],j);
 				}
 				list.innerHTML=postHtml;
 		}
@@ -291,9 +292,9 @@ mui.plusReady(function () {
 	   			//显示成功信息
 	   			//mui.toast("发送评论成功");
 				console.log(data.data);
-				var chatWebview = plus.webview.getWebviewById("crb_details.html");
+				//var chatWebview = plus.webview.getWebviewById("crb_details.html");
 				//chatWebview.evalJS("pulldownRefresh()");
-				mui.back();
+				 location.reload()
 	   		}
 	   		else{
 	   			app.showToast(data.msg, "error");
@@ -306,23 +307,4 @@ mui.plusReady(function () {
 	   });
 	   }
 	});	
-	
-	
-	//me=app.getUserGlobalInfo();//获取用户信息	
-	//标题改为朋友的昵称
-	//渲染初始化的聊天记录
-	//initChatHistory()
-	//设置聊天记录在进入页面时自动滚动到最后一条
-	//resizeScreen ();
-	
-	/*
-	var self = plus.webview.currentWebview();
-	self.addEventListener("hide",function (e) {
-		window.scrollTo(0, 0);
-		vm.resetData();
-	},false);*/
-	
-	
-	
-	
 })
