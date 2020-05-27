@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf-8">
 		<title>举报页面</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../css/mui.css" rel="stylesheet" />
+		<link href="../css/lhf_report.css" rel="stylesheet" />
 	</head>
 
 	<body>
@@ -14,32 +14,43 @@
 			<h1 class="mui-title">举报</h1>
 		</header>
 		
-		<div class="mui-content">
+		<div class="mui-content" style="padding-top: 30px;">
 			<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
-						举报类型
+						<div class="choseTitle">
+							举报类型
+							<span id="reportType" class="choseTip"></span>
+						</div>
 					</li>
-					<li class="mui-table-view-cell mui-collapse">
-						<a class="mui-navigate-right" href="#">举报原因</a>
-						<div class="mui-collapse-content">
-							<p>原因1</p>
-							<p>原因2</p>
-							<p>原因3</p>
-							<p>原因4</p>
+					<li class="mui-table-view-cell mui-collapse" id="reasonChose">
+						<a class="mui-navigate-right choseTitle" href="#">举报原因
+							<span id="reportReason" class="choseTip" reportReasonId=""></span>
+						</a>
+						<div class="mui-collapse-content" style="padding-left: 0px;">
+							<ul class="mui-table-view" style="margin-right: 10px;">
+								<li class="mui-table-view-cell" id="pornSpread">淫秽色情传播</li>
+								<li class="mui-table-view-cell" id="fraud">欺诈骗钱</li>
+								<li class="mui-table-view-cell" id="harassment">骚扰</li>
+								<li class="mui-table-view-cell" id="examCheat">考试舞弊</li>
+								<li class="mui-table-view-cell" id="political">政治敏感</li>
+								<li class="mui-table-view-cell" id="violence">暴力血腥</li>
+								<li class="mui-table-view-cell" id="invasionOfPrivacy">侵犯隐私</li>
+								<li class="mui-table-view-cell" id="otherReason">其他违规</li>
+							</ul>
 						</div>
 					</li>
 					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							 Item 3
-						</a>
+						<p class="choseTitle" style="margin-bottom: 5px;">举报理由</p>
+						<textarea class="mui-input-clear" type="text" id="reportContent" rows="20" placeholder="请输入举报理由(尽量详细)"></textarea>
 					</li>
 			</ul>
-			
+			<button type="button" class="mui-btn mui-btn-block" id="sendReport">确定举报</button>
 			
 		</div>
 		
 		<script src="../js/mui.js"></script>
 		<script src="../js/crb_app.js"></script>
+		<script src="../js/lhf_report.js"></script>
 		<script type="text/javascript">
 			mui.init()
 		</script>

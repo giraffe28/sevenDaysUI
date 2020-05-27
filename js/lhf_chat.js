@@ -1,3 +1,8 @@
+/*
+	本文件由lhf创建并维护
+	本文件仅服务于聊天页面
+*/
+
 //dom定位
 var areaMsgList = document.getElementById("msgs");
 var msgText=document.getElementById("msg");
@@ -20,7 +25,7 @@ mui.plusReady(function () {
 	});
 	//获取上一个页面传入的好友属性值
 	friendUserId = chatview.friUserId;
-	console.log(friendUserId);
+	//console.log(friendUserId);
 	friendName=chatview.friName;
 	friendFaceImg=chatview.friendFaceImg;
 	friendLevel=chatview.friendLevel;
@@ -62,7 +67,7 @@ mui.plusReady(function () {
 				return;
 			}
 			// 构建ChatMsg
-			console.log(friendUserId);
+			//console.log(friendUserId);
 			var chatMsg = new app.ChatMsg(me.userId, friendUserId, msgTextValue, null);
 			// 构建DataContent
 			var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
@@ -73,7 +78,7 @@ mui.plusReady(function () {
 			app.saveUserChatHistory(me.userId, friendUserId, msgTextValue, app.ME);
 			
 			//保存聊天快照，由于是由自己发送的,所以默认为已读
-			console.log(friendUserId);
+			//console.log(friendUserId);
 			app.saveUserChatSnapshot(me.userId, friendUserId, msgTextValue, true);
 			chatWebview.evalJS("loadingChatSnapshot()");
 			sendMsgFunc(msgTextValue);//渲染发送出去的消息
@@ -143,9 +148,16 @@ mui.plusReady(function () {
 	//监听举报的操作
 	document.getElementById("report").addEventListener("tap",function(event){
 		console.log("到达举报的事件监听");
-		
-		//todo
-		
+		//跳转到对应的朋友的举报页面
+		mui.openWindow({
+			url:"lhf_report.html",
+			id:"lhf_report.html",
+			extras:{
+				reportType:app.CHATMSGVIOLATION,
+				reportObjectId:friendUserId
+			},
+			createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+		});
 	});
 	
 	
@@ -158,8 +170,8 @@ mui.plusReady(function () {
 				//向服务器发送请求将该朋友加入黑名单
 				mui.ajax(app.serverUrl+'/blacklist/add', {
 					data: {
-						userId: userId,
-						addedId: addedId
+						userId: me.userId,
+						addedId: friendUserId
 					},
 					dataType: 'json', //服务器返回json格式数据
 					type: 'post', //HTTP请求类型
@@ -290,7 +302,7 @@ function receiveMsgFunc(friMsg){
 function initChatHistory() {
 	var myId = me.userId;
 	var chatHistoryList = app.getUserChatHistory(myId, friendUserId);//获取缓存中的聊天记录
-	console.log("初始化聊天内容" + JSON.stringify(chatHistoryList));
+//	console.log("初始化聊天内容" + JSON.stringify(chatHistoryList));
 	for (var i = 0 ; i < chatHistoryList.length ; i ++) {
 		var singleMsg = chatHistoryList[i];
 		if (singleMsg.flag == app.ME) {

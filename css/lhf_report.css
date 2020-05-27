@@ -1,0 +1,19 @@
+.choseTip{
+	font-size: 14px;
+	color:gray;
+	padding-left:10px;
+}
+
+.choseTitle{
+	font-size: 16px;
+	color:black;
+}
+
+#reportContent{
+	margin-bottom: 0px;
+}
+
+#sendReport{
+	padding: 7px 0px;
+	margin-bottom: 0px;
+}

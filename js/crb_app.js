@@ -1,7 +1,7 @@
 window.app = {
 	
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_1_war_exploded',
+	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2__2_war_exploded',
 	//netty服务后端发布的url地址
 	nettyServerUrl:'ws://192.168.1.2:7888/ws', //172.17.243.33
 
@@ -359,10 +359,22 @@ window.app = {
 		return JSON.parse(blackListStr);
 	},
 	
-	//举报的类型
-	USERVIOLATION:1, //用户违规
-	OTHERVIOLATION:2,//他人违规
-	CHATROOMVILATION:3,//食堂违规
+	//举报的对象类型
+	USERMSGVIOLATION:1, //用户信息违规
+	CHATMSGVIOLATION:2,//聊天内容违规
+	POSTVIOLATION:3,//动态相关内容违规
+	CHATROOMVILATION:4,//食堂违规
+	BOTTLEVIOLATION:5,//漂流瓶内容违规
+	
+	//举报原因
+	PORNOGRAPHY:1,//淫秽色情传播
+	FRAUD:2,//欺诈骗钱
+	HARASSMENT:3,//骚扰
+	EXAMCHEATING:4,//考试舞弊
+	POLITICALLY:5,//政治敏感
+	VIOLENCE:6,//暴力血腥
+	INVASIONOFPRIVACY:7,//侵犯隐私
+	OTHERRESON:8,//其他违规
 	
 	
 	//保存十字记忆
