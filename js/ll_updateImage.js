@@ -2,7 +2,7 @@ mui.init();
 
 mui.plusReady(function() {
 	var myImage = document.getElementById("myImage");
-	if(app.getUserGlobalInfo().icon!=null)
+	if(app.getUserGlobalInfo().icon!="")
 		myImage.src=app.getUserGlobalInfo().icon;
 	var imgWidth = document.body.clientWidth;
 	myImage.width = imgWidth;
@@ -33,7 +33,7 @@ mui.plusReady(function() {
 });
 
 function refreshImage(){
-	if(app.getUserGlobalInfo().icon!=null)
+	if(app.getUserGlobalInfo().icon!="")
 		myImage.src=app.getUserGlobalInfo().icon;
 	mui.back();//刷新必须
 }
