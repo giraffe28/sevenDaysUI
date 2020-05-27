@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>Cropper</title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<!--<link href="../css/header.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"><!-->
+		<link rel="stylesheet" href="../css/ll_cropper.css">
+		<link rel="stylesheet" href="../css/ll_main.css">
+		<style>
+			#container {
+				width: 100%;
+				position: absolute;
+				top: 44px;
+				bottom: 0px;
+				background: #000000;
+			}
+			
+		</style>
+	</head>
+	<body>
+
+		<header class="mui-bar mui-bar-nav title" style="position: fixed;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: blue;"></a>
+			<a id="cutter" class="mui-pull-right" style="font-size: 15px;color: blue;line-height: 40px;">
+				<img src="../images/upload.png" width="25px" />
+			</a>
+			<h1 class="mui-title title-color"><b id="chatting-nickname">个人头像</b></h1>
+		</header>
+
+		<!-- Content -->
+		<div id="container">
+			<div class="img-container">
+				<img id="image" src="" style="background-color: #000000;">
+			</div>
+		</div>
+
+		<!-- Scripts -->
+	<!-->	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+		<script src="https://fengyuanchen.github.io/js/common.js"></script><!-->
+		<script src="../js/ll_cropper.js"></script>
+		<script src="../js/crb_app.js"></script>
+		<script src="https://unpkg.com/qiniu-js@<2.5.5>/dist/qiniu.min.js"></script>
+		<!--><script src="../js/ll_upload.js"></script><!-->
+		<script src="../js/ll_imageUpload.js"></script>
+
+	</body>
+
+</html>
