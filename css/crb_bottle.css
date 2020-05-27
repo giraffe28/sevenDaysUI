@@ -1,0 +1,15 @@
+body {
+    background-image: url("../images/ocean.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+div{
+	float:left
+}
+img{
+    display: table-cell;
+    vertical-align: bottom;
+	width:10%;
+	height:10%
+}
