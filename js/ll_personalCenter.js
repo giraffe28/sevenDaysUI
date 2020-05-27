@@ -131,12 +131,12 @@ function refreshBasicInfo() {
 function loadPersonalCenter(user){
 	console.log('加载缓存中的用户数据');
 	//用户基本信息已经在缓存中
-	//var myImage=user.icon;//头像
 	var nickname = user.nickname; //假名
 	var gender = user.gender; //性别
 	var profile = user.profile; //简介
 	var telephone = user.telephone; //手机号，暂时不允许更改
-	//document.getElementById("myImage").src=myImage;
+	if(user.icon!=null)
+		document.getElementById("myImage").src=user.icon;
 	document.getElementById("nickname").innerHTML = nickname;
 	document.getElementById("gender").innerHTML = gender;
 	document.getElementById("profile").innerHTML = profile;
@@ -167,6 +167,40 @@ function loadThisWeekTags(tags){
 function refreshThisWeekTags(tags){
 	console.log("刷新本周标签：");
 	loadThisWeekTags(tags);
+}
+
+//刷新我的头像
+function refreshMyImage(imageUrl){
+	console.log("更改数据库头像，并更新本地头像");
+	mui.ajax(app.serverUrl+'/user/modifyIcon', {
+			data: {
+				userId:app.getUserGlobalInfo().userId,
+				icon:imageUrl,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为10秒；
+			headers:{'Content-Type':'application/json'},	
+			success: function(data) {
+				//服务器返回响应，根据响应结果，分析是否成功获取信息；
+				if (data.status == 200) {
+					var userJson= app.getUserGlobalInfo();
+					userJson.icon=imageUrl;
+					//console.log(JSON.stringify(memoryJson));
+					plus.storage.setItem("userInfo", JSON.stringify(userJson));
+					document.getElementById("myImage").src=imageUrl;
+					var imageWebview=plus.webview.getWebviewById("ll_updateImage.html");
+					imageWebview.evalJS("refreshImage()");
+					/*var currentWebview=plus.webview.currentWebview();
+					mui.fire(currentWebview,'refresh');*/
+					mui.toast('修改成功！');
+				}
+				else{
+					app.showToast(data.msg, "error");
+				}
+			},
+		
+		});
 }
 
 //加载过往标签
@@ -202,9 +236,5 @@ function loadPastTags(){
 				app.showToast(data.msg, "error");
 			}
 		},
-		// error: function(xhr, type, errorThrown) {
-		// 	//异常处理；
-		// 	console.log(JSON.stringify(data.data));
-		// }
 	});
 }
