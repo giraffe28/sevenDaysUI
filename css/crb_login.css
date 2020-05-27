@@ -245,7 +245,7 @@ button:hover {
   -moz-transition: all 0.4s;
   transition: all 0.4s;
 }
-.capbt:hover  {
+.capbt:active  {
   background-color: #333333;
   box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
   -moz-box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
@@ -285,7 +285,7 @@ button:hover {
   transition: all 0.4s;
 }
 
-.login-form-btn:hover  {
+.login-form-btn:active  {
   background-color: #333333;
   box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
   -moz-box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
