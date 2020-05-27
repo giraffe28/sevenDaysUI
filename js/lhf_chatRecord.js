@@ -12,7 +12,10 @@ mui.plusReady(function () {
 	thisWebview.addEventListener("show",function(){
 		//fetchUnReadMsg();
 		console.log("触发chatRecord的show事件");
-		fetchContactList();
+		//fetchContactList();
+		renderFriPage();
+		//加载聊天快照
+		loadingChatSnapshot();
 	});
 	netChangeSwitch();//对网络连接进行监听
 	//刷新页面
@@ -46,9 +49,9 @@ function loadingChatSnapshot() {
 		chatItem = chatSnapshotList[i];
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
 	//	console.log(JSON.stringify(chatItem));
-		console.log(friendId);
+	//	console.log(friendId);
 		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+'"]');//获取指定id朋友的项
-		console.log(friendId);
+//		console.log(friendId);
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
 		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+'"]');//获取朋友的关于昵称的项
 		// 判断消息的已读或未读状态
@@ -67,6 +70,7 @@ function fetchContactList() {
 	loadingFriendRequests();
 	renderFriPage();
 	//加载聊天快照
+	loadingChatSnapshot();
 	//loadingChatSnapshot();
 }
 
@@ -100,7 +104,7 @@ function renderFriPage(){
 			}
 			
 			friNicknameNode[0].setAttribute("class","");
-			console.log(friendUserId);
+			//console.log(friendUserId);
 			//打开聊天子页面
 			mui.openWindow({
 				url:"lhf_chat.html",
@@ -115,8 +119,6 @@ function renderFriPage(){
 			});
 			//点击进入聊天页面后，标记未读状态为已读
 			app.readUserChatSnapshot(me.userId,friendUserId);
-			//重新渲染快照列表
-			loadingChatSnapshot();
 		});
 	}
 	else{
@@ -155,7 +157,7 @@ function loadingRecFriendRequests(){
 	var user=app.getUserGlobalInfo();//获取用户全局对象
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/Friend/getInterest/?userId="+user.userId,{
-		async:true, 
+		async:false, 
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型

@@ -62,10 +62,13 @@ var pageStyle={
 
 // 预加载
 function initData() {
+	
+	//经过试验，似乎没必要
 	var lhf_chatRecord = plus.webview.getWebviewById("lhf_chatRecord.html");
 	mui.fire(lhf_chatRecord, "refresh");
-	var ll_personalCenter = plus.webview.getWebviewById("ll_personalCenter.html");
-	mui.fire(ll_personalCenter, "refresh");
+/*	var ll_personalCenter = plus.webview.getWebviewById("ll_personalCenter.html");
+	mui.fire(ll_personalCenter, "refresh");*/
+	
 	CHAT.init();
 }
 
