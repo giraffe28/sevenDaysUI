@@ -191,8 +191,8 @@ function refreshMyImage(imageUrl){
 					document.getElementById("myImage").src=imageUrl;
 					var imageWebview=plus.webview.getWebviewById("ll_updateImage.html");
 					imageWebview.evalJS("refreshImage()");
-					/*var currentWebview=plus.webview.currentWebview();
-					mui.fire(currentWebview,'refresh');*/
+					var currentWebview=plus.webview.currentWebview();
+					mui.fire(currentWebview,'refresh');
 					mui.toast('修改成功！');
 				}
 				else{
