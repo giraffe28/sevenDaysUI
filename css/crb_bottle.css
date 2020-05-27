@@ -1,0 +1,42 @@
+body {
+    background-image: url("../images/ocean.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.leftstyle {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  top: 550px;
+  left: 50px;
+}
+
+.middlestyle {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  top: 550px;
+  left: 158px;
+}
+ 
+.rightstyle {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  top: 550px;
+  left: 266px;
+}
+
+img{
+    display: table-cell;
+    position:right bottom;
+	width:35%;
+	height:35%
+}
+
+p{
+	color:#ffffff;
+	font-size: larger;
+}

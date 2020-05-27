@@ -1,6 +1,7 @@
 //mui初始化，配置下拉刷新
 var head;
 var max;
+var index;
 mui.init({
 	pullRefresh: {
 		container: '#comment',
@@ -12,6 +13,7 @@ mui.init({
 		},
 		up: {
 			contentrefresh: '正在加载...',
+			contentnomore:'评论到底了',
 			callback: pullupRefresh
 		}
 	}
@@ -27,7 +29,7 @@ function pulldownRefresh() {
 		timeout:10000,
 		contentType:'application/json;charset=utf-8',
 		success:function(data){
-			nickname=data.data.user.userId;
+			nickname=data.data.user.nickname;
 			date=new Date(data.data.postDate);
 			content=data.data.postContent;
 			postlike=data.data.postLike;
@@ -40,43 +42,46 @@ function pulldownRefresh() {
 	document.getElementById("postlike").innerHTML=postlike;
 		
 	head = 0;
-	max = 1;
+	max = 10;
 	var data = {
 		start:0,
-		max:1,//需要的字段名
+		max:max,//需要的字段名
 		postId:postid,
 	}
 	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
 		if(rsp.data==""){
 			mui('#comment').pullRefresh().endPulldownToRefresh();
 		}else{
-		/*console.log(rsp.data[0].commentId);
-		console.log(JSON.stringify(rsp.data));*/
-		mui('#comment').pullRefresh().endPulldownToRefresh();
-		rsp=rsp.data;
-		if(rsp && rsp.length > 0) {
-			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
-			posts.items = convert(rsp);
+			/*console.log(rsp.data[0].commentId);
+			console.log(JSON.stringify(rsp.data));*/
+			mui('#comment').pullRefresh().endPulldownToRefresh();
+			rsp=rsp.data;
+			if(rsp && rsp.length > 0) {
+				lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
+				posts.items = convert(rsp);
 			
-			var list=document.getElementById("commentlist");
-			var postHtml="";
-			for(var i=0;i<posts.items.length;i++){
-				postHtml+=addpost(posts.items[i]);
+				var list=document.getElementById("commentlist");
+				var postHtml="";
+				for(var i=0;i<posts.items.length;i++){
+					var j=parseInt(i)+parseInt(1);
+					postHtml+=addpost(posts.items[i],j);
+				}
+				if(max>posts.items.length){
+					index=posts.items.length;
+				}else{
+					index=max;
+				}
+				list.innerHTML=postHtml;
 			}
-			list.innerHTML=postHtml;
-		}
-	}	
-	},'json'
-	);
-	
+		}	
+	},'json');
 }
 
-function addpost(post) {
+function addpost(post,j) {
 	var html="";
 	html='<div class="mui-card comment" id="commentItem">'+
-			post.commentId+'<br/>'+
-			post.postContent+'<br/>'+
-			post.sendUser+'<br/>'+
+			'评论'+j+'<br/>'+
+			post.sendUser+':'+post.postContent+
 		'</div>';
 		
 	return html;
@@ -103,40 +108,55 @@ function convert(items) {
 	return postItems;
 }
 
-//上拉
+//上拉(！！有问题，仍在修改中！！必须先下拉刷新才能正常显示上拉加载的功能)
 function pullupRefresh() {
 	head += 1;
 	max = 1;
 	var data = {
 		start:0,
-		max:1,//需要的字段名
+		max:max,//需要的字段名
 		postId:postid,
 	}
 	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
-		if(rsp.data==""){
+		rsp=rsp.data;
+		posts.items = posts.items.concat(convert(rsp));
+		console.log(posts.items.length);
+		console.log(index);
+		if(posts.items.length>parseInt(index)+1){
+			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
+			var list=document.getElementById("commentlist");
+			var postHtml="";
+			console.log(index);
+			for(var i=index;i<posts.items.length;i++){
+				var j=parseInt(i)+parseInt(1)
+				postHtml+=addpost(posts.items[i],j);
+				index++;
+			}
+			list.innerHTML+=postHtml;
+		}
+		/*if(rsp.data==""){
 			mui('#comment').pullRefresh().endPullupToRefresh();
 		}else{
-		/*console.log(rsp.data[0].commentId);
-		console.log(JSON.stringify(rsp.data));*/
-		mui('#comment').pullRefresh().endPullupToRefresh();
-		rsp=rsp.data;
-		if(rsp && rsp.length > 0) {
-			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
-			//posts.items = convert(rsp);
-						posts.items = posts.items.concat(convert(rsp));
-			var list=document.getElementById("commentlist");
-	
+			/*console.log(rsp.data[0].commentId);
+			console.log(JSON.stringify(rsp.data));*/
+			/*mui('#comment').pullRefresh().endPullupToRefresh();
+			rsp=rsp.data;
+			if(rsp && rsp.length > 0) {
+				lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
+				//posts.items = convert(rsp);
+				posts.items = posts.items.concat(convert(rsp));
+				var list=document.getElementById("commentlist");
 				var postHtml="";
-				for(var i=0;i<posts.items.length;i++){
-					postHtml+=addpost(posts.items[i]);
+				console.log(index);
+				for(var i=index;i<posts.items.length;i++,index++){
+					var j=parseInt(i)+parseInt(1)
+					postHtml+=addpost(posts.items[i],j);
 				}
-				list.innerHTML=postHtml;
-		}
-		}
-		
-		
-	},'json'
-	);
+				list.innerHTML+=postHtml;
+			}
+		}*/
+	},'json');
+	this.endPullupToRefresh(true);
 }
 
 //窗口隐藏时，重置页面数据
@@ -269,13 +289,16 @@ mui.plusReady(function () {
 	   }
 	   else{
 	   var myDate = new Date();
-	   mui.ajax(……, {//后端url，需更改
+	   mui.ajax(app.serverUrl+"/corner/comment", {//后端url
 	   	data: {
-			user:{
+			sendUser:{
 				userId:user.userId
 			},
-	   		commentcontent:content
-	   	},
+			post:{
+				postId:postid
+			},
+			postContent:content
+		},
 	   	dataType: 'json', //服务器返回json格式数据
 	   	type: 'post', //HTTP请求类型
 	   	timeout: 10000, //超时时间设置为10秒；
@@ -288,9 +311,9 @@ mui.plusReady(function () {
 	   			//显示成功信息
 	   			//mui.toast("发送评论成功");
 				console.log(data.data);
-				var chatWebview = plus.webview.getWebviewById("crb_details.html");
-				chatWebview.evalJS("pulldownRefresh()");
-				mui.back();
+				//var chatWebview = plus.webview.getWebviewById("crb_details.html");
+				//chatWebview.evalJS("pulldownRefresh()");
+				 location.reload()
 	   		}
 	   		else{
 	   			app.showToast(data.msg, "error");
@@ -303,23 +326,4 @@ mui.plusReady(function () {
 	   });
 	   }
 	});	
-	
-	
-	//me=app.getUserGlobalInfo();//获取用户信息	
-	//标题改为朋友的昵称
-	//渲染初始化的聊天记录
-	//initChatHistory()
-	//设置聊天记录在进入页面时自动滚动到最后一条
-	//resizeScreen ();
-	
-	/*
-	var self = plus.webview.currentWebview();
-	self.addEventListener("hide",function (e) {
-		window.scrollTo(0, 0);
-		vm.resetData();
-	},false);*/
-	
-	
-	
-	
 })

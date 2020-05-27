@@ -44,8 +44,8 @@ var sevenDaysArray=[
 		pageUrl:"../html/test.html"
 	},
 	{
-		pageId:"test3.html",
-		pageUrl:"../html/test.html"
+		pageId:"crb_bottle.html",
+		pageUrl:"../html/crb_bottle.html"
 	},
 	{//个人中心
 		pageId:"ll_personalCenter.html",
