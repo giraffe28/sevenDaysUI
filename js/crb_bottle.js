@@ -14,10 +14,16 @@ mui.plusReady(function(){
     });
 	
 	throwout.addEventListener('tap',function(){
-		
+		mui.openWindow({
+			url:'../html/crb_throwbottle.html',
+			id:'crb_throwbottle.html'
+		})
 	});
 	
 	mine.addEventListener('tap',function(){
-		
+		mui.openWindow({
+			url:'../html/crb_mybottle.html',
+			id:'crb_mybottle.html'
+		})
 	});
 })
