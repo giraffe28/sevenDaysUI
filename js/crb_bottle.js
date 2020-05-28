@@ -1,13 +1,14 @@
 mui.init();
 mui.plusReady(function(){
-	var userInfo=app.getUserGlobalInfo();
+	//var userInfo=app.getUserGlobalInfo();
 	
-    var get=document.getElementById("get");
 	var throwout=document.getElementById("throwout");
     var mine=document.getElementById("mine");
 	
-    get.addEventListener('tap',function(){//从数据库随机获取漂流瓶
-        mui.ajax(app.serverUrl+"/user/login",{//后端url,需更改
+	   
+	document.addEventListener('tap',function(e){console.log("pageX:"+e.detail.touches[0].pageX+"\npageY:"+e.detail.touches[0].pageY);})
+    document.getElementById("get").addEventListener("tap", function() {//从数据库随机获取漂流瓶
+        /*mui.ajax(app.serverUrl+"/user/login",{//后端url,需更改
             data:{
                 telephone:telephone,
                 password:password,
@@ -33,7 +34,11 @@ mui.plusReady(function(){
             		app.showToast(data.msg, "error");
             	}
             }
-        });
+        });*/
+		//调用隐藏/显示弹出层
+		//mui('#popover').popover('toggle',document.getElementById("ta"));
+		mui('#popover').popover('show');
+
     });
 	
 	throwout.addEventListener('tap',function(){

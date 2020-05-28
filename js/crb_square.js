@@ -114,7 +114,7 @@ function addlistNer(){
 			id:"post_"+postId,
 			extras:{
 				postid:postId,
-			}
+			},
 		});
 	});
 }

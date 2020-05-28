@@ -16,7 +16,7 @@ mui.init({
 			contentnomore:'评论到底了',
 			callback: pullupRefresh
 		}
-	}
+	},
 });
 
 function pulldownRefresh() {
