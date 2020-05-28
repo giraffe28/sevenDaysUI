@@ -16,7 +16,7 @@ mui.plusReady(function(){
 				var content=document.getElementById("content");
 				var Html="";
 				Html='<ul class="mui-table-view" >'+
-						ddddd
+						data+
 					'</ul>';
 				content.innerHTML=Html;
 			}
@@ -40,14 +40,14 @@ mui.plusReady(function(){
 		else{
 			var myDate = new Date();
 			mui.ajax(app.serverUrl+"/corner/comment", {//后端url
-				data: {
+				data: {/*
 					sendUser:{
 						userId:user.userId
 					},
 					post:{
 						postId:postid
 					},
-					postContent:content
+					postContent:content*/
 				},
 				dataType: 'json', //服务器返回json格式数据
 				type: 'post', //HTTP请求类型
@@ -59,7 +59,7 @@ mui.plusReady(function(){
 					//服务器返回响应，根据响应结果，分析是否成功发送动态；
 					if (data.status == 200) {
 						//显示成功信息
-						//mui.toast("发送评论成功");
+						mui.toast("评论发送成功");
 						console.log(data.data);
 						//var chatWebview = plus.webview.getWebviewById("crb_details.html");
 						//chatWebview.evalJS("pulldownRefresh()");
