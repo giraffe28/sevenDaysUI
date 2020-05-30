@@ -1,27 +1,52 @@
 mui.init();
 mui.plusReady(function(){
-	mui.post(app.serverUrl + "/square/find", data, function(rsp) {
-	
+	var user = app.getUserGlobalInfo();
+	mui.ajax(app.serverUrl+'/drift/viewByUserId',{
+		type:'post',
+		contentType: "application/json;charset=utf-8",
+		dataType: "json",
+		data: {//data携带的参数，根据自己的服务器参数写
+			userId:user.userId
+		},
+		success:function(data){
+			//服务器返回响应，根据响应结果，分析是否捞取成功；
+			console.log(JSON.stringify(data));
+			//console.log(JSON.stringify(data.data.content));
+			if (data.status == 200) {
+				var content=document.getElementById("content");
+				var Html="";
+				Html='<ul class="mui-view-cell">'+
+						data.data.content+
+					'</ul>';
+				content.innerHTML=Html;
+			}
+			else{
+				app.showToast(data.msg, "error");
+			}
+		}
+	});
+	/*mui.json()
 		mui('#post').pullRefresh().endPulldownToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
-			lastId = rsp[0].postId; //保存最新消息的id，方便下拉刷新时使用			
-			posts.items = convert(rsp);
-			var list=document.getElementById("postlist");
-			var postHtml="";
-			for(var i=0;i<posts.items.length;i++){
-				postHtml+=addpost(posts.items[i]);
+			//lastId = rsp[0].postId; //保存最新消息的id，方便下拉刷新时使用			
+			bottles.items = convert(rsp);
+			var list=document.getElementById("bottlelist");
+			var bottleHtml="";
+			for(var i=0;i<bottles.items.length;i++){
+				bottleHtml+=addbottle(bottles.items[i]);
 			}
-			list.innerHTML=postHtml;
+			list.innerHTML=bottleHtml;
 			addlistNer();
 		}
-	},'json');
+	},'json');*/
+	
 	
 })
 
-function addpost(post) {
+function addbottle(bottle) {
 	var html="";
-	html='<div class="mui-table-view-cell line-limit-length">'+
+	html='<div class="mui-table-view-cell line-limit-length bottleItem" id="'+drift.driftid+'">'+
 					
 		'</div>';
 	return html;
@@ -44,36 +69,36 @@ function addpost(post) {
 }
 
 function addlistNer(){
-	mui("#postlist").on("tap",".postItem",function(e){
+	mui("#bottlelist").on("tap",".bottleItem",function(e){
 		var postId = this.getAttribute("id");
 		mui.openWindow({
 			url:"crb_bottle.html",
-			id:"post_"+postId,
+			id:"bottle_"+bottleId,
 			extras:{
-				postid:postId,
+				bottleid:bottleId,
 			},
 		});
 	});
 }
 
-var posts = new Vue({
-	el: '#posts',
+var bottles = new Vue({
+	el: '#bottles',
 	data: {
 		items: [] //列表信息流数据
 	}
 });
 
 function convert(items) {
-	var postItems = [];
+	var bottleItems = [];
 	items.forEach(function(item) {
-		postItems.push({
-			//icon:item.user.icon,
+		bottleItems.push({
+			/*icon:item.user.icon,
 			nickname:item.user.nickname,
 			date:new Date(item.postDate),
 			content:item.postContent,
 			postId:item.postId,
-			postlike:item.postLike
+			postlike:item.postLike*/
 		});
 	});
-	return postItems;
+	return bottleItems;
 }

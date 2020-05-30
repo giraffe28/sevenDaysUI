@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
 		<script src="../js/mui.min.js"></script>
+		<script src="../js/vue.min.js"></script>
 		<link href="../css/mui.min.css" rel="stylesheet"/>
 		<link href="../css/crb_bottle.css" rel="stylesheet"/>
 		<script type="text/javascript" charset="utf-8">
@@ -18,6 +19,7 @@
 		    <h1 class="mui-title">我的瓶子</h1>	
 		</header>
 		<div class="mui-content" style="opacity: 0.6;" id="content">		
+			<div class="mui-table-view" id="bottlelist">
 			<!--
 				<div class="mui-table-view-cell line-limit-length">
 					
@@ -29,14 +31,7 @@
 					feffrgr
 				</div>
 			-->
-		</div>
-		<div class="mui-bar mui-bar-tab">
-			<div class="footer-center">  
-				<textarea id='comment-text' type="text" class='input-text'></textarea>  
-			</div>  
-			<label class="footer-right">  
-				<button type="button" id="send-btn">发送</button>  
-			</label>  
+			</div>
 		</div>
 		<script src="../js/crb_app.js"></script>
 		<script src="../js/crb_mybottle.js"></script>

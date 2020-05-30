@@ -1,22 +1,22 @@
 mui.init();
 mui.plusReady(function(){
 	var user = app.getUserGlobalInfo();
-	mui.ajax(app.serverUrl+'/user/forgetRegister',{//需更改
-		type:'post',
+	mui.ajax(app.serverUrl+'/drift/randomGetOne',{//随机捞取漂流瓶
+		type:'get',
 		contentType: "application/json;charset=utf-8",
 		dataType: "json",
 		data: {//data携带的参数，根据自己的服务器参数写
-			//telephone:telephone,
-			//password:password
+			
 		},
 		success:function(data){
-			//服务器返回响应，根据响应结果，分析是否注册成功；
+			//服务器返回响应，根据响应结果，分析是否捞取成功；
 			console.log(JSON.stringify(data));
+			//console.log(JSON.stringify(data.data.content));
 			if (data.status == 200) {
 				var content=document.getElementById("content");
 				var Html="";
-				Html='<ul class="mui-table-view" >'+
-						data+
+				Html='<ul class="mui-view-cell">'+
+						data.data.content+
 					'</ul>';
 				content.innerHTML=Html;
 			}
@@ -25,7 +25,6 @@ mui.plusReady(function(){
 			}
 		}
 	});
-	
 	var send=document.getElementById("send-btn");
 	send.addEventListener('tap',function(){
 		var content=document.getElementById('comment-text').value;
@@ -39,15 +38,11 @@ mui.plusReady(function(){
 		}
 		else{
 			var myDate = new Date();
-			mui.ajax(app.serverUrl+"/corner/comment", {//后端url
-				data: {/*
-					sendUser:{
-						userId:user.userId
-					},
-					post:{
-						postId:postid
-					},
-					postContent:content*/
+			mui.ajax(app.serverUrl+"/drift/send", {//回复漂流瓶
+				data: {
+					replayId:user.userId,
+					message:content,
+					driftId:1				
 				},
 				dataType: 'json', //服务器返回json格式数据
 				type: 'post', //HTTP请求类型
@@ -56,13 +51,11 @@ mui.plusReady(function(){
 					'Content-Type': 'application/json;charset:utf-8'
 				},
 				success: function(data) {
-					//服务器返回响应，根据响应结果，分析是否成功发送动态；
+					//服务器返回响应，根据响应结果，分析是否成功发送评论；
 					if (data.status == 200) {
 						//显示成功信息
 						mui.toast("评论发送成功");
 						console.log(data.data);
-						//var chatWebview = plus.webview.getWebviewById("crb_details.html");
-						//chatWebview.evalJS("pulldownRefresh()");
 						location.reload()
 					}
 					else{

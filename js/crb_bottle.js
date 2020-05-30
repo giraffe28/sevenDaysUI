@@ -2,7 +2,7 @@ mui.init();
 mui.plusReady(function () {
     mui.ajax(app.serverUrl+"/corner/getpost",{
     	data:{
-    		postId:postid
+    		bottleId:bottleid
     	},
     	dataType:'json',
     	type:'POST',

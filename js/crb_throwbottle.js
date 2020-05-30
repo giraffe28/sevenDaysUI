@@ -1,8 +1,9 @@
 mui.init();
 mui.plusReady(function () {
+	var user = app.getUserGlobalInfo();
 	var post=document.getElementById("post");
 	post.addEventListener('tap',function(){
-		var content=document.getElementById('post_content').value;
+		var content=document.getElementById('throw_content').value;
 		if(content==''){
 			mui.toast('内容不能为空');
 			return false; 
@@ -13,13 +14,10 @@ mui.plusReady(function () {
 	   }
 	   else{
 	   var user = app.getUserGlobalInfo();
-	   var myDate = new Date();
-	   mui.ajax(app.serverUrl+"/corner/talk", {//需更改
+	   mui.ajax(app.serverUrl+"/drift/write", {//需更改
 	   	data: {
-			user:{
-				userId:user.userId
-			},
-	   		postContent:content
+			userId:user.userId,
+	   		content:content
 	   	},
 	   	dataType: 'json', //服务器返回json格式数据
 	   	type: 'post', //HTTP请求类型
@@ -31,10 +29,9 @@ mui.plusReady(function () {
 	   		//服务器返回响应，根据响应结果，分析是否成功扔出；
 	   		if (data.status == 200) {
 	   			//显示成功信息
-	   			//mui.toast("成功扔出漂流瓶");
+	   			mui.toast("成功扔出漂流瓶");
 				console.log(data.data);
-				var chatWebview = plus.webview.getWebviewById("crb_square.html");
-				chatWebview.evalJS("pulldownRefresh()");
+				var chatWebview = plus.webview.getWebviewById("crb_drift.html");
 				mui.back();
 	   		}
 	   		else{
