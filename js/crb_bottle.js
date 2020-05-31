@@ -9,17 +9,21 @@ mui.plusReady(function () {
     	timeout:10000,
     	contentType:'application/json;charset=utf-8',
     	success:function(data){
+			/*
     		nickname=data.data.user.nickname;
     		date=new Date(data.data.postDate);
     		content=data.data.postContent;
-    		postlike=data.data.postLike;
+    		postlike=data.data.postLike;*/
+			content=data.data.bottleContent;
     	}
     })
-    
+    /*
     document.getElementById("title").innerHTML=nickname;
     document.getElementById("time").innerHTML=date;
     document.getElementById("content").innerHTML=content;
     document.getElementById("postlike").innerHTML=postlike;
+	*/
+   document.getElementById("")
     	
     head = 0;
     max = 10;
