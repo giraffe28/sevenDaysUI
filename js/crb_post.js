@@ -1,7 +1,9 @@
+var imgUrl;
 mui.init();
 mui.plusReady(function () {
 	var post=document.getElementById("post");
 	post.addEventListener('tap',function(){
+		console.log(imgUrl);
 		var content=document.getElementById('post_content').value;
 		if(content==''){
 			mui.toast('内容不能为空');
@@ -48,123 +50,60 @@ mui.plusReady(function () {
 	   });
 	   }
 	});	
-	
-	
-	
-	//上传图片
-	var fileArr = [];
+
 	document.getElementById('headImage').addEventListener('tap', function() {
-		if(mui.os.plus) {
-			var buttonTit = [{
-				title: "拍照"
-			}, {
-				title: "从手机相册选择"
-			}];
+		//mui.openWindow('../html/crb_postimage.html','crb_postimage.html');
+		mui("#sheet-myImage").popover("toggle");
+	});
 	
-			plus.nativeUI.actionSheet({
-				title: "上传图片",
-				cancel: "取消",
-				buttons: buttonTit
-			}, function(b) { /*actionSheet 按钮点击事件*/
-				switch(b.index) {
-					case 0:
-						break;
-					case 1:
-						getImage(); /*拍照*/
-						break;
-					case 2:
-						galleryImg(); /*打开相册*/
-						break;
-					default:
-						break;
-				}
-			})
-		}
-	}, false);
-	
-	// 拍照获取图片  
-	function getImage() {
-		var c = plus.camera.getCamera();
-		c.captureImage(function(e) {
-			plus.io.resolveLocalFileSystemURL(e, function(entry) {
-				var imgSrc = entry.toLocalURL() + "?version=" + new Date().getTime(); //拿到图片路径  
-				setFile(imgSrc);
-				setHtml(imgSrc);
-			}, function(e) {
-				console.log("读取拍照文件错误：" + e.message);
-			});
-		}, function(s) {
-			console.log("error" + s.message);
-		}, {
-			filename: "_doc/camera/"
-		})
-	}
-	// 从相册中选择图片   
-	function galleryImg() {
-		// 从相册中选择图片  
-		plus.gallery.pick(function(e) {
-			for(var i in e.files) {
-				var fileSrc = e.files[i];
-				setFile(fileSrc);
-				setHtml(fileSrc);
-			}
-		}, function(e) {
-			console.log("取消选择图片");
-		}, {
-			filter: "image",
-			multiple: true,
-			//maximum: 9,
-			system: false,
-			onmaxed: function() {
-				plus.nativeUI.alert('最多只能选择9张图片');
-			}
-		});
-	}
-	
-	
-	function setHtml(path) {
-		var str = '';
-		var img=document.getElementById("imgs");
-		str = '<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
-				'<img class="mui-media-object" src="'+path+'">'+
-				'<span class="mui-icon mui-icon-trash deleteBtn"></span>'+
-	//					'<div class="mui-media-body">'+
-	//						'<input type="text" class="remark" placeholder="备注">'+
-	//					'</div>'+
-			'</li>';
-		img.innerHTML+=str;
-	}
-			
-	function setFile(fileSrc){
-		var image = new Image();  
-		image.src = fileSrc;
-		fileArr.push(image);
-	}
-					
-	document.getElementById('uploadImage').addEventListener('tap',function(){
-		var files = fileArr;
-	 	var wt=plus.nativeUI.showWaiting();
-		var task=plus.uploader.createUpload('http://192.168.1.111:8181/sys-privilege/Upload',
-			{method:"POST"},
-	        function(t,status){ //上传完成
-	            if(status==200){
-	                alert("上传成功："+t.responseText);
-	                wt.close(); //关闭等待提示按钮
-	            }else{
-	                alert("上传失败："+status);
-	                wt.close();//关闭等待提示按钮
-	            }
-	        }
-	    );  
-	    //将文件集合添加到上传队列中
-		for(var i=0;i<files.length;i++){
-	        var f=files[i];
-	        task.addFile(f.src,{key:i});
-	    }
-	    //传其他的参数 如备注
-	    //添加其他参数
-	    //遍历5个input框			    
-	    //task.addData("comment","test");
-	    //task.start();
+	document.getElementById('choose').addEventListener('tap', function() {
+		mui.openWindow('../html/crb_postimage.html','crb_postimage.html');
+		mui("#sheet-myImage").popover("toggle");
 	});
 })
+
+function showImage(imageUrl){
+	console.log("暂时显示动态照片");
+	imgUrl=imageUrl;
+	/*
+	mui.ajax(app.serverUrl+'/user/modifyIcon', {
+			data: {
+				userId:app.getUserGlobalInfo().userId,
+				icon:imageUrl,
+			},
+			dataType: 'json', //服务器返回json格式数据
+			type: 'post', //HTTP请求类型
+			timeout: 10000, //超时时间设置为10秒；
+			headers:{'Content-Type':'application/json'},	
+			success: function(data) {
+				//服务器返回响应，根据响应结果，分析是否成功获取信息；
+				if (data.status == 200) {
+					var userJson= app.getUserGlobalInfo();
+					userJson.icon=imageUrl;
+					//console.log(JSON.stringify(memoryJson));
+					plus.storage.setItem("userInfo", JSON.stringify(userJson));
+					document.getElementById("myImage").src=imageUrl;
+					var imageWebview=plus.webview.getWebviewById("ll_updateImage.html");
+					imageWebview.evalJS("refreshImage()");
+					var currentWebview=plus.webview.currentWebview();
+					mui.fire(currentWebview,'refresh');
+					mui.toast('修改成功！');
+				}
+				else{
+					app.showToast(data.msg, "error");
+				}
+			},
+		
+		});*/
+	//console.log(imageUrl)
+	var img=document.getElementById("imgs");
+	var html="";
+	html='<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
+		'<a href="#">'+
+			'<img class="mui-media-object" src="'+imageUrl+'">'+
+			'<span class="mui-icon mui-icon-trash deleteBtn"></span>'+
+		'</a>'+
+	'</li>';
+	img.innerHTML=html;
+	
+}

@@ -62,9 +62,10 @@ function pulldownRefresh() {
 
 function addpost(post) {
 	var html="";
-	html=//'<li class="postItem" id="'+post.postId+'">'+
+	html=
 		   '<div class="mui-card postItem" id="'+post.postId+'">'+
 				'<div class="mui-card-header mui-card-media">'+
+				'<img src="'+post.icon+'"/>'+
 					'<div class="mui-media-body">'+
 						post.nickname+
 						'<p>发表于'+post.date+'</p>'+
@@ -77,7 +78,6 @@ function addpost(post) {
 					'赞:'+post.postlike+
 				'</div>'+
 			'</div>';			
-		//'<>';	
 	return html;
 }
 
@@ -135,7 +135,7 @@ function convert(items) {
 	var postItems = [];
 	items.forEach(function(item) {
 		postItems.push({
-			//icon:item.user.icon,
+			icon:item.user.icon,
 			nickname:item.user.nickname,
 			date:new Date(item.postDate),
 			content:item.postContent,

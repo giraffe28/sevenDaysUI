@@ -19,7 +19,18 @@ mui.init({
 	},
 });
 
-function pulldownRefresh() {
+mui.plusReady(function () {
+	
+	var user = app.getUserGlobalInfo();
+	var Webview=plus.webview.currentWebview();
+	postid=Webview.postid;
+	icon=Webview.icon;
+	nickname=Webview.nickname;
+	content=Webview.content;
+	date=Webview.date;
+	postlike=Webview.postlike;
+	/*postid=Webview.postid;
+	console.log(postlike);*/
 	mui.ajax(app.serverUrl+"/corner/getpost",{
 		data:{
 			postId:postid
@@ -29,18 +40,208 @@ function pulldownRefresh() {
 		timeout:10000,
 		contentType:'application/json;charset=utf-8',
 		success:function(data){
+			//console.log(JSON.stringify(data));
+			icon=data.data.user.icon;
 			nickname=data.data.user.nickname;
 			date=new Date(data.data.postDate);
 			content=data.data.postContent;
 			postlike=data.data.postLike;
-		}
+			//console.log(icon);
+			var post=document.getElementById("post");
+			var html="";
+			html=
+				'<div class="mui-card-header mui-card-media">'+
+					'<img src="'+icon+'"/>'+
+					'<div class="mui-media-body">'+
+						'<p>'+nickname+'</p>'+
+						'<p>'+date+'</p>'+
+					'</div>'+
+				'</div>'+
+				'<div class="mui-card-content">'+
+					//<img v-html="image" id="post_image" width="100%"-->
+					'<p class="content">'+
+						content+
+					'</p>'+
+				'</div>'+
+				'<div class="mui-card-footer">'+
+					'<p>'+postlike+'</p>'+
+					'<p id="like">赞</p>'+
+				'</div>'+
+			'</div>';
+			post.innerHTML=html;
+		},
 	})
 	
+	
+	
+	/*
 	document.getElementById("title").innerHTML=nickname;
 	document.getElementById("time").innerHTML=date;
 	document.getElementById("content").innerHTML=content;
 	document.getElementById("postlike").innerHTML=postlike;
-		
+	*/
+   
+	
+	/*mui.ajax(app.serverUrl+"/corner/likeornot",{//后端url
+	//前端默认赞,,,查询后端数据库是否有userid对于post的点赞，
+	//若有，改变为已赞，若无，不做操作
+		data:{
+			postId:postid,
+			userId:user.userId
+	    },
+		dataType:'json',
+		type:'POST',
+		timeout:10000,
+		contentType:'application/json;charset=utf-8',
+		success:function(data){
+			if (data.status == 200) {
+				console.log(JSON.stringify(data));
+				if(data.data=="已经点赞"){
+					like.innerHTML="已赞";
+				}else if(data.data=="尚未点赞"){
+					like.innerHTML="赞";
+				}
+	        }
+	    	else{
+	        	app.showToast(data.msg, "error");
+	        }
+	    }
+	});*/
+	
+	
+	
+	
+	
+});
+
+var like=document.getElementById("like");
+	like.addEventListener('tap',function(){
+		if(like.innerHTML=="赞"){
+			mui.ajax(app.serverUrl+"/corner/like",{//后端url
+		        data:{
+		            postId:postid,
+		            userId:user.userId
+		        },
+		        dataType:'json',
+		        type:'POST',
+		        timeout:10000,
+		    	contentType:'application/json;charset=utf-8',
+		        success:function(data){
+		        	if (data.status == 200) {
+		    			console.log(JSON.stringify(data));
+						like.innerHTML="已赞";
+		        	}
+		    		else{
+		        		app.showToast(data.msg, "error");
+		        	}
+		        }
+			});
+		}else if(like.innerHTML=="已赞"){
+			mui.ajax(app.serverUrl+"/corner/notlike",{//后端url
+		        data:{
+		            postId:postid,
+		            userId:user.userId
+		        },
+		        dataType:'json',
+		        type:'POST',
+		        timeout:10000,
+		    	contentType:'application/json;charset=utf-8',
+		        success:function(data){
+		        	if (data.status == 200) {
+		    			console.log(JSON.stringify(data));
+						like.innerHTML="赞";
+		        	}
+		    		else{
+		        		app.showToast(data.msg, "error");
+		        	}
+		        }
+			});
+		}else{
+			console.log("发生异常");
+		}
+			
+		console.log("我改好了");
+		mui.ajax(app.serverUrl+"/corner/getpost",{
+			data:{
+				postId:postid
+			},
+			dataType:'json',
+			type:'POST',
+			timeout:10000,
+			contentType:'application/json;charset=utf-8',
+			success:function(data){
+				nickname=data.data.user.userId;
+				date=new Date(data.data.postDate);
+				content=data.data.postContent;
+				postlike=data.data.postLike;
+			}
+		})
+			
+			
+		document.getElementById("title").innerHTML=nickname;
+		document.getElementById("time").innerHTML=date;
+		document.getElementById("content").innerHTML=content;
+		document.getElementById("postlike").innerHTML=postlike;
+		console.log("postid"+postid);
+		console.log(postlike);
+			
+	});
+	
+	
+	var send=document.getElementById("send-btn");
+		//var user = app.getUserGlobalInfo();
+		send.addEventListener('tap',function(){
+			var content=document.getElementById('comment-text').value;
+			if(content==''){
+				mui.toast('内容不能为空');
+				return false; 
+			}
+			else if(content.length>50){
+			   mui.toast('评论不得超过50个字');
+			   return false; 
+		   }
+		   else{
+		   var myDate = new Date();
+		   mui.ajax(app.serverUrl+"/corner/comment", {//后端url
+		   	data: {
+				sendUser:{
+					userId:user.userId
+				},
+				post:{
+					postId:postid
+				},
+				postContent:content
+			},
+		   	dataType: 'json', //服务器返回json格式数据
+		   	type: 'post', //HTTP请求类型
+		   	timeout: 10000, //超时时间设置为10秒；
+		   	headers: {
+		   		'Content-Type': 'application/json;charset:utf-8'
+		   	},
+		   	success: function(data) {
+		   		//服务器返回响应，根据响应结果，分析是否成功发送动态；
+		   		if (data.status == 200) {
+		   			//显示成功信息
+		   			mui.toast("评论发送成功");
+					console.log(data.data);
+					//var chatWebview = plus.webview.getWebviewById("crb_details.html");
+					//chatWebview.evalJS("pulldownRefresh()");
+					 location.reload()
+		   		}
+		   		else{
+		   			app.showToast(data.msg, "error");
+		   		}
+		   	},
+		   	error: function(xhr, type, errorThrown) {
+		   		//异常处理；
+		   		console.log(type);
+		   	}
+		   });
+		   }
+		});
+
+function pulldownRefresh() {
+	
 	head = 0;
 	max = 10;
 	var data = {
@@ -160,170 +361,5 @@ function pullupRefresh() {
 }
 
 //窗口隐藏时，重置页面数据
-mui.plusReady(function () {
-	
-	var user = app.getUserGlobalInfo();
-	var Webview=plus.webview.currentWebview();
-	postid=Webview.postid;
-	console.log(postid);
-	nickname=Webview.nickname;
-	content=Webview.content;
-	date=Webview.date;
-	postlike=Webview.postlike;
-	/*postid=Webview.postid;
-	console.log(postlike);*/
 
-	
-	
-	mui.ajax(app.serverUrl+"/corner/likeornot",{//后端url
-	//前端默认赞,,,查询后端数据库是否有userid对于post的点赞，
-	//若有，改变为已赞，若无，不做操作
-		data:{
-			postId:postid,
-			userId:user.userId
-	    },
-		dataType:'json',
-		type:'POST',
-		timeout:10000,
-		contentType:'application/json;charset=utf-8',
-		success:function(data){
-			if (data.status == 200) {
-				console.log(JSON.stringify(data));
-				if(data.data=="已经点赞"){
-					like.innerHTML="已赞";
-				}else if(data.data=="尚未点赞"){
-					like.innerHTML="赞";
-				}
-	        }
-	    	else{
-	        	app.showToast(data.msg, "error");
-	        }
-	    }
-	});
-	
-	
-	like=document.getElementById("like");
-	like.addEventListener('tap',function(){
-		if(like.innerHTML=="赞"){
-			mui.ajax(app.serverUrl+"/corner/like",{//后端url
-		        data:{
-		            postId:postid,
-		            userId:user.userId
-		        },
-		        dataType:'json',
-		        type:'POST',
-		        timeout:10000,
-		    	contentType:'application/json;charset=utf-8',
-		        success:function(data){
-		        	if (data.status == 200) {
-		    			console.log(JSON.stringify(data));
-						like.innerHTML="已赞";
-		        	}
-		    		else{
-		        		app.showToast(data.msg, "error");
-		        	}
-		        }
-			});
-		}else if(like.innerHTML=="已赞"){
-			mui.ajax(app.serverUrl+"/corner/notlike",{//后端url
-		        data:{
-		            postId:postid,
-		            userId:user.userId
-		        },
-		        dataType:'json',
-		        type:'POST',
-		        timeout:10000,
-		    	contentType:'application/json;charset=utf-8',
-		        success:function(data){
-		        	if (data.status == 200) {
-		    			console.log(JSON.stringify(data));
-						like.innerHTML="赞";
-		        	}
-		    		else{
-		        		app.showToast(data.msg, "error");
-		        	}
-		        }
-			});
-		}else{
-			console.log("发生异常");
-		}
-			
-		console.log("我改好了");
-		mui.ajax(app.serverUrl+"/corner/getpost",{
-			data:{
-				postId:postid
-			},
-			dataType:'json',
-			type:'POST',
-			timeout:10000,
-			contentType:'application/json;charset=utf-8',
-			success:function(data){
-				nickname=data.data.user.userId;
-				date=new Date(data.data.postDate);
-				content=data.data.postContent;
-				postlike=data.data.postLike;
-			}
-		})
-		
-		
-		document.getElementById("title").innerHTML=nickname;
-		document.getElementById("time").innerHTML=date;
-		document.getElementById("content").innerHTML=content;
-		document.getElementById("postlike").innerHTML=postlike;
-		console.log("postid"+postid);
-		console.log(postlike);
-		
-		
-	});
-	
-	var send=document.getElementById("send-btn");
-	send.addEventListener('tap',function(){
-		var content=document.getElementById('comment-text').value;
-		if(content==''){
-			mui.toast('内容不能为空');
-			return false; 
-		}
-		else if(content.length>50){
-		   mui.toast('评论不得超过50个字');
-		   return false; 
-	   }
-	   else{
-	   var myDate = new Date();
-	   mui.ajax(app.serverUrl+"/corner/comment", {//后端url
-	   	data: {
-			sendUser:{
-				userId:user.userId
-			},
-			post:{
-				postId:postid
-			},
-			postContent:content
-		},
-	   	dataType: 'json', //服务器返回json格式数据
-	   	type: 'post', //HTTP请求类型
-	   	timeout: 10000, //超时时间设置为10秒；
-	   	headers: {
-	   		'Content-Type': 'application/json;charset:utf-8'
-	   	},
-	   	success: function(data) {
-	   		//服务器返回响应，根据响应结果，分析是否成功发送动态；
-	   		if (data.status == 200) {
-	   			//显示成功信息
-	   			mui.toast("评论发送成功");
-				console.log(data.data);
-				//var chatWebview = plus.webview.getWebviewById("crb_details.html");
-				//chatWebview.evalJS("pulldownRefresh()");
-				 location.reload()
-	   		}
-	   		else{
-	   			app.showToast(data.msg, "error");
-	   		}
-	   	},
-	   	error: function(xhr, type, errorThrown) {
-	   		//异常处理；
-	   		console.log(type);
-	   	}
-	   });
-	   }
-	});	
-})
+
