@@ -1,3 +1,4 @@
+var randomId;
 mui.init();
 mui.plusReady(function(){
 	var user = app.getUserGlobalInfo();
@@ -5,14 +6,11 @@ mui.plusReady(function(){
 		type:'get',
 		contentType: "application/json;charset=utf-8",
 		dataType: "json",
-		data: {//data携带的参数，根据自己的服务器参数写
-			
-		},
 		success:function(data){
 			//服务器返回响应，根据响应结果，分析是否捞取成功；
-			console.log(JSON.stringify(data));
-			//console.log(JSON.stringify(data.data.content));
+			//console.log(JSON.stringify(data));
 			if (data.status == 200) {
+				randomId=data.data.bottleId;
 				var content=document.getElementById("content");
 				var Html="";
 				Html='<ul class="mui-view-cell">'+
@@ -25,6 +23,7 @@ mui.plusReady(function(){
 			}
 		}
 	});
+	
 	var send=document.getElementById("send-btn");
 	send.addEventListener('tap',function(){
 		var content=document.getElementById('comment-text').value;
@@ -42,7 +41,7 @@ mui.plusReady(function(){
 				data: {
 					replayId:user.userId,
 					message:content,
-					driftId:1				
+					driftId:randomId				
 				},
 				dataType: 'json', //服务器返回json格式数据
 				type: 'post', //HTTP请求类型
@@ -54,9 +53,12 @@ mui.plusReady(function(){
 					//服务器返回响应，根据响应结果，分析是否成功发送评论；
 					if (data.status == 200) {
 						//显示成功信息
+						//console.log(JSON.stringify(data));
 						mui.toast("评论发送成功");
-						console.log(data.data);
-						location.reload()
+						//mui.openWindow('../html/crb_drift.html','crb_drift.html');
+						//location.reload();
+						//mui.openWindow('../html/crb_drift.html','crb_drift.html');
+						mui.back();
 					}
 					else{
 						app.showToast(data.msg, "error");
@@ -70,3 +72,4 @@ mui.plusReady(function(){
 		}
 	});	
 })
+

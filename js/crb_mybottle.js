@@ -10,14 +10,24 @@ mui.plusReady(function(){
 		},
 		success:function(data){
 			//服务器返回响应，根据响应结果，分析是否捞取成功；
-			console.log(JSON.stringify(data));
+			//console.log(JSON.stringify(data));
 			//console.log(JSON.stringify(data.data.content));
 			if (data.status == 200) {
 				var content=document.getElementById("content");
 				var Html="";
-				Html='<ul class="mui-view-cell">'+
-						data.data.content+
-					'</ul>';
+				for(var i=0;i<data.data.length;i++){
+					//console.log(JSON.stringify(data.data[i].bottleId));
+					Html+=
+						'<li class="mui-table-view-cell mui-media" id="'+data.data[i].bottleId+'">'+
+							'<a href="javascript:;">'+
+								'<span class="mui-pull-right"'+
+									'style="color: gray;font-size: 14px;"></span>'+
+								'<div class="mui-media-body" style="font-size:20px">'+
+									data.data[i].content+
+								'</div>'+
+							'</a>'+
+						'</li>';
+				}
 				content.innerHTML=Html;
 			}
 			else{
