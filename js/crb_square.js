@@ -62,23 +62,36 @@ function pulldownRefresh() {
 
 function addpost(post) {
 	var html="";
+	year=post.date.getFullYear();
+	month=parseInt(post.date.getMonth()+1);
+	day=post.date.getDate();
+	hour=post.date.getHours();
+	minute=post.date.getMinutes();
+	second=post.date.getSeconds();
+		
 	html=
-		   '<div class="mui-card postItem" id="'+post.postId+'">'+
-				'<div class="mui-card-header mui-card-media">'+
-				'<img src="'+post.icon+'"/>'+
-					'<div class="mui-media-body">'+
-						post.nickname+
-						'<p>发表于'+post.date+'</p>'+
-					'</div>'+
+		'<div class="mui-card postItem" id="'+post.postId+'">'+
+			'<div class="mui-card-header mui-card-media">'+
+			'<img src="'+post.icon+'"/>'+
+				'<div class="mui-media-body">'+
+					post.nickname+
+					'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
+					t(hour)+':'+t(minute)+':'+t(second)+
+					'</p>'+
 				'</div>'+
-				'<div class="mui-card-content">'+
-					'<p class="line-limit-length content">'+post.content+'</p>'+
-				'</div>'+
-				'<div class="mui-card-footer">'+
-					'赞:'+post.postlike+
-				'</div>'+
-			'</div>';			
+			'</div>'+
+			'<div class="mui-card-content">'+
+				'<p class="line-limit-length content">'+post.content+'</p>'+
+			'</div>'+
+			'<div class="mui-card-footer">'+
+				'赞:'+post.postlike+
+			'</div>'+
+		'</div>';			
 	return html;
+}
+
+function t(s){
+	return s<10?"0"+s:s;
 }
 
 function addlistNer(){
