@@ -198,7 +198,7 @@ function renderFriendRecommend(friend) {
 		    '</div>'+
 		    '<div class="mui-slider-handle">'+
 				'<img class="mui-media-object mui-pull-left" src="../images/1.jpg">'+
-		        '<a href="lhf_chat.html">'+friend.nickname+'</a>'+
+		        '<a href="">'+friend.nickname+'</a>'+
 		    '</div>'+
 		'</li>';
 	// console.log(html);
@@ -231,7 +231,7 @@ function renderFriends(friend){
 
 var btnArray = ['确认', '取消'];
 mui('.chatRecords').on('tap','.mui-btn-red',function() {
-    //获取当前DOM对象<a>
+    //获取当前DOM对象
 	var elem1 = this;
     mui.confirm('确定结束与对方的闲聊？', '提示', btnArray, function(e) {
 		if (e.index == 0) {
@@ -289,16 +289,16 @@ mui('body').on('tap','a',function(){document.location.href=this.href;});
 
 
 mui('.makeChat').on('tap','.mui-btn-blue',function() {
-	//获取当前DOM对象<a>
+	//获取当前DOM对象
 	var elem1 = this;
 	//获取DOM对象
 	var par = elem1.parentElement.parentNode;
 	mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
 		if (e.index == 0) {
-		var user=app.getUserGlobalInfo();//获取用户全局对象
-		var par1=par.getAttribute("friendId");
-//		console.log(par1);
-		if (e.index == 0) {
+			var user=app.getUserGlobalInfo();//获取用户全局对象
+			var par1=par.getAttribute("friendId");
+		//	console.log(par1);
+		
 			var user=app.getUserGlobalInfo();//获取用户全局对象
 			if(sendMakeFri(user.userId,par1)==true){
 				//获取朋友列表，并且渲染到页面
@@ -315,7 +315,7 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 		else {
 			//取消：关闭滑动列表
 			mui.swipeoutClose(par);
-		}}
+		}
 	});
 });
 

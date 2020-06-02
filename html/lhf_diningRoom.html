@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>食堂页面内部</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<link href="../css/lhf_DiningRoom.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-draggable">
+		  <!-- 菜单容器 -->
+		  <aside class="mui-off-canvas-right lhf_settings">
+		    <div class="mui-scroll-wrapper">
+		      <div class="mui-scroll">
+					<header class="mui-bar mui-bar-nav">
+						<h1 class="mui-title">行动</h1>
+					</header>
+					<ul class="mui-table-view" id="funcUL">
+						<li class="mui-table-view-cell"></li><!-- 占位置用的 -->
+						<li class="mui-table-view-cell"></li><!-- 占位置用的 -->
+						<li class="mui-table-view-cell" id="watchDiningRoomMsg">查看食堂信息</li>
+						<li class="mui-table-view-cell" id="report">举报</li>
+						<li class="mui-table-view-cell" id="leave">离开食堂</li>
+					</ul>
+		      </div>
+		    </div>
+		  </aside>
+		  <!-- 主页面容器 -->
+		  <div class="mui-inner-wrap" id='mainContainer'>
+		    <!-- 主页面标题 -->
+		    <header class="mui-bar mui-bar-nav">
+		    	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    	<h1 class="mui-title" id="roomName">未知食堂</h1>
+		    	<span class="mui-icon mui-icon-settings mui-pull-right"></span>
+		    </header>
+			
+		    <div id="msgOutter" class="mui-content mui-scroll-wrapper" style="background-color: white;width: 100%;padding-bottom: 36px;">
+				<div id="msgs" class="mui-content"><!-- 聊天内容显示框 -->
+					
+				</div>
+				
+				<div class="mui-content" style="position:fixed; bottom:0;width:100%;height: 36px;">
+					<div class="mui-input-row">
+						<textarea class="mui-input-clear" type="text" id="msg" rows="1"></textarea>
+						<button type="button" class="mui-btn mui-btn-block" id="sendMsg">发送</button>
+					</div>
+				</div>			
+		    </div> 
+			
+		  </div>
+		</div>
+		
+		
+		
+		<script src="../js/mui.js"></script>
+		<script src="../js/lhf_diningRoom.js"></script>
+	</body>
+
+</html>

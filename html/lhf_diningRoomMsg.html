@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>食堂资料页</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<link href="../css/lhf_DiningRoom.css" rel="stylesheet" />
+	</head>
+
+	<body class="roomMsgBackground">
+		
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title" id="titleName"></h1>
+		</header>
+		
+		<div class="mui-content" style="opacity: 0.6;padding-top: 30px;" >
+			<ul class="mui-table-view">
+				
+				<li class="mui-table-view-cell">
+					<div class="mui-media-body msgNoteFont">
+						<label class="titleLable">食堂id</label>
+						<span id="roomId" class="msgStyle contentSpan"></span>
+					</div>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<div class="mui-media-body msgNoteFont">
+						<label class="titleLable">食堂名称</label>
+						<span id="roomName" class="msgStyle"></span>
+					</div>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<div class="mui-media-body msgNoteFont">
+						<label class="titleLable">创建者</label>
+						<span id="creator" class="msgStyle"></span>
+					</div>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<div class="mui-media-body msgNoteFont">
+						<label class="titleLable">食堂主营</label>
+						<span id="tags"  class="msgStyle">
+							
+						</span>
+					</div>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<div class="mui-media-body msgNoteFont">
+						<label class="titleLable">当前食客人数</label>
+						<span id="roomPeoples" class="msgStyle"></span>
+					</div>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<div class="mui-media-body msgNoteFont">
+						<label class="titleLable">开张时间</label>
+						<span id="creationTime" class="msgStyle"></span>
+					</div>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<div class="mui-media-body msgNoteFont">
+						<label class="titleLable">关闭时间</label>
+						<span id="closeTime" class="msgStyle"></span>
+					</div>
+				</li>
+				
+			</ul>
+			
+		</div>
+		
+		<script src="../js/mui.js"></script>
+		<script src="../js/lhf_diningRoomMsg.js"></script>
+	</body>
+
+</html>

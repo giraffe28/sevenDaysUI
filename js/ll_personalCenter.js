@@ -135,7 +135,7 @@ function loadPersonalCenter(user){
 	var gender = user.gender; //性别
 	var profile = user.profile; //简介
 	var telephone = user.telephone; //手机号，暂时不允许更改
-	if(user.icon!=null)
+	if(user.icon!="")
 		document.getElementById("myImage").src=user.icon;
 	document.getElementById("nickname").innerHTML = nickname;
 	document.getElementById("gender").innerHTML = gender;
