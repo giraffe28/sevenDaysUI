@@ -1,6 +1,8 @@
 //mui初始化，配置下拉刷新
 var head;
 var max;
+var length;
+var index;
 mui.init({
 	pullRefresh: {
 		container: '#post',
@@ -12,6 +14,7 @@ mui.init({
 		},
 		up: {
 			contentrefresh: '正在加载...',
+			contentnomore:'动态到底了',
 			callback: pullupRefresh
 		}
 	}
@@ -31,10 +34,11 @@ function pulldownRefresh() {
 		});
 		return;
 	}
+	
 	head = 0;
 	max = 10;
 	var data = {
-		start:0,
+		start:head,
 		max:max//需要的字段名
 	}
 	/*if(lastId) { //说明已有数据，目前处于下拉刷新，增加时间戳，触发服务端立即刷新，返回最新数据
@@ -51,6 +55,7 @@ function pulldownRefresh() {
 			posts.items = convert(rsp);
 			var list=document.getElementById("postlist");
 			var postHtml="";
+			index=posts.items.length;
 			for(var i=0;i<posts.items.length;i++){
 				postHtml+=addpost(posts.items[i]);
 			}
@@ -111,15 +116,16 @@ function addlistNer(){
  * 上拉加载拉取历史列表 
  */
 function pullupRefresh() {
-	head += 1;
-	max = 1;
+	console.log(index);
+	console.log(head);
 	
+	head += max;
+	max = 10;	
 	var data = {
 		start:head,
-		max:10//需要的字段名
+		max:max//需要的字段名
 	}
-	
-	
+	if(index>=head){
 	//请求历史列表信息流
 	mui.post(app.serverUrl + "/square/find", data, function(rsp) {
 		mui('#post').pullRefresh().endPullupToRefresh();
@@ -129,12 +135,17 @@ function pullupRefresh() {
 			posts.items = posts.items.concat(convert(rsp));	
 			var list=document.getElementById("postlist");
 			var postHtml="";
+			index=posts.items.length
 			for(var i=0;i<posts.items.length;i++){
 				postHtml+=addpost(posts.items[i]);
 			}
 			list.innerHTML=postHtml;
-		}
+		}		
 	},'json');
+	}
+	else{
+		mui('#post').pullRefresh().endPullupToRefresh(true);
+	}
 }
 
 var posts = new Vue({
