@@ -1,6 +1,8 @@
 //mui初始化，配置下拉刷新
 var head;
 var max;
+var length;
+var index;
 mui.init({
 	pullRefresh: {
 		container: '#post',
@@ -12,6 +14,7 @@ mui.init({
 		},
 		up: {
 			contentrefresh: '正在加载...',
+			contentnomore:'动态到底了',
 			callback: pullupRefresh
 		}
 	}
@@ -31,10 +34,11 @@ function pulldownRefresh() {
 		});
 		return;
 	}
+	
 	head = 0;
 	max = 10;
 	var data = {
-		start:0,
+		start:head,
 		max:max//需要的字段名
 	}
 	/*if(lastId) { //说明已有数据，目前处于下拉刷新，增加时间戳，触发服务端立即刷新，返回最新数据
@@ -43,67 +47,56 @@ function pulldownRefresh() {
 	}*/
 	//请求最新列表信息流
 	mui.post(app.serverUrl + "/square/find", data, function(rsp) {
-		/*
-		console.log(app.serverUrl + "/square/find?start=0&max=5");
-		console.log(rsp.data[0].postContent);
-		console.log(JSON.stringify(rsp.data));*/
+
 		mui('#post').pullRefresh().endPulldownToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
-			lastId = rsp[0].postId; //保存最新消息的id，方便下拉刷新时使用
-			
+			lastId = rsp[0].postId; //保存最新消息的id，方便下拉刷新时使用			
 			posts.items = convert(rsp);
-//			console.log(posts.items[0].nickname);
-			
-			
 			var list=document.getElementById("postlist");
-
-				var postHtml="";
-				for(var i=0;i<posts.items.length;i++){
-					postHtml+=addpost(posts.items[i]);
-				}
-				list.innerHTML=postHtml;
-				addlistNer();
+			var postHtml="";
+			index=posts.items.length;
+			for(var i=0;i<posts.items.length;i++){
+				postHtml+=addpost(posts.items[i]);
+			}
+			list.innerHTML=postHtml;
+			addlistNer();
 		}
-	},'json'
-	);
+	},'json');
 }
 
-/*
 function addpost(post) {
 	var html="";
-	html='<li class="postItem" id="'+post.postId+'">'+
-			
-		   '<div class="mui-card">'+
-		        post.nickname+'<br/>'+
-				post.content+'<br/>'+
-				post.date+'<br/>'+
-				post.postlike+'<br/>'+
+	year=post.date.getFullYear();
+	month=parseInt(post.date.getMonth()+1);
+	day=post.date.getDate();
+	hour=post.date.getHours();
+	minute=post.date.getMinutes();
+	second=post.date.getSeconds();
+		
+	html=
+		'<div class="mui-card postItem" id="'+post.postId+'">'+
+			'<div class="mui-card-header mui-card-media">'+
+			'<img src="'+post.icon+'"/>'+
+				'<div class="mui-media-body">'+
+					post.nickname+
+					'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
+					t(hour)+':'+t(minute)+':'+t(second)+
+					'</p>'+
 				'</div>'+
-				
-		'</li>';	
+			'</div>'+
+			'<div class="mui-card-content">'+
+				'<p class="line-limit-length content">'+post.content+'</p>'+
+			'</div>'+
+			'<div class="mui-card-footer">'+
+				'赞:'+post.postlike+
+			'</div>'+
+		'</div>';			
 	return html;
-}*/
+}
 
-function addpost(post) {
-	var html="";
-	html=//'<li class="postItem" id="'+post.postId+'">'+
-		   '<div class="mui-card postItem" id="'+post.postId+'">'+
-				'<div class="mui-card-header mui-card-media">'+
-					'<div class="mui-media-body">'+
-						post.nickname+
-						'<p>发表于'+post.date+'</p>'+
-					'</div>'+
-				'</div>'+
-				'<div class="mui-card-content">'+
-					'<p class="line-limit-length content">'+post.content+'</p>'+
-				'</div>'+
-				'<div class="mui-card-footer">'+
-					'赞:'+post.postlike+
-				'</div>'+
-			'</div>';			
-		//'<>';	
-	return html;
+function t(s){
+	return s<10?"0"+s:s;
 }
 
 function addlistNer(){
@@ -114,55 +107,46 @@ function addlistNer(){
 			id:"post_"+postId,
 			extras:{
 				postid:postId,
-			}
+			},
 		});
 	});
 }
-
 
 /**
  * 上拉加载拉取历史列表 
  */
 function pullupRefresh() {
-	head += 1;
-	max = 1;
+	console.log(index);
+	console.log(head);
 	
+	head += max;
+	max = 10;	
 	var data = {
 		start:head,
-		max:10//需要的字段名
+		max:max//需要的字段名
 	}
-	
-	
+	if(index>=head){
 	//请求历史列表信息流
 	mui.post(app.serverUrl + "/square/find", data, function(rsp) {
-		
-		//console.log(app.serverUrl + "/square/find?start=0&max=5");
-		//console.log(rsp.data[0].postContent);
-		//console.log(JSON.stringify(rsp.data));
 		mui('#post').pullRefresh().endPullupToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
 			lastId = rsp[0].postId; //保存最新消息的id，方便下拉刷新时使用
-			
-			//posts.items = convert(rsp).concat(posts.items);
-			posts.items = posts.items.concat(convert(rsp));
-//			console.log(posts.items[0].nickname);
-			
-			
+			posts.items = posts.items.concat(convert(rsp));	
 			var list=document.getElementById("postlist");
-				var postHtml="";
-				for(var i=0;i<posts.items.length;i++){
-					postHtml+=addpost(posts.items[i]);
-				}
-
-				list.innerHTML=postHtml;
-
-		
-		}
-	},'json'
-	);
+			var postHtml="";
+			index=posts.items.length
+			for(var i=0;i<posts.items.length;i++){
+				postHtml+=addpost(posts.items[i]);
+			}
+			list.innerHTML=postHtml;
+		}		
+	},'json');
+	}
+	else{
+		mui('#post').pullRefresh().endPullupToRefresh(true);
+	}
 }
-
 
 var posts = new Vue({
 	el: '#posts',
@@ -175,7 +159,7 @@ function convert(items) {
 	var postItems = [];
 	items.forEach(function(item) {
 		postItems.push({
-			//icon:item.user.icon,
+			icon:item.user.icon,
 			nickname:item.user.nickname,
 			date:new Date(item.postDate),
 			content:item.postContent,
@@ -183,6 +167,5 @@ function convert(items) {
 			postlike:item.postLike
 		});
 	});
-	//console.log(postItems);
 	return postItems;
 }

@@ -1,9 +1,10 @@
 body {
-    background-image: url("../images/ocean.jpg");
+    background-image: url("../images/letter.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
 
 .playstyle{	
 	position: fixed; /*or前面的是absolute就可以用*/  
@@ -23,4 +24,78 @@ img{
 	vertical-align: middle;
 	width:50%;
 	height:50%;
+
+.footer-right {  
+	position: absolute;  
+	width: 60px;  
+	height: 50px;  
+	right: 0px;  
+	bottom: 0px;  
+	text-align: center;  
+	vertical-align: middle;  
+	display: inline-block;  
+}  
+
+#send-btn {
+  color: #fff;
+  width: 100% !important;  
+  height: 80% !important;
+  background-color: #55aa7f;
+  border-radius: 5px;
+  margin-top: 5px; 
+
+  box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
+  -moz-box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
+  -webkit-box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
+  -o-box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
+  -ms-box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
+}
+#send-btn:active  {
+  background-color: #333333;
+  box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+  -moz-box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+  -webkit-box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+  -o-box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+  -ms-box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+}
+
+      
+.footer-center {  
+	position: absolute;  
+	left: 0px;  
+	width: calc(100% - 50px);  
+	bottom: 0px;  
+	height: 100%;  
+	padding: 5px 0px;  
+}  
+
+.footer-center [class*=input] {  
+	width: 97%;  
+	height: 100%;  
+	border-radius: 5px;  
+}  
+
+.footer-center .input-text {  
+	background: #ffffff;  
+	border: solid 1px #b5c8ba;  
+	padding: 10px !important;  
+	font-size: 16px !important;  
+	line-height: 18px !important;  
+	font-family: verdana !important;  
+	overflow: hidden;  
+}
+
+.line-limit-length {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; //文本不换行，这样超出一行的部分被截取，显示...
+}
+
+.card {
+	width:250px;
+	box-shadow:0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	text-align:center;
+	display:inline-block;
+	background-color:#FFF;
+
 }

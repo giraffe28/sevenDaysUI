@@ -16,10 +16,7 @@
 		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 		    <h1 class="mui-title">动态</h1>	
 			<a class="mui-icon-right-nav mui-pull-right">
-				<span id="headImage" class="mui-icon mui-icon-camera"></span>
-			</a>
-			<a class="mui-icon-right-nav mui-pull-right">
-				<span id="uploadImage" class="mui-icon mui-icon-upload"></span>
+				<span id="headImage" class="mui-icon mui-icon-image"></span>
 			</a>
 		</header>
 		<div class="mui-content">
@@ -30,17 +27,31 @@
 				<ul id="imgs" class="mui-table-view mui-grid-view">
 					<!--<li class="mui-table-view-cell mui-media mui-col-xs-6">
 						<a href="#">
-							<img class="mui-media-object" src="images/shuijiao.jpg">
+							<img class="mui-media-object" src="http://qazbuv5y2.bkt.clouddn.com/Fob0fIHVTz8qT_uiZCWyubR14jHF">
 							<span class="mui-icon mui-icon-trash deleteBtn"></span>
-							<div class="mui-media-body">
-								<input type="text" class="remark" placeholder="备注">
-							</div>
 						</a>
 					</li>-->
 				</ul>
 			</div>
 			<div class="mui-content-padded" align="center">
 			    <button type="button" class="mui-btn mui-btn-blue" id="post">发布</button>
+			</div>
+			<div id="sheet-myImage" class="mui-popover mui-popover-bottom mui-popover-action ">
+				<!-- 可选择菜单 -->
+				<ul class="mui-table-view">
+				  <li class="mui-table-view-cell">
+					<a id="choose" href="#">相册</a>
+				  </li>
+				  <!--<li class="mui-table-view-cell">
+					<a id="save" href="#">保存照片</a>
+				  </li><!-->
+				</ul>
+				<!-- 取消菜单 -->
+				<ul class="mui-table-view">
+				  <li class="mui-table-view-cell">
+					<a href="#sheet-myImage"><b>取消</b></a>
+				  </li>
+				</ul>
 			</div>
 		</div>
 		<script src="../js/crb_app.js"></script>

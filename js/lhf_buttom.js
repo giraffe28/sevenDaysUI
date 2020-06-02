@@ -44,8 +44,8 @@ var sevenDaysArray=[
 		pageUrl:"../html/lhf_midnightDiner.html"
 	},
 	{
-		pageId:"crb_bottle.html",
-		pageUrl:"../html/crb_bottle.html"
+		pageId:"crb_drift.html",
+		pageUrl:"../html/crb_drift.html"
 	},
 	{//个人中心
 		pageId:"ll_personalCenter.html",

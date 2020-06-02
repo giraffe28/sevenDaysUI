@@ -32,8 +32,14 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 	var btnArray = ['是', '否'];
 	mui.confirm('你确定要退出登录吗？', '提示', btnArray, function(e) {
 		if (e.index == 0) {
+			requestLogOff();
 			//清空缓存
+
 			plus.storage.removeItem("userInfo");
+			
+			var webviews= plus.webview.all();
+
+			/*plus.storage.removeItem("userInfo");
 			
 			var webviews= plus.webview.all();
 			
@@ -41,6 +47,7 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 			mui.openWindow("crb_login1.html","crb_login1.html");
 			console.log("执行至跳转到登录页面");
 						
+
 			mui.toast("退出登录成功！");
 			setTimeout(function(){
 				for(var i=0;i<webviews.length;i++){
@@ -48,11 +55,54 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 				}
 			},1000);
 			
+
+			mui.toast("退出登录成功！");
+			setTimeout(function(){
+				for(var i=0;i<webviews.length;i++){
+					webviews[i].close();
+				}
+			},1000);
+			*/
 		} else {
 			mui.toast("嘿嘿（`v`）");
 		}
 	})
 });
+
+//发送请求注销用户
+function requestLogOff(){
+	mui.ajax(app.serverUrl+'/user/loginoff', {
+		data: {},
+		dataType: 'json', //服务器返回json格式数据
+		type: 'post', //HTTP请求类型
+		timeout: 10000, //超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},	
+		success: function(data) {
+			//服务器返回响应，根据响应结果，分析是否成功获取用户信息；
+			if (data.status == 200) {
+				//清空缓存
+				plus.storage.removeItem("userInfo");
+				var webviews= plus.webview.all();
+				//打开login页面		
+				mui.openWindow("crb_login1.html","crb_login1.html");
+				console.log("执行至跳转到登录页面");			
+				mui.toast("退出登录成功！");
+				setTimeout(function(){
+					for(var i=0;i<webviews.length;i++){
+						webviews[i].close();
+					}
+				},1000);
+			}
+			else{
+				app.showToast(data.msg, "error");
+			}
+		},
+		error: function(xhr, type, errorThrown) {
+			//异常处理；
+			// console.log(JSON.stringify(data.data));
+		}
+	});
+};
 
 /*点击“黑名单”项*/
 document.getElementById("blackList").addEventListener('tap', function() {
@@ -134,6 +184,8 @@ function loadPersonalCenter(user){
 	var nickname = user.nickname; //假名
 	var gender = user.gender; //性别
 	var profile = user.profile; //简介
+
+	//var telephone = user.telephone; //手机号，暂时不允许更改
 	var telephone = user.telephone; //手机号，暂时不允许更改
 	if(user.icon!="")
 		document.getElementById("myImage").src=user.icon;

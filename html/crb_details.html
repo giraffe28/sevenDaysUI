@@ -19,15 +19,17 @@
 		    <h1 class="mui-title">详情</h1>	
 		</header>
 		<div class="mui-content">
-			<div class="mui-card post">
+			<div class="mui-card postDetail" id="post">
+				<!--
 				<div class="mui-card-header mui-card-media">
+					<img src="" id="icon"/>
 					<div class="mui-media-body">
 						<p id="title">{{nickname}}</p>
 						<p id="time">{{post_date}}</p>
 					</div>
 				</div>
 				<div class="mui-card-content">
-					<!--img v-html="image" id="post_image" width="100%"-->
+					<img v-html="image" id="post_image" width="100%">
 					<p id="content" class="content">
 						{{post_content}}
 					</p>
@@ -35,12 +37,9 @@
 				<div class="mui-card-footer">
 					<p id="postlike"></p>
 					<p id="like">赞</p>
-				</div>
-			</div>
-			<br/>
-			
-		</div>
-		
+				</div>-->
+			</div>		
+		</div>	
 		<div class="mui-content" id="comment">
 			<div class="makeChat" id="commentlist">
 			</div>
@@ -52,7 +51,7 @@
 				<textarea id='comment-text' type="text" class='input-text'></textarea>  
 			</div>  
 			<label class="footer-right">  
-				<button type="button" id="send-btn">发送</button>  
+				<button type="button" id="send-btn" onclick="send()">发送</button>  
 			</label>  
 		</div>
 		
