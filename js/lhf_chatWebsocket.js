@@ -70,7 +70,7 @@ mui.plusReady(function () {
 			
 			// 定时发送心跳
 			if(myinterval!=null) clearInterval(myinterval);//先清空心跳
-			//myinterval=setInterval("CHAT.keepalive()", 7000);
+			myinterval=setInterval("CHAT.keepalive()", 7000);
 		},
 		wsmessage: function(e) {
 			console.log("接受到消息：" + e.data);	

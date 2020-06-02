@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>深夜食堂首页</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<link href="../css/lhf_DiningRoom.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">深夜食堂</h1>
+			<a id="newDiningRoom" class="mui-icon mui-icon-plusempty mui-pull-right" href="#popover" style="padding-top: 4px;padding-right: 7px;font-size: 37px;"></a>
+		</header>
+		
+		<div class="mui-content" style="padding-top: 30px;">
+			 <ul class="mui-table-view"> 
+				<li class="mui-table-view-cell mui-collapse" id="closedRoomItem">
+					<a class="mui-navigate-right" href="#">留恋的足迹</a>
+					<div class="mui-collapse-content" style="padding: 0px 0px 0px 15px;">
+						<ul  id="closedRoom" class="zeroPaddingLeft">
+							
+							<!--<li class="mui-table-view-cell closedRoom room mui-media" roomId="3">
+								<div class="mui-slider-right mui-disabled" roomId="3">
+									<span class="mui-btn mui-btn-red">离开食堂</span>
+								</div>
+								<div class="mui-slider-handle">
+									<img class="mui-media-object mui-pull-left" src="../images/diner.png">
+									<span>1212</span>
+								</div>
+							</li>
+							<li class="mui-table-view-cell closedRoom room mui-media" roomId="3">
+								<div class="mui-slider-right mui-disabled" roomId="3">
+									<span class="mui-btn mui-btn-red">离开食堂</span>
+								</div>
+								<div class="mui-slider-handle">
+									<img class="mui-media-object mui-pull-left" src="../images/diner.png">
+									<span>1212</span>
+								</div>
+							</li>
+							-->
+						</ul>
+					</div>
+				</li>
+				<li class="mui-table-view-cell mui-collapse" id="recommendRoomItem">
+					<a class="mui-navigate-right" href="#" id="recommendRoomOpen">食堂街道</a>
+					<div class="mui-collapse-content" style="padding: 0px 0px 0px 15px;">
+						<ul id="recommendRoom" class="zeroPaddingLeft">
+							
+						</ul>	
+					</div>
+				</li>
+				<li class="mui-table-view-cell mui-collapse" id="createRoomItem">
+					<a class="mui-navigate-right" href="#">我的食堂</a>
+					<div class="mui-collapse-content" style="padding: 0px 0px 0px 15px;">
+						<ul id="createRoom" class="mui-table-view zeroPaddingLeft">
+						<!--	
+							<li class="mui-table-view-cell room mui-media" roomId="1">
+								<img class="mui-media-object mui-pull-left" src="../images/diner.png">
+								<div class="mui-media-body">
+									<span>12121</span>
+									<p class="mui-ellipsis">1213</p>
+								</div>
+							</li>
+							<li class="mui-table-view-cell room mui-media" roomId="1">
+								<img class="mui-media-object mui-pull-left" src="../images/diner.png">
+								<div class="mui-media-body">
+									<span>12121</span>
+									<p class="mui-ellipsis">1213</p>
+								</div>
+							</li>
+						-->	
+						</ul>
+					</div>
+				</li>
+				<li class="mui-table-view-cell mui-collapse" id="openRoomItem">
+					<a class="mui-navigate-right" href="#">入座的食堂</a>
+					<div class="mui-collapse-content" style="padding: 0px 0px 0px 15px;">
+						<ul id="openRoom" class="zeroPaddingLeft">
+							
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+		
+		
+		<div id="popover" class="mui-popover">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="popCreateRoom">开张新食堂</li>
+				<li class="mui-table-view-cell" id="search">搜索食堂</li>
+			</ul>
+		</div>
+		
+		
+		<script src="../js/mui.js"></script>
+		<script src="../js/crb_app.js"></script>
+		<script src="../js/lhf_midnightDiner.js"></script>
+	</body>
+
+</html>

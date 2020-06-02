@@ -40,8 +40,8 @@ var sevenDaysArray=[
 			pageUrl:"../html/crb_square.html"
 	},
 	{
-		pageId:"test2.html",
-		pageUrl:"../html/test.html"
+		pageId:"lhf_midnightDiner.html",
+		pageUrl:"../html/lhf_midnightDiner.html"
 	},
 	{
 		pageId:"crb_drift.html",

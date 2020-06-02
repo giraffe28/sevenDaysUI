@@ -5,6 +5,26 @@ body {
     background-attachment: fixed;
 }
 
+
+.playstyle{	
+	position: fixed; /*or前面的是absolute就可以用*/  
+	bottom: 20px;
+	margin:0 auto;
+}
+
+.leftstyle,.middlestyle,.rightstyle {
+	width:33%;
+	float:left;
+	margin:0 auto;
+	vertical-align: middle;
+	text-align:center;
+}
+
+img{
+	vertical-align: middle;
+	width:50%;
+	height:50%;
+
 .footer-right {  
 	position: absolute;  
 	width: 60px;  
@@ -77,4 +97,5 @@ body {
 	text-align:center;
 	display:inline-block;
 	background-color:#FFF;
+
 }

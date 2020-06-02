@@ -34,6 +34,11 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 		if (e.index == 0) {
 			requestLogOff();
 			//清空缓存
+
+			plus.storage.removeItem("userInfo");
+			
+			var webviews= plus.webview.all();
+
 			/*plus.storage.removeItem("userInfo");
 			
 			var webviews= plus.webview.all();
@@ -42,6 +47,15 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 			mui.openWindow("crb_login1.html","crb_login1.html");
 			console.log("执行至跳转到登录页面");
 						
+
+			mui.toast("退出登录成功！");
+			setTimeout(function(){
+				for(var i=0;i<webviews.length;i++){
+					webviews[i].close();
+				}
+			},1000);
+			
+
 			mui.toast("退出登录成功！");
 			setTimeout(function(){
 				for(var i=0;i<webviews.length;i++){
@@ -170,6 +184,8 @@ function loadPersonalCenter(user){
 	var nickname = user.nickname; //假名
 	var gender = user.gender; //性别
 	var profile = user.profile; //简介
+
+	//var telephone = user.telephone; //手机号，暂时不允许更改
 	var telephone = user.telephone; //手机号，暂时不允许更改
 	if(user.icon!="")
 		document.getElementById("myImage").src=user.icon;

@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		<link href="../css/lhf_DiningRoom.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">搜索食堂</h1>
+		</header>
+		
+		<div class="mui-content" style="margin-top: 10px;">
+			
+			<div class="mui-segmented-control">
+				<a class="mui-control-item mui-active" href="#searchByName">以食堂名称搜索</a>
+				<a class="mui-control-item" href="#searchById">以id搜索</a>
+				<a class="mui-control-item" href="#searchByTag">以主营搜索</a>
+			</div>
+			
+			<div class="mui-content-padded">
+				<div class="mui-input-group mui-control-content" id="searchByTag">
+				    <div class="mui-input-row">
+						<label style="width: 28%;padding: 11px 3px 11px 15px;">食堂主营</label>
+						<span id="diningRoomTags"  class="msgStyle">
+							
+						</span>
+						<span id="addTag" class="mui-pull-right mui-icon mui-icon-plusempty"></span>
+				    </div>
+					<div class="mui-button-row">
+						<button type="button" class="mui-btn mui-btn-primary" id="searchByTagCondirm">确认</button>
+						<button type="button" class="mui-btn mui-btn-danger"  id="tagCancel">取消</button>
+					</div>
+				</div>
+				
+				<div class="mui-input-group mui-control-content mui-active" id="searchByName">
+				    <div class="mui-input-row">
+						<label style="width: 28%;padding: 11px 3px 11px 15px;">食堂名称</label>
+						<input type="text" class="mui-input-clear" id="searchByNameInput" style="width: 72%;" placeholder="请输入要寻找的食堂名称" />
+				    </div>
+					<div class="mui-button-row">
+						<button type="button" class="mui-btn mui-btn-primary" id="searchByNameConfirm">确认</button>
+						<button type="button" class="mui-btn mui-btn-danger" id="nameCancel">取消</button>
+					</div>
+				</div>
+				
+				<div class="mui-input-group mui-control-content" id="searchById">
+				    <div class="mui-input-row">
+						<label style="width: 28%;padding: 11px 3px 11px 15px;">食堂id</label>
+						<input type="text" class="mui-input-clear" id="searchByIdInput" style="width: 72%;" placeholder="请输入要寻找的食堂id" />
+				    </div>
+					<div class="mui-button-row">
+						<button type="button" class="mui-btn mui-btn-primary" id="searchByIdConfirm">确认</button>
+						<button type="button" class="mui-btn mui-btn-danger" id="idConfirm">取消</button>
+					</div>
+				</div>
+			</div>
+		
+			
+			<div class="mui-content"><!-- 搜索结果 -->
+				<ul class="zeroPaddingLeft" id="searchResult">
+					
+				</ul>
+			</div>
+			
+		</div>
+		
+		
+		<script src="../js/mui.js"></script>
+		<script src="../js/lhf_searchDiningRoom.js"></script>
+	</body>
+
+</html>

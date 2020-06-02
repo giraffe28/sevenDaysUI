@@ -1,7 +1,7 @@
 window.app = {
 	
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2__2_war_exploded',
+	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_3_war_exploded',
 	//netty服务后端发布的url地址
 	nettyServerUrl:'ws://192.168.0.3:7888/ws', //172.17.243.33
 
@@ -386,5 +386,123 @@ window.app = {
 	getMemory:function(){
 		var memoryStr=plus.storage.getItem("memory");
 		return JSON.parse(memoryStr);
+	},
+	
+	
+	
+	//保存用户的已加入的关闭状态的食堂列表
+	setCloseRoomList:function(closedRoomList){
+		var closedRoomListStr=JSON.stringify(closedRoomList);
+		plus.storage.setItem("closedRoomList",closedRoomListStr);
+	},
+	
+	
+	//取出用户的已加入的关闭状态的食堂列表
+	getCloseRoomList:function(){
+		var closedRoomListStr=plus.storage.getItem("closedRoomList");
+		if(closedRoomListStr!=null&&closedRoomListStr.length>0){
+			return JSON.parse(closedRoomListStr);
+		}
+		else{
+			return [];
+		}
+	},
+	
+	//取出用户的已加入食堂列表中指定id的一项
+/*	getCloseRoomList:function(roomId){
+		var closedRoomListStr=plus.storage.getItem("closedRoomList");
+		if(this.isNotNull(closedRoomListStr)){//若不为空
+			var closedRoomList=JSON.parse(closedRoomListStr);
+			for(var i=0;i<closedRoomList.length;i++){
+				if(closedRoomList[i].chatroomId==roomId){
+					return closedRoomList[i];
+				}
+			}
+			return null;
+		}
+		else{
+			return null;
+		}
+	},	
+*/
+	
+	//保存用户自己创建的食堂列表
+	setCreateRoomList:function(createRoomList){
+		var createRoomListStr=JSON.stringify(createRoomList);
+		plus.storage.setItem("createRoomList",createRoomListStr);
+	},
+	
+	//取出用户的自己创建的食堂列表
+	getCreateRoomList:function(){
+		var createRoomListStr=plus.storage.getItem("createRoomList");
+		if(createRoomListStr!=null&&createRoomListStr.length>0){
+			return JSON.parse(createRoomListStr);
+		}
+		else{
+			return [];
+		}
+	},
+	
+	
+	//修改食堂的食堂名和标签(仅涉及自己创建的食堂)
+	changeRoomMsg:function(roomId,roomName,newTags){
+		var me=this;
+		var roomKey = "createRoomList";
+		// 从本地缓存获取由自己创建的食堂列表
+		var createRoomListStr = plus.storage.getItem(roomKey);
+		var createRoomList;
+		if (me.isNotNull(createRoomListStr)) {// 如果不为空
+			createRoomList = JSON.parse(createRoomListStr);
+			// 循环这个list，判断是否存在食堂，比对roomId，
+			// 如果有，在list中的原有位置修改食堂名和标签
+			for (var i = 0 ; i < createRoomList.length ; i ++) {
+				var item = createRoomList[i];
+				if (item.roomId == roomId) {
+					item.roomName=roomName;
+					item.newTags=newTags;
+					createRoomList.splice(i, 1, item);	// 替换原有的食堂数据
+					console.log("app中的修改指定id食堂信息");
+					break;
+				}
+			}
+			// 替换原有的食堂列表
+			plus.storage.setItem(roomKey, JSON.stringify(createRoomList));
+		} 
+		else {// 如果为空			
+			return;
+		}
+	},
+	
+	
+	//增加新食堂(仅涉及自己创建的食堂)
+	addMyRoom:function(room){
+		var me=this;
+		var roomKey = "createRoomList";
+		// 从本地缓存获取由自己创建的食堂列表
+		var createRoomListStr = plus.storage.getItem(roomKey);
+		var createRoomList = JSON.parse(createRoomListStr);
+		//添加新食堂
+		createRoomList.unshift(room);
+		//替换原本的食堂列表
+		plus.storage.setItem("createRoomList",JSON.stringify(createRoomListStr));
+	},
+	
+	
+	
+	//保存用户加入的处在开启状态的食堂列表
+	setOpenRoomList:function(openRoomList){
+		var openRoomListStr=JSON.stringify(openRoomList);
+		plus.storage.setItem("openRoomList",openRoomListStr);
+	},
+	
+	//取出用户加入的处在开启状态的食堂列表
+	getOpenRoomList:function(){
+		var openRoomListStr=plus.storage.getItem("openRoomList");
+		if(openRoomListStr!=null&&openRoomList.length>0){
+			return JSON.parse(openRoomList);
+		}
+		else{
+			return [];
+		}
 	},
 }
