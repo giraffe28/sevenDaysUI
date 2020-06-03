@@ -19,7 +19,7 @@ mui.plusReady(function () {
 	userId=thisWebview.userId;
     
 	/* 点击“添加标签” */
-	mui("#addTag").addEventListener('tap', function() {
+	document.getElementById("addTag").addEventListener('tap', function() {
 		mui.openWindow({
 			url:"lhf_addTag.html",
 			id:"lhf_addTag.html",//每个朋友的聊天页面独立
@@ -31,8 +31,8 @@ mui.plusReady(function () {
 		});
 	});
 	//点击确认键
-	mui("#createConfirm").addEventListener('tap',function(){
-		var roomName=mui("#roomName").value;
+	document.getElementById("createConfirm").addEventListener('tap',function(){
+		var roomName=document.getElementById("roomName").value;
 		//检测是否已经填写了食堂名称
 		if(app.isNotNull(roomName)==false){
 			mui.toast("请先书写你的食堂招牌呦！(๑‾᷅^‾᷅๑)");
@@ -51,7 +51,7 @@ mui.plusReady(function () {
 		}
 	});
 	//点击取消键
-	mui("#createCancel").addEventListener('tap',function(){
+	document.getElementById("createCancel").addEventListener('tap',function(){
 		mui.back();
 	});
 });
@@ -59,14 +59,16 @@ mui.plusReady(function () {
 
 //渲染标签内容
 function renderNewTag(newTags){
+//	console.log(newTags);
 	tagStr=newTags;//记录传回的标签
-	var addTagDom=mui("#diningRoomTags");
-	newTags = newTags.split(" ");
-	if (app.isNotNull(newTags)) {
+	var addTagDom=document.getElementById("diningRoomTags");
+	if (app.isNotNull(newTags)==true) {
+//		console.log("渲染食堂主营内容");
+		newTags = newTags.split(" ");
 		var theTagsHtml = "";
 		for (var i = 0; i < newTags.length; i++) {
-			theTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
-			+newTags[i]+'</label>';
+			theTagsHtml += '<label style="background-color: lightgreen; border-radius: 7px;width: auto;margin:10px 0px 0px 5px ;padding: 0;">'
+							+newTags[i]+'</label>';
 		}
 		addTagDom.innerHTML = theTagsHtml;
 	}
@@ -79,11 +81,10 @@ function renderNewTag(newTags){
 //发送创建请求到后端
 //创建成功，返回true，创建失败，返回false
 function createRoomRequests(){
-	var roomName=mui("#roomName").value;
+	var roomName=document.getElementById("roomName").value;
 	
 	plus.nativeUI.showWaiting("请稍等");
-	mui.ajax(app.serverUrl+"chatRoom/create",{
-		async:false, 
+	mui.ajax(app.serverUrl+"/chatRoom/create",{
 		data:{
 			userId:userId,
 			chatroomName:roomName,
@@ -95,9 +96,9 @@ function createRoomRequests(){
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
+			plus.nativeUI.closeWaiting();
 			//console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
-				plus.nativeUI.closeWaiting();
 				app.addMyRoom(data.data);//修改缓存
 				return true;
 			}
@@ -107,6 +108,7 @@ function createRoomRequests(){
 		},
 		error: function(xhr, type, errorThrown) {
 			//异常处理；
+			plus.nativeUI.closeWaiting();
 			console.log("发送新建食堂出错error");
 			// console.log(JSON.stringify(data.data));
 		}

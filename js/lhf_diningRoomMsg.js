@@ -17,6 +17,8 @@ var tagsDom;//记录显示标签的位置
 var roomPeoplesDom;//记录显示食堂当前人数的位置
 var creationTimeDom;//记录显示食堂开张时间的位置
 var closeTimeDom;//记录显示食堂预期关闭时间的位置
+var userId;//记录用户id
+var roomTag;//记录食堂主营
 
 var roomId;//本食堂的id
 var isMine;//是否为自己开启的食堂
@@ -34,18 +36,65 @@ mui.plusReady(function () {
 	roomPeoplesDom=mui("#roomPeoples");
 	creationTimeDom=mui("#creationTime");
 	closeTimeDom=mui("#closeTime");
+	
+	userId=app.getUserGlobalInfo().userId;
 	//获取结束
 	
 	getRoomMsgRequests();//发送请求，加载数据
+	
+	if(isMine==true){
+		//添加修改入口
+		addmodifyEntrance();
+		// 点击“修改食堂信息”
+		document.getElementById("modifyBtn").addEventListener('tap', function() {
+			mui.openWindow({
+				url:"lhf_modifyDiningRoom.html",
+				id:"lhf_modifyDiningRoom.html",
+				extras:{
+					userId:userId,
+					roomId:roomId,
+					roomName:creatorDom.innerHTML,
+					theTags:roomTag
+				},
+				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+			});
+		});
+	}
 });
+
+
+//对于如果是自己创建的食堂，则增加修改食堂信息的入口
+function addmodifyEntrance(){
+	if(isMine==true){
+		modifyHtml='<button type="button" class="mui-btn mui-btn-primary" id="modifyBtn" >修改食堂信息</button>';
+		mui("#modifyRow").innerHTML=modifyHtml;
+	}
+}
 
 
 
 //修改食堂信息后的配套动作，将被修改食堂信息的功能模块调用
 //这里是修改食堂名和食堂主营
-//TODO
-//暂时没想好是否应该给这个页面加上修改信息的入口
-function reload(roomName,theTags){
+function reload(roomName,tags){
+	titleNameDom.innerHTML=roomName;
+	tags=tags.splice(" ");
+	if (app.isNotNull(tags)) {
+		var theTagsHtml = "";
+		for (var i = 0; i < tags.length; i++) {
+			theTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
+			+tags[i]+'</label>';
+		}
+		tagsDom.innerHTML = theTagsHtml;
+	}
+	else {
+		tagsDom.innerHTML = "";
+	}
+	
+	var fatherWebview=plus.webview.currentWebview().opener();
+	fatherWebview.evalJS("reload("+roomName+","+tags+")");//修改食堂聊天页面的名称
+	
+	var midnightDinerWebview=plus.webview.getWebviewById("lhf_midnightDiner.html");
+	midnightDinerWebview.evalJS("renderStoredCreateRoom()");//重新渲染自己创建的食堂列表
 }
 
 
@@ -54,6 +103,8 @@ function renderRoomMsg(room){
 	titleNameDom.innerHTML=room.chatroomName;
 	roomIdDom.innerHTML=room.chatroomId;
 	creatorDom.innerHTML=room.userName;
+	
+	roomTag=room.chatroomTag;//记录返回的食堂标签，用于进入修改食堂信息时的页面传参
 	
 	var tags=room.chatroomTag;
 	tags=tags.splice(" ");
