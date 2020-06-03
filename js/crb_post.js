@@ -1,4 +1,4 @@
-var imgUrl;
+var imgUrl="";
 mui.init();
 mui.plusReady(function () {
 	var post=document.getElementById("post");
@@ -21,7 +21,8 @@ mui.plusReady(function () {
 			user:{
 				userId:user.userId
 			},
-	   		postContent:content
+	   		postContent:content,
+			postImage:imgUrl,
 	   	},
 	   	dataType: 'json', //服务器返回json格式数据
 	   	type: 'post', //HTTP请求类型
@@ -33,7 +34,7 @@ mui.plusReady(function () {
 	   		//服务器返回响应，根据响应结果，分析是否成功发送动态；
 	   		if (data.status == 200) {
 	   			//显示成功信息
-	   			//mui.toast("发送动态成功");
+	   			mui.toast("发送动态成功");
 				console.log(data.data);
 				var chatWebview = plus.webview.getWebviewById("crb_square.html");
 				chatWebview.evalJS("pulldownRefresh()");

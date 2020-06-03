@@ -27,6 +27,7 @@ mui.plusReady(function () {
 	icon=Webview.icon;
 	nickname=Webview.nickname;
 	content=Webview.content;
+	postImage=Webview.postImage;
 	date=Webview.date;
 	postlike=Webview.postlike;
 	
@@ -70,6 +71,7 @@ mui.plusReady(function () {
 					'<p class="content">'+
 						content+
 					'</p>'+
+					'<img src="'+postImage+'" alt="" width="100%">'+
 				'</div>'+
 				'<div class="mui-card-footer">'+
 					'<p>'+postlike+'</p>'+
@@ -226,7 +228,7 @@ function send(){
 	}
 
 function pulldownRefresh() {
-	mui('#comment').pullRefresh().endPullupToRefresh(false);
+	mui('#comment').pullRefresh().endPullupToRefresh();
 	//location.reload();
 	if(window.plus && plus.networkinfo.getCurrentType() === plus.networkinfo.CONNECTION_NONE) {
 		plus.nativeUI.toast('似乎已断开与互联网的连接', {
@@ -258,7 +260,6 @@ function pulldownRefresh() {
 			list.innerHTML=postHtml;
 			//addlistNer();
 		}
-		console.log(index);
 		/*
 		if(rsp.data==""){
 			
@@ -295,7 +296,7 @@ function pullupRefresh() {
 
 	head += max;
 	max = 10;
-	if(index>=head){
+	//if(index>=head){
 	var data = {
 		start:head,
 		max:max,//需要的字段名
@@ -322,17 +323,16 @@ function pullupRefresh() {
 		}
 	},'json');
 	//this.endPullupToRefresh(true);
-	}
-	else{
-		mui('#comment').pullRefresh().endPullupToRefresh(true);
-	}
+	//}
+	//else{
+	//	mui('#comment').pullRefresh().endPullupToRefresh(true);
+	//}
 	
 }
 
 function addcomment(comment,j) {
 	var html="";
 	html='<div class="mui-card comment" id="commentItem">'+
-			'评论'+j+'<br/>'+
 			comment.sendUser+':'+comment.postContent+
 		'</div>';
 		
