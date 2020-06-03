@@ -2,7 +2,7 @@
 window.app = {
 	
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_6_war_exploded',
+	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_7_war_exploded',
 	//netty服务后端发布的url地址
 	nettyServerUrl:'ws://192.168.0.3:7888/ws', //172.17.243.33
 
@@ -51,7 +51,10 @@ window.app = {
 	SIGNED: 3, 		// 消息签收
 	KEEPALIVE: 4, 	// 客户端保持心跳
 	PULL_FRIEND:5,	// 重新拉取好友
-	
+	CHATROOM:6,     // 聊天室消息
+	USEROUT:7,      // 用户退出
+	CHATROOMOUT:8,  // 聊天室退出
+	MUTIUSER:9,     // 用户多登录问题
 	
 	/*
 	 * 和后端的 ChatMsg 聊天模型对象保持一致
@@ -473,26 +476,6 @@ window.app = {
 			return;
 		}
 	},
-	
-	
-	//增加新食堂(仅涉及自己创建的食堂)
-	addMyRoom:function(room){
-		var me=this;
-		var roomKey = "createRoomList";
-		// 从本地缓存获取由自己创建的食堂列表
-		var createRoomListStr = plus.storage.getItem(roomKey);
-		if(me.isNotNull(createRoomListStr)){
-			var createRoomList = JSON.parse(createRoomListStr);
-			//添加新食堂
-			createRoomList.unshift(room);
-		}
-		else{
-			createRoomListStr=room;
-		}
-		//替换原本的食堂列表
-		plus.storage.setItem("createRoomList",JSON.stringify(createRoomListStr));
-	},
-	
 	
 	
 	//保存用户加入的处在开启状态的食堂列表

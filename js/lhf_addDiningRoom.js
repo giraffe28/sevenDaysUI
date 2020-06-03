@@ -44,9 +44,13 @@ mui.plusReady(function () {
 		//已经正确填写
 		else{
 			if(createRoomRequests()==true){
-				var fatherWebview=plus.webview.currentWebview().opener();
-				fatherWebview.evalJS("renderStoredCreateRoom()");//重新渲染自己创建的食堂列表
+				//var fatherWebview=plus.webview.currentWebview().opener();
+				//fatherWebview.evalJS("renderStoredCreateRoom()");//重新渲染自己创建的食堂列表
+				mui.toast("开业大吉♫ヽ(゜∇゜ヽ)♪");
 				mui.back();
+			}
+			else{
+				mui.toast("开业失利，需要等下再操作QAQ");
 			}
 		}
 	});
@@ -85,6 +89,7 @@ function createRoomRequests(){
 	
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/create",{
+		//async:false,
 		data:{
 			userId:userId,
 			chatroomName:roomName,
@@ -96,13 +101,15 @@ function createRoomRequests(){
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
-			plus.nativeUI.closeWaiting();
 			//console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
-				app.addMyRoom(data.data);//修改缓存
+				//修改重新获取自己创建的食堂
+				plus.webview.currentWebview().opener().evalJS("createRoomRequests()");
+				plus.nativeUI.closeWaiting();
 				return true;
 			}
 			else{
+				plus.nativeUI.closeWaiting();
 				mui.toast("发送添加新食堂加载请求出错啦！QAQ");
 			}
 		},
