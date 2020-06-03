@@ -23,7 +23,7 @@ mui.plusReady(function(){
 			}
 		}
 	});
-	
+		
 	var send=document.getElementById("send-btn");
 	send.addEventListener('tap',function(){
 		var content=document.getElementById('comment-text').value;
