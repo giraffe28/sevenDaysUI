@@ -2,6 +2,8 @@
 	由lhf创建并维护
 	服务于食堂的信息修改（目前只允许修改主营（标签）和名字）
 	
+	目前仅在食堂页面可被调用
+	
 	使用本标签修改方式，需要提供四个参数
 	userId(用户的id)
 	roomId（食堂Id）
@@ -29,6 +31,7 @@ mui.plusReady(function () {
 	theTags=thisWebview.theTags;
 	userId=thisWebview.userId;
 	roomId=thisWebview.roomId;
+	roomName=thisWebview.roomName;
 	fatherWebview=thisWebview.opener();
 	addTagDom=mui("#addTag");
 	//获取结束
@@ -39,7 +42,7 @@ mui.plusReady(function () {
 	
     
 	/* 点击“添加标签/修改标签” */
-	mui("#addTagAction").addEventListener('tap', function() {
+	document.getElementById("addTagAction").addEventListener('tap', function() {
 		mui.openWindow({
 			url:"lhf_addTag.html",
 			id:"lhf_addTag.html",//每个朋友的聊天页面独立
@@ -51,14 +54,24 @@ mui.plusReady(function () {
 		});
 	});
 	//点击确认键时的动作
-	mui("#confirmBtn").addEventListener('tap',function(){
+	document.getElementById("confirmBtn").addEventListener('tap',function(){
 		roomName=mui("#modifyRoomName").value;//获取当前的食堂名
-		if(modifyRequests()==true){
-			mui.back();
+		if(app.isNotNull(roomName)==true){
+			if(roomName.length<18){
+				if(modifyRequests()==true){
+					mui.back();
+				}
+			}
+			else{
+				mui.toast("食堂名太长了哦！(*｀へ´*) ");
+			}
+		}
+		else{
+			mui.toast("食堂名不能为空哦！(*｀へ´*) ");
 		}
 	});
 	//点击取消键时的操作
-	mui("#cancelBtn").addEventListener('tap',function(){
+	document.getElementById("cancelBtn").addEventListener('tap',function(){
 		mui.back();
 	});
 });

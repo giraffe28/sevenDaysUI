@@ -1,7 +1,8 @@
+
 window.app = {
 	
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_3_war_exploded',
+	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_6_war_exploded',
 	//netty服务后端发布的url地址
 	nettyServerUrl:'ws://192.168.0.3:7888/ws', //172.17.243.33
 
@@ -480,9 +481,14 @@ window.app = {
 		var roomKey = "createRoomList";
 		// 从本地缓存获取由自己创建的食堂列表
 		var createRoomListStr = plus.storage.getItem(roomKey);
-		var createRoomList = JSON.parse(createRoomListStr);
-		//添加新食堂
-		createRoomList.unshift(room);
+		if(me.isNotNull(createRoomListStr)){
+			var createRoomList = JSON.parse(createRoomListStr);
+			//添加新食堂
+			createRoomList.unshift(room);
+		}
+		else{
+			createRoomListStr=room;
+		}
 		//替换原本的食堂列表
 		plus.storage.setItem("createRoomList",JSON.stringify(createRoomListStr));
 	},
@@ -498,8 +504,8 @@ window.app = {
 	//取出用户加入的处在开启状态的食堂列表
 	getOpenRoomList:function(){
 		var openRoomListStr=plus.storage.getItem("openRoomList");
-		if(openRoomListStr!=null&&openRoomList.length>0){
-			return JSON.parse(openRoomList);
+		if(openRoomListStr!=null&&openRoomListStr.length>0){
+			return JSON.parse(openRoomListStr);
 		}
 		else{
 			return [];

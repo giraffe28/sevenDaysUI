@@ -31,7 +31,7 @@ mui.plusReady(function() {
 	oldTags=thisWebview.oldTags;
 	userId=thisWebview.userId;
 	fatherWebview=thisWebview.opener();
-	addTagDom=mui("#addtags");
+	addTagDom=document.getElementById("addtags");
 	//获取结束
 	
 	oldTagsStr = oldTags.split(" ");
@@ -43,24 +43,28 @@ mui.plusReady(function() {
 	var tagNum = 0;//统计选中了几个标签
 	
 	//点击保存按键
-	mui("#confirmBtn").addEventListener('tap', function() {
+	document.getElementById("confirmBtn").addEventListener('tap', function() {
 		tagNum = 0;//置零
 		for (var i = 0; i < selectedTags.length; i++) {
 			if (selectedTags[i].type == "checkbox" && selectedTags[i].checked) {
-				newTags += selectedTags[i].value + ' ';
-				console.log(newTags);
 				tagNum++;
 			}
 		}
 		if (tagNum <= MAXTAGSNUM) {
+			for (var i = 0; i < selectedTags.length; i++) {
+				if (selectedTags[i].type == "checkbox" && selectedTags[i].checked) {
+					newTags += selectedTags[i].value + " ";
+				}
+			}
 			mui.back();
 		}
 		else {
 			mui.toast('保存失败啦=.= 最多只能选择'+MAXTAGSNUM+'个哦！');
 		}
 	});
+	
 	//点击取消按键
-	mui("#cancelBtn").addEventListener("tap",function(){
+	document.getElementById("cancelBtn").addEventListener("tap",function(){
 		mui.back();
 	});
 });
@@ -69,8 +73,10 @@ mui.plusReady(function() {
 //备份mui.back，mui.back已将窗口关闭逻辑封装的比较完善（预加载及父子窗口），因此最好复用mui.back
 var oldBack = mui.back;
 mui.back = function(){
+	//console.log("添加标签结束后的返回前操作");
+	//console.log(newTags);
 	//退出前,先父窗口进行新标签的加载
-	fatherWebview.evalJS("renderNewTag("+newTags+")");
+	fatherWebview.evalJS("renderNewTag('"+newTags+"')");
     //执行mui封装好的窗口关闭逻辑；
     oldBack();
 }
@@ -78,7 +84,7 @@ mui.back = function(){
 
 //从后台获取标签，渲染页面
 function renderTagPage(oldTagsStr) {
-	console.log("渲染标签列表");
+//	console.log("渲染标签列表");
 	mui.ajax(app.serverUrl + '/tag/getTag', { //发送请求返回系统标签
 		data: {},
 		dataType: 'json', //服务器返回json格式数据
@@ -90,7 +96,7 @@ function renderTagPage(oldTagsStr) {
 			if (data.status == 200) {
 				var flag;
 				var tags = data.data;
-				console.log(JSON.stringify(tags));
+				//console.log(JSON.stringify(tags));
 				if (tags != null && tags.length > 0) {
 					var tagsHtml = "";
 					for (var i = 0; i < tags.length; i++) {
@@ -113,6 +119,7 @@ function renderTagPage(oldTagsStr) {
 						}
 					}
 					addTagDom.innerHTML = tagsHtml;
+					//console.log(tagsHtml);
 				} 
 				else {
 					addTagDom.innerHTML = "";

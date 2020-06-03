@@ -8,6 +8,8 @@
 
 var userId;//用于记录传入的参数：用户id
 var searchTag;//用于记录用于搜索的标签
+//通用的二次确认使用
+var btnArray = ['确认', '取消'];
 
 mui.init();
 
@@ -17,7 +19,7 @@ mui.plusReady(function () {
 	userId=thisWebview.userId;
     
 	/* 点击“添加标签” */
-	mui("#addTag").addEventListener('tap', function() {
+	document.getElementById("addTag").addEventListener('tap', function() {
 		mui.openWindow({
 			url:"lhf_addTag.html",
 			id:"lhf_addTag.html",//每个朋友的聊天页面独立
@@ -29,7 +31,7 @@ mui.plusReady(function () {
 		});
 	});
 	//点击用标签（主营）搜索的确认键
-	mui('#searchByTagCondirm').addEventListener('tap',function(){
+	document.getElementById('searchByTagCondirm').addEventListener('tap',function(){
 		if(app.isNotNull(searchTag)){//如果已经弄了食堂主营
 			searchByTagRequests(searchTag);
 		}
@@ -38,12 +40,12 @@ mui.plusReady(function () {
 		}
 	});
 	//点击用标签（主营）搜索的取消键
-	mui('#tagCancel').addEventListener('tap',function(){
+	document.getElementById('tagCancel').addEventListener('tap',function(){
 		mui.back();
 	});
 	//点击用id搜索的确认键
-	mui('#searchByIdConfirm').addEventListener('tap',function(){
-		var searchstr=mui("#searchByIdInput").value;
+	document.getElementById('searchByIdConfirm').addEventListener('tap',function(){
+		var searchstr=document.getElementById("searchByIdInput").value;
 		if(app.isNotNull(searchstr)){//如果已经填写了食堂id
 			searchByIdRequests(searchstr);
 		}
@@ -52,12 +54,12 @@ mui.plusReady(function () {
 		}
 	});
 	//点击用id搜索的取消键
-	mui('#idConfirm').addEventListener('tap',function(){
+	document.getElementById('idConfirm').addEventListener('tap',function(){
 		mui.back();
 	});
 	//点击用食堂名搜索的确认键
-	mui('#searchByNameConfirm').addEventListener('tap',function(){
-		var searchstr=mui("#searchByNameInput").value;
+	document.getElementById('searchByNameConfirm').addEventListener('tap',function(){
+		var searchstr=document.getElementById("searchByNameInput").value;
 		if(app.isNotNull(searchstr)){//如果已经填写了食堂名称
 			searchByNameRequests(searchstr);
 		}
@@ -66,7 +68,7 @@ mui.plusReady(function () {
 		}
 	});
 	//点击用食堂名搜索的取消键
-	mui('#nameCancel').addEventListener('tap',function(){
+	document.getElementById('nameCancel').addEventListener('tap',function(){
 		mui.back();
 	});
 });
@@ -75,12 +77,12 @@ mui.plusReady(function () {
 //渲染标签内容
 function renderNewTag(newTags){
 	searchTag=newTags;
-	var addTagDom=mui("#diningRoomTags");
+	var addTagDom=document.getElementById("diningRoomTags");
 	newTags = newTags.split(" ");
 	if (app.isNotNull(newTags)) {
 		var theTagsHtml = "";
 		for (var i = 0; i < newTags.length; i++) {
-			theTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
+			theTagsHtml += '<label style="background-color: lightgreen; border-radius: 7px;width: auto;margin:10px 0px 0px 5px ;padding: 0;">'
 			+newTags[i]+'</label>';
 		}
 		addTagDom.innerHTML = theTagsHtml;
@@ -93,8 +95,11 @@ function renderNewTag(newTags){
 
 //渲染搜索的结果（顺便绑定点击事件）
 function renderResult(roomList){
-	var resultShowDom=mui("#searchResult");
+	console.log("渲染搜索食堂的结果");
+	var resultShowDom=document.getElementById("searchResult");
 	var room;
+//	console.log(roomList.length);
+//	console.log(roomList);
 	if(app.isNotNull(roomList)!=false && roomList.length>0){
 		var resultHtml="";
 		for(var i=0;i<roomList.length;i++){
@@ -109,10 +114,11 @@ function renderResult(roomList){
 							'</div>'+
 						'</li>';
 		}
+		//console.log(resultHtml);
 		resultShowDom.innerHTML=resultHtml;
 		
 		//批量绑定点击事件
-		resultShowDom.on("tap",".room",function(e){
+		mui("#searchResult").on("tap",".room",function(e){
 			var roomId = this.getAttribute("roomId");
 			//打开食堂信息子页面
 			mui.openWindow({
@@ -126,7 +132,7 @@ function renderResult(roomList){
 			});
 		});
 		//给加入食堂作动作
-		resultShowDom.on('tap','.mui-btn-blue',function() {
+		mui("#searchResult").on('tap','.mui-btn-blue',function() {
 			var midDinerWebview = plus.webview.getWebviewById("lhf_midnightDiner.html");
 			//获取当前DOM对象
 			var elem1 = this;
@@ -180,6 +186,9 @@ function searchByTagRequests(searchTag){
 				var roomlist = data.data;
 				renderResult(roomlist);
 			}
+			else if(data.status==500){
+				mui.toast("找不到对应的聊天室o(╥﹏╥)o");
+			}
 			else{
 				mui.toast("根据主营搜食堂的请求出错啦！QAQ");
 			}
@@ -205,10 +214,13 @@ function searchByIdRequests(searchstr){
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
-			// console.log(JSON.stringify(data.data));//输出返回的数据
+			//console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
 				var roomlist = data.data;
 				renderResult(roomlist);
+			}
+			else if(data.status==500){
+				mui.toast("找不到对应的聊天室o(╥﹏╥)o");
 			}
 			else{
 				mui.toast("根据id搜食堂的请求出错啦！QAQ");
@@ -239,6 +251,9 @@ function searchByNameRequests(searchstr){
 			if(data.status==200){
 				var roomlist = data.data;
 				renderResult(roomlist);
+			}
+			else if(data.status==500){
+				mui.toast("找不到对应的聊天室o(╥﹏╥)o");
 			}
 			else{
 				mui.toast("根据名称搜食堂的请求出错啦！QAQ");

@@ -164,10 +164,10 @@ function loadingRecFriendRequests(){
 		timeout:10000,//超时时间设置为10秒；
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
+			plus.nativeUI.closeWaiting();
 			//服务器返回响应
 			//console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
-				plus.nativeUI.closeWaiting();
 				var friRecList=data.data;
 				var friRecUlist=document.getElementById("recommendFri");
 				if(friRecList!=null&&friRecList.length>0){
@@ -183,6 +183,11 @@ function loadingRecFriendRequests(){
 			else{
 				mui.toast("发送好友推荐列表加载请求出错啦！QAQ");
 			}
+		},
+		error: function(xhr, type, errorThrown) {
+			//异常处理；
+			console.log("发送获取推荐朋友列表出错error");
+			// console.log(JSON.stringify(data.data));
 		}
 	});
 }

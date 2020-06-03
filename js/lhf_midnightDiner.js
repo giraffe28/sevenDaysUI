@@ -8,10 +8,14 @@
 mui.init();
 
 //获取用户对象
-var me = app.getUserGlobalInfo();
-
+var me;
+//通用的二次确认使用
+var btnArray = ['确认', '取消'];
 
 mui.plusReady(function () {
+	
+	me = app.getUserGlobalInfo();
+	console.log(me.userId);
 	//加载页面信息
 	loadAllRoom();
 	
@@ -29,7 +33,7 @@ mui.plusReady(function () {
 	//刷新聊天室推荐(食堂街道)
 	var recommendRoomOpen = document.getElementById("recommendRoomOpen");
 	var num=0;
-	recommendRoomOpen.addEventListener("tap", function() {
+	recommendRoomOpen.addEventListener('tap', function() {
 		if(num==0){//避免关闭时也刷新
 			recommendRoomRequests();
 		}
@@ -37,7 +41,7 @@ mui.plusReady(function () {
 	});
 	
 	//开张新食堂
-	mui("#popCreateRoom").addEventListener("tap",function(){
+	document.getElementById("popCreateRoom").addEventListener('tap',function(){
 		mui.openWindow({
 			url:"lhf_addDiningRoom.html",
 			id:"lhf_addDiningRoom",
@@ -48,7 +52,7 @@ mui.plusReady(function () {
 		});
 	});
 	//搜索食堂
-	mui("#search").addEventListener('tap',function(){
+	document.getElementById("search").addEventListener('tap',function(){
 		//打开搜索页面
 		mui.openWindow({
 			url:"lhf_searchDiningRoom.html",
@@ -78,7 +82,7 @@ function renderStoredClosedRoom(){
 	//console.log("到达从缓存中获取留恋的足迹数据加载到页面");
 	//获取食堂列表
 	var closedRoomList = app.getCloseRoomList();
-	//显示好友列表
+	//显示食堂列表
 	var closedRoomUlist = document.getElementById("closedRoom");
 	if(closedRoomList!=null&&closedRoomList.length>0){
 		var closedHtml="";
@@ -118,9 +122,9 @@ function renderStoredOpenRoom(){
 	//console.log("到达从缓存中获取入座的食堂数据加载到页面");
 	//获取食堂列表
 	var openRoomList = app.getOpenRoomList();
-	//显示好友列表
+	//显示食堂列表
 	var openRoomUlist = document.getElementById("openRoom");
-	if(openRoomList!=null&&openRoomList.length>0){
+	if(openRoomList!=undefined && openRoomList!=null && openRoomList.length>0){
 		var openHtml="";
 		for(var i=0;i<openRoomList.length;i++){
 			openHtml+=renderOpenRoom(openRoomList[i]);
@@ -128,14 +132,17 @@ function renderStoredOpenRoom(){
 		openRoomUlist.innerHTML=openHtml;
 		//批量绑定点击事件
 		mui("#openRoom").on("tap",".openRoom",function(e){
-			var roomId = this.getAttribute("roomId");		
+			var roomId = this.getAttribute("roomId");
+			var roomName = this.getAttribute("roomName");
 			//打开食堂子页面
 			mui.openWindow({
 				url:"lhf_diningRoom.html",
 				id:"lhf_diningRoom_"+roomId,//每个食堂的聊天页面独立
 				extras:{
 					roomId:roomId,
-					isMine:false
+					isMine:false,
+					userId:me.userId,
+					roomName:roomName
 				},
 				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 			});
@@ -157,10 +164,10 @@ function renderStoredOpenRoom(){
 function renderStoredCreateRoom(){
 	//console.log("到达从缓存中获取我的食堂数据加载到页面");
 	//获取食堂列表
-	var createRoomList = app.getCreateRoomList()();
-	//显示好友列表
+	var createRoomList = app.getCreateRoomList();
+	//显示食堂列表
 	var createRoomUlist = document.getElementById("createRoom");
-	if(createRoomList!=null&&createRoomList.length>0){
+	if(createRoomList!=undefined && createRoomList!=null && createRoomList.length>0){
 		var createHtml="";
 		for(var i=0;i<createRoomList.length;i++){
 			createHtml+=renderCreateRoom(createRoomList[i]);
@@ -169,14 +176,17 @@ function renderStoredCreateRoom(){
 		//批量绑定点击事件
 		mui("#createRoom").on("tap",".createRoom",function(e){
 			var roomId = this.getAttribute("roomId");		
-		
+			var roomName = this.getAttribute("roomName");
+//			console.log(roomName);
 			//打开聊天子页面
 			mui.openWindow({
 				url:"lhf_diningRoom.html",
-				id:"lhf_diningRoom_"+roomId,//每个朋友的聊天页面独立
+				id:"lhf_diningRoom_"+roomId,//每个食堂的聊天页面独立
 				extras:{
 					roomId:roomId,
-					isMine:true
+					isMine:true,
+					userId:me.userId,
+					roomName:roomName
 				},
 				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 			});
@@ -192,6 +202,7 @@ function renderStoredCreateRoom(){
 function leaveRoom(elem1,tag){
 	//获取DOM对象
 	var par = elem1.parentElement.parentNode;
+	var btnArray = ['确认', '取消'];
 	mui.confirm('确定离开该食堂？', '提示', btnArray, function(e) {
 		if (e.index == 0) {
 			var par1=par.getAttribute("roomId");
@@ -201,17 +212,17 @@ function leaveRoom(elem1,tag){
 				mui.toast("您离开了食堂~( ´•︵•` )~");
 				//获取新的已加入且关闭中的食堂列表，并且渲染到页面
 				if(tag==1){
-					loadingCloseRoom();
+					closedRoomRequests();
 				}
 				else if(tag==2){//获取新的已加入且开启中的食堂列表，并且渲染到页面
-					loadingOpenRoom();
+					openRoomRequests();
 				}
-				else{//错误事
+				else{//错误时
 					Console.log("离开食堂的操作tag非法");
 				}
 			}
 			else{
-				mui.toast("发送入座食堂请求出错啦！QAQ");
+				mui.toast("发送离开食堂请求出错啦！QAQ");
 				//取消：关闭滑动列表
 				mui.swipeoutClose(par);
 			}
@@ -227,7 +238,7 @@ function leaveRoom(elem1,tag){
 //设置留恋的足迹的html项内容（已加入但是已经关闭的食堂）
 function renderClosedRoom(room) {
 	var html="";
-	html='<li class="mui-table-view-cell closedRoom room mui-media" roomId="'+room.chatroomId+'">'+
+	html='<li class="mui-table-view-cell closedRoom room mui-media" roomId="'+room.chatroomId+'" roomName="'+room.chatroomName+'">'+
 		    '<div class="mui-slider-right mui-disabled" roomId="'+room.chatroomId+'">'+
 		        '<span class="mui-btn mui-btn-blue">离开食堂</span>'+
 		    '</div>'+
@@ -244,7 +255,7 @@ function renderClosedRoom(room) {
 //设置食堂街道的html项内容（推荐的食堂）
 function renderRecommendRoom(room) {
 	var html="";
-	html='<li class="mui-table-view-cell recommendRoom room mui-media" roomId="'+room.chatroomId+'">'+
+	html='<li class="mui-table-view-cell recommendRoom room mui-media" roomId="'+room.chatroomId+'" roomName="'+room.chatroomName+'">'+
 		    '<div class="mui-slider-right mui-disabled" roomId="'+room.chatroomId+'">'+
 		        '<span class="mui-btn mui-btn-blue">加入食堂</span>'+
 		    '</div>'+
@@ -261,7 +272,7 @@ function renderRecommendRoom(room) {
 //设置我的食堂的html项内容（自己创建的食堂）
 function renderCreateRoom(room) {
 	var html="";
-	html='<li class="mui-table-view-cell createRoom room mui-media" roomId="'+room.chatroomId+'">'+
+	html='<li class="mui-table-view-cell createRoom room mui-media" roomId="'+room.chatroomId+'" roomName="'+room.chatroomName+'">'+
 				'<img class="mui-media-object mui-pull-left" src="../images/diner.png">'+
 				'<div class="mui-media-body">'+
 					'<span>'+room.chatroomName+'</span>'+
@@ -276,7 +287,7 @@ function renderCreateRoom(room) {
 //设置入座的食堂的html项内容（已加入且仍处在开启状态的食堂）
 function renderOpenRoom(room) {
 	var html="";
-	html='<li class="mui-table-view-cell openRoom room mui-media" roomId="'+room.chatroomId+'">'+
+	html='<li class="mui-table-view-cell openRoom room mui-media" roomId="'+room.chatroomId+'" roomName="'+room.chatroomName+'">'+
 		    '<div class="mui-slider-right mui-disabled" roomId="'+room.chatroomId+'">'+
 		        '<span class="mui-btn mui-btn-blue">离开食堂</span>'+
 		    '</div>'+
@@ -294,7 +305,6 @@ function renderOpenRoom(room) {
 function closedRoomRequests(){
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/getBeforeRoomListById",{
-		async:false, 
 		data:{
 			userId:me.userId
 		},//上传的数据
@@ -355,8 +365,7 @@ function closedRoomRequests(){
 //发送获取自己创建的食堂列表的资源请求以及加载
 function createRoomRequests(){
 	plus.nativeUI.showWaiting("请稍等");
-	mui.ajax(app.serverUrl+"/chatRoom/getMyCreate",{
-		async:false, 
+	mui.ajax(app.serverUrl+"/chatRoom/getMyCreate",{ 
 		data:{
 			userId:me.userId
 		},//上传的数据
@@ -386,10 +395,11 @@ function createRoomRequests(){
 						//打开聊天子页面
 						mui.openWindow({
 							url:"lhf_diningRoom.html",
-							id:"lhf_diningRoom_"+roomId,//每个朋友的聊天页面独立
+							id:"lhf_diningRoom_"+roomId,//每个食堂的聊天页面独立
 							extras:{
 								roomId:roomId,
-								isMine:true
+								isMine:true,
+								userId:me.userId
 							},
 							createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 						});
@@ -409,9 +419,10 @@ function createRoomRequests(){
 
 //发送获取加入且开启中的食堂列表的资源请求以及加载
 function openRoomRequests(){
+	console.log("openRoomRequests()");
+	
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/getMyJoinRoomListById",{
-		async:false, 
 		data:{
 			userId:me.userId
 		},//上传的数据
@@ -445,7 +456,8 @@ function openRoomRequests(){
 							id:"lhf_diningRoom_"+roomId,//每个食堂的聊天页面独立
 							extras:{
 								roomId:roomId,
-								isMine:false
+								isMine:false,
+								userId:me.userId
 							},
 							createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 						});
@@ -474,7 +486,6 @@ function openRoomRequests(){
 function recommendRoomRequests(){
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/recommend",{
-		async:false, 
 		data:{
 			userId:me.userId
 		},//上传的数据
@@ -511,7 +522,7 @@ function recommendRoomRequests(){
 								if(sendIntoRoom(me.userId,par1)==true){
 									mui.toast("入座成功(≧∇≦)");
 									//获取新的已加入且开启中的食堂列表，并且渲染到页面
-									loadingOpenRoom();
+									openRoomRequests();
 									setTimeout("recommendRoomRequests()",200);
 									//页面跳转至对应的食堂内部聊天页面todo
 								}
