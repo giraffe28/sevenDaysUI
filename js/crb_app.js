@@ -77,7 +77,7 @@ window.app = {
 	DataContent: function(action, chatMsg, extend){
 		this.action = action;
 		this.msg = chatMsg;
-		this.extend = extend;//扩展字段，尚未使用
+		this.extend = extend;//扩展字段，紧急征用为食堂聊天时，放头像
 	},
 	
 	/**
@@ -90,6 +90,7 @@ window.app = {
 	ME:1, // 表示我
 	FRIEND:2, // 表示朋友
 	
+	//保存用户的聊天记录
 	saveUserChatHistory: function(myId, friendId, msg, flag) {
 		var me = this;
 		var chatKey = "chat_" + myId + "_" + friendId;//缓存的key
@@ -417,24 +418,6 @@ window.app = {
 		}
 	},
 	
-	//取出用户的已加入食堂列表中指定id的一项
-/*	getCloseRoomList:function(roomId){
-		var closedRoomListStr=plus.storage.getItem("closedRoomList");
-		if(this.isNotNull(closedRoomListStr)){//若不为空
-			var closedRoomList=JSON.parse(closedRoomListStr);
-			for(var i=0;i<closedRoomList.length;i++){
-				if(closedRoomList[i].chatroomId==roomId){
-					return closedRoomList[i];
-				}
-			}
-			return null;
-		}
-		else{
-			return null;
-		}
-	},	
-*/
-	
 	//保存用户自己创建的食堂列表
 	setCreateRoomList:function(createRoomList){
 		var createRoomListStr=JSON.stringify(createRoomList);
@@ -466,7 +449,6 @@ window.app = {
 			// 如果有，在list中的原有位置修改食堂名和标签
 			for (var i = 0 ; i < createRoomList.length ; i ++) {
 				var item = createRoomList[i];
-				console.log(item.chatroomId );
 				if (item.chatroomId == roomId) {
 					item.chatroomName=roomName;
 					item.chatroomTag=newTags;
@@ -498,6 +480,194 @@ window.app = {
 		}
 		else{
 			return [];
+		}
+	},
+	
+	
+	
+	/*
+	 * 单个食堂的聊天记录的对象
+	 * flag	判断本条消息是我发送的，还是别人发送的，1:我  2:朋友
+	 */
+	RoomChatHistory: function(sendId, roomId, msg, flag, icon){
+		this.sendId = sendId;
+		this.icon = icon;
+		this.roomId = roomId;
+		this.msg = msg;
+		this.flag = flag;
+	},
+	
+	//保存用户的食堂聊天记录
+	saveUserChatRoomHistory: function(myId, otherId, roomId, msg, flag, icon) {
+		var me = this;
+		var chatRoomKey = "chatRoom_" + myId + "_" + roomId;//缓存的key
+		// 从本地缓存获取聊天记录是否存在
+		var chatHistoryListStr = plus.storage.getItem(chatRoomKey);
+		var chatHistoryList;
+		if (me.isNotNull(chatHistoryListStr)) {
+			// 如果不为空
+			chatHistoryList = JSON.parse(chatHistoryListStr);
+		} 
+		else {
+			// 如果为空，赋一个空的list
+			chatHistoryList = [];
+		}
+		// 构建食堂聊天记录对象
+		var singleMsg = new me.RoomChatHistory(otherId, roomId, msg, flag, icon);
+		// 向list中追加msg对象
+		chatHistoryList.push(singleMsg);
+		//保存聊天记录
+		plus.storage.setItem(chatRoomKey, JSON.stringify(chatHistoryList));
+	},
+	
+	
+	/**
+	 * 获取用户食堂的聊天记录
+	 */
+	getUserChatRoomHistory: function(myId, roomId) {
+		var me = this;
+		var chatRoomKey = "chatRoom_" + myId + "_" + roomId;//缓存的key
+		var chatHistoryListStr = plus.storage.getItem(chatRoomKey);
+		var chatHistoryList;
+		if (me.isNotNull(chatHistoryListStr)) {// 如果不为空		
+			chatHistoryList = JSON.parse(chatHistoryListStr);
+		} 
+		else {// 如果为空，赋一个空的list	
+			chatHistoryList = [];
+		}
+		return chatHistoryList;
+	},
+	
+	
+	/*
+	 * 食堂消息的快照对象
+	   isRead用于判断消息是否已读还是未读
+	 */
+	ChatRoomSnapshot: function(myId, roomId, msg, isRead){
+		this.myId = myId;
+		this.roomId = roomId;
+		this.msg = msg;
+		this.isRead = isRead;
+	},
+	
+	/**
+	 * 食堂聊天记录的快照，仅仅保存每个食堂聊天的最后一条消息
+	 * @param {Object} myId
+	 * @param {Object} roomId
+	 * @param {Object} msg
+	 * @param {Object} isRead
+	 */
+	saveUserChatRoomSnapshot: function(myId, roomId, msg, isRead) {
+		var me = this;
+		var chatRoomKey = "chatRoom_snapshot" + myId;		
+		// 从本地缓存获取食堂聊天快照的list
+		var chatSnapshotListStr = plus.storage.getItem(chatRoomKey);
+		var chatSnapshotList;
+		if (me.isNotNull(chatSnapshotListStr)) {// 如果不为空
+			chatSnapshotList = JSON.parse(chatSnapshotListStr);
+			// 循环快照list，并且判断每个元素是否包含（匹配）roomId，如果匹配，则删除
+			for (var i = 0 ; i < chatSnapshotList.length ; i ++) {
+				if (chatSnapshotList[i].roomId == roomId) {
+					// 删除已经存在的roomId所对应的快照对象,删除一个即可
+					chatSnapshotList.splice(i, 1);
+					break;
+				}
+			}
+		} 
+		else {// 如果为空，赋一个空的list
+			chatSnapshotList = [];
+		}
+		// 构建食堂聊天快照对象
+		var singleMsg = new me.ChatRoomSnapshot(myId, roomId, msg, isRead);	
+		// 向list中追加快照对象
+		chatSnapshotList.unshift(singleMsg);	
+		plus.storage.setItem(chatRoomKey, JSON.stringify(chatSnapshotList));
+	},
+	
+	
+	/**
+	 * 获取用户快照记录列表
+	 */
+	getUserChatRoomSnapshot: function(myId) {
+		var me = this;
+		var chatRoomKey = "chatRoom_snapshot" + myId;
+		// 从本地缓存获取聊天快照的list
+		var chatSnapshotListStr = plus.storage.getItem(chatRoomKey);
+		var chatSnapshotList;
+		if (me.isNotNull(chatSnapshotListStr)) {// 如果不为空	
+			chatSnapshotList = JSON.parse(chatSnapshotListStr);
+		} 
+		else {// 如果为空，赋一个空的list
+			chatSnapshotList = [];
+		}	
+		return chatSnapshotList;
+	},
+	
+	
+	//清空食堂聊天快照
+	clearUserChatRoomSnapshot: function(myId) {
+		var chatRoomKey = "chatRoom_snapshot" + myId;
+		plus.storage.removeItem(chatRoomKey);
+	},
+	
+	
+	/**
+	 * 删除本地的某个食堂聊天快照记录
+	 * @param {Object} myId
+	 * @param {Object} roomId
+	 */
+	deleteUserChatRoomSnapshot: function(myId, roomId) {
+		var me = this;
+		var chatRoomKey = "chatRoom_snapshot" + myId;		
+		// 从本地缓存获取聊天快照的list
+		var chatSnapshotListStr = plus.storage.getItem(chatRoomKey);
+		var chatSnapshotList;
+		if (me.isNotNull(chatSnapshotListStr)) {// 如果不为空
+			chatSnapshotList = JSON.parse(chatSnapshotListStr);
+			// 循环快照list，并且判断每个元素是否包含（匹配）roomId，如果匹配，则删除
+			for (var i = 0 ; i < chatSnapshotList.length ; i ++) {
+				if (chatSnapshotList[i].roomId == roomId) {
+					// 删除已经存在的roomId所对应的快照对象
+					chatSnapshotList.splice(i, 1);
+					break;
+				}
+			}
+		} 
+		else {// 如果为空，不做处理
+			return;
+		}
+		plus.storage.setItem(chatRoomKey, JSON.stringify(chatSnapshotList));
+	},
+	
+	
+	/**
+	 * 标记食堂的未读消息为已读状态
+	 * @param {Object} myId
+	 * @param {Object} roomId
+	 */
+	readUserChatRoomSnapshot: function(myId, roomId) {
+		var me = this;
+		var chatRoomKey = "chatRoom_snapshot" + myId;
+		// 从本地缓存获取聊天快照的list
+		var chatSnapshotListStr = plus.storage.getItem(chatRoomKey);
+		var chatSnapshotList;
+		if (me.isNotNull(chatSnapshotListStr)) {// 如果不为空
+			chatSnapshotList = JSON.parse(chatSnapshotListStr);
+			// 循环这个list，判断是否存在食堂，比对roomId，
+			// 如果有，在list中的原有位置删除该 快照 对象，然后重新放入一个标记已读的快照对象
+			for (var i = 0 ; i < chatSnapshotList.length ; i ++) {
+				var item = chatSnapshotList[i];
+				if (item.roomId == roomId) {
+					item.isRead = true;		// 标记为已读
+					chatSnapshotList.splice(i, 1, item);	// 替换原有的快照
+					break;
+				}
+			}
+			// 替换原有的快照列表
+			plus.storage.setItem(chatRoomKey, JSON.stringify(chatSnapshotList));
+		} 
+		else {// 如果为空			
+			return;
 		}
 	},
 }
