@@ -2,11 +2,12 @@
 	本文件由lhf创建并维护
 	本文件仅用于深夜食堂的食堂内部聊天页使用
 	
-	使用时，需要传入四个参数
+	使用时，需要传入五个参数
 	roomId
 	isMine（区分是否为自己创建的食堂）
 	userId
 	roomName
+	myIcon
 	
 	(是自己创建的食堂的话，本功能会额外在侧滑菜单中加上一个修改食堂信息的功能)
 */
@@ -31,21 +32,86 @@ var roomId;
 var roomName;
 //记录传入的是否为自己创建食堂的判断
 var isMine;
+//记录传入的自己的头像
+var myIcon="../images/2.jpg";//默认头像
 //记录食堂主页
 var midnightDiner;
+//本页面
+var thisWebview;
+//记录index页面，用于执行websocket相关的操作
+var	chatWebSocket;
+//记录发送聊天消息的dom
+var send=document.getElementById("sendMsg");
+//获取要发送的消息内容的dom
+var msgText=document.getElementById("msg");
+//记录显示聊天内容列表的dom
+var areaMsgList = document.getElementById("msgs");
 
 
 mui.plusReady(function () {
     //对共用的参数进行获取值
-    var thisWebview=plus.webview.currentWebview();
+    thisWebview=plus.webview.currentWebview();
 	midnightDiner=thisWebview.opener();
     roomId=thisWebview.roomId;
     isMine=thisWebview.isMine;
 	userId=thisWebview.userId;
 	roomName=thisWebview.roomName;
+	if(thisWebview.icon!="")
+		myIcon=thisWebview.icon;
+	//获取index页面
+	chatWebSocket = plus.webview.getWebviewById("index.html");
 	
-	console.log(roomName);
 	roomNameDom.innerHTML=roomName;
+	
+	thisWebview.setStyle({
+		softinputMode:"adjustResize"//设置软键盘样式
+	});
+	
+	//渲染初始化的食堂聊天记录
+	initChatHistory()
+	//设置聊天记录在进入页面时自动滚动到最后一条
+	resizeScreen();
+	
+	//发送消息时的处理
+	send.addEventListener("tap",function(){
+		var msgTextValue = msgText.value;
+		if(msgTextValue.length>128){
+			mui.toast("您输入的字数超过了128字节，请进行分批次发送(´-ωก`)");
+		}
+		else if(msgTextValue.length<1){
+			msgText.focus();
+			mui.toast("请输入信息<(｀^´)>");
+		}
+		else{
+			//发送前判断网络状态
+			var connectionStatus = plus.networkinfo.getCurrentType();
+			if(connectionStatus==0 || connectionStatus==1){
+				mui.toast("请打开网络连接！QAQ");
+				return;
+			}
+			// 构建ChatMsg
+			var chatMsg = new app.ChatMsg(userId, roomId, msgTextValue, null);
+			// 构建DataContent
+			var dataContent = new app.DataContent(app.CHATROOM, chatMsg, null);
+			// 调用websocket发送消息
+			chatWebSocket.evalJS("CHAT.chat('" + JSON.stringify(dataContent) + "')");
+			
+			//我发送出去的信息进行保存
+			app.saveUserChatRoomHistory(userId, null, roomId, msgTextValue, app.ME, null);
+			
+			//保存食堂聊天快照，由于是由自己发送的,所以默认为已读
+			app.saveUserChatRoomSnapshot(userId, roomId, msgTextValue, true);
+			
+			midnightDiner.evalJS("loadingChatSnapshot()");
+			
+			sendMsgFunc(msgTextValue);//渲染发送出去的消息
+			msgText.value="";//清空文本框中的内容
+			send.setAttribute("class","mui-btn mui-btn-block mui-btn-gray");//重置发送按钮的状态
+			resizeScreen ();
+			//mui.toast("测试用：已发送");
+		}
+	});
+	
 	
 	watchDiningRoomMsgDom.addEventListener('tap',function(){
 		//跳转到对应的食堂信息页
@@ -132,4 +198,82 @@ setObj[0].addEventListener("tap",function () {
 function reload(roomName,theTags){
 	roomNameDom.innerHTML=roomName;
 	midnightDiner.evalJS("renderStoredCreateRoom()");//由于修改了食堂名称，所以这里要重新加载食堂主页
+}
+
+
+//设置聊天记录滚动到最后一条
+function resizeScreen (){
+	areaMsgList.scrollTop = areaMsgList.scrollHeight+areaMsgList.offsetHeight;
+}
+
+//对当前窗口监听resize事件
+window.addEventListener("resize",function(){
+	resizeScreen ();
+	document.getElementById("msgOutter").style.paddingBottom = "36px";
+});
+
+
+//监听用户输入，使得发送按钮变色
+msgText.addEventListener("input",function(){
+	var msgTextValue=msgText.value;
+	if(msgTextValue.length>0){
+		send.setAttribute("class","mui-btn mui-btn-block mui-btn-blue");
+	}
+	else{
+		send.setAttribute("class","mui-btn mui-btn-block mui-btn-gray");
+	}
+});
+
+
+//发送的消息
+function sendMsgFunc(myMsg){
+	var myMsgHtml='<div class="myLists">'+
+		'<div class="headerImg">'+
+			'<img src="'+myIcon+'" class="imgMsg" />'+
+		'</div>'+
+		'<div class="myMsgWrapper">'+
+			'<p class="msgRightGreen">'+myMsg+'</p>'+
+		'</div>'+
+	'</div>';
+	areaMsgList.insertAdjacentHTML("beforeend",myMsgHtml);
+}
+
+
+//接收的消息
+//如果对方头像为空，则默认使用系统配置的图片
+function receiveMsgFunc(otherMsg,otherIcon,otherId){
+	if(otherIcon==""){
+		otherIcon="../images/1.jpg";
+	}
+	var otherMsgHtml='<div class="friLists">'+
+					'<div class="headerImg" otherId="'+otherId+'">'+
+						'<img src="'+otherIcon+'" class="imgMsg" />'+
+					'</div>'+
+					'<div class="friMsgWrapper">'+
+						'<p class="msgLeftWhite">'+otherMsg+'</p>'+
+					'</div>'+
+				'</div>';
+	areaMsgList.insertAdjacentHTML("beforeend",otherMsgHtml);
+}
+
+
+// 初始化食堂的聊天记录
+function initChatHistory() {
+	var myId = me.userId;
+	var chatHistoryList = app.getUserChatRoomHistory(myId, roomId);//获取缓存中的聊天记录
+//	console.log("初始化聊天内容" + JSON.stringify(chatHistoryList));
+	for (var i = 0 ; i < chatHistoryList.length ; i ++) {
+		var singleMsg = chatHistoryList[i];
+		if (singleMsg.flag == app.ME) {
+			sendMsgFunc(singleMsg.msg);//渲染发送出去的消息
+		} 
+		else {
+			receiveMsgFunc(singleMsg.msg,singleMsg.icon,singleMsg.sendId);//渲染接收到的消息
+		}
+	}
+}
+
+//用于弹出本页面
+function outThisPage(){
+	mui.back();
 }

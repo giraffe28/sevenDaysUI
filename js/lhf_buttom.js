@@ -69,7 +69,7 @@ function initData() {
 /*	var ll_personalCenter = plus.webview.getWebviewById("ll_personalCenter.html");
 	mui.fire(ll_personalCenter, "refresh");*/
 	
-	//CHAT.init();
+	CHAT.init();
 }
 
 
