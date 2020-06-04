@@ -2,7 +2,9 @@
 var head;
 var max;
 var index;
+var postuser;
 var reportDom=document.getElementById("report");
+var chatDom=document.getElementById("chat");
 
 mui.init({
 	pullRefresh: {
@@ -43,6 +45,7 @@ mui.plusReady(function () {
 		contentType:'application/json;charset=utf-8',
 		success:function(data){
 			//console.log(JSON.stringify(data));
+			postuser=data.data.user.userId;
 			icon=data.data.user.icon;
 			nickname=data.data.user.nickname;
 			date=new Date(data.data.postDate);
@@ -95,6 +98,41 @@ mui.plusReady(function () {
 				reportObjectId:postid
 			},
 			createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+		});
+	});
+	
+	//mui('.makeChat').on('tap','.mui-btn-blue',function() {
+	chatDom.addEventListener('tap',function(){
+		console.log(user.userId);
+		console.log(postuser);
+		//获取当前DOM对象
+		//var elem1 = this;
+		//获取DOM对象
+		//var par = elem1.parentElement.parentNode;
+		var btnArray = ['是', '否'];
+		mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
+			if (e.index == 0) {
+				//var user=app.getUserGlobalInfo();//获取用户全局对象
+				//var par1=par.getAttribute("friendId");
+			//	console.log(par1);
+			
+				//var user=app.getUserGlobalInfo();//获取用户全局对象
+				if(sendMakeFri(user.userId,postuser)==true){
+					//获取朋友列表，并且渲染到页面
+					//fetchContactList();
+					//setTimeout("loadingRecFriendRequests()",500);
+					//页面跳转至对应的聊天页面todo
+				}
+				else{
+					mui.toast("发送闲聊请求出错啦！QAQ");
+					//取消：关闭滑动列表
+					//mui.swipeoutClose(par);
+				}
+			} 
+			else {
+				//取消：关闭滑动列表
+				//mui.swipeoutClose(par);
+			}
 		});
 	});
 })
@@ -276,33 +314,6 @@ function pulldownRefresh() {
 			list.innerHTML=postHtml;
 			//addlistNer();
 		}
-		/*
-		if(rsp.data==""){
-			
-		}else{
-			//console.log(rsp.data[0].commentId);
-			//console.log(JSON.stringify(rsp.data));
-			mui('#comment').pullRefresh().endPulldownToRefresh();
-			rsp=rsp.data;
-			if(rsp && rsp.length > 0) {
-				lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
-				posts.items = convert(rsp);
-			
-				var list=document.getElementById("commentlist");
-				var postHtml="";
-				for(var i=0;i<posts.items.length;i++){
-					var j=parseInt(i)+parseInt(1);
-					postHtml+=addcomment(posts.items[i],j);
-				}
-				if(max>posts.items.length){
-					index=posts.items.length;
-				}else{
-					index=max;
-				}
-				console.log(index);
-				list.innerHTML=postHtml;
-			}
-		}	*/
 	},'json');
 }
 
@@ -375,38 +386,6 @@ function convert(items) {
 	//console.log(postItems);
 	return postItems;
 };
-
-mui('.makeChat').on('tap','.mui-btn-blue',function() {
-	//获取当前DOM对象
-	var elem1 = this;
-	//获取DOM对象
-	var par = elem1.parentElement.parentNode;
-	mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
-		if (e.index == 0) {
-			var user=app.getUserGlobalInfo();//获取用户全局对象
-			var par1=par.getAttribute("friendId");
-		//	console.log(par1);
-		
-			var user=app.getUserGlobalInfo();//获取用户全局对象
-			if(sendMakeFri(user.userId,par1)==true){
-				//获取朋友列表，并且渲染到页面
-				fetchContactList();
-				setTimeout("loadingRecFriendRequests()",500);
-				//页面跳转至对应的聊天页面todo
-			}
-			else{
-				mui.toast("发送闲聊请求出错啦！QAQ");
-				//取消：关闭滑动列表
-				mui.swipeoutClose(par);
-			}
-		} 
-		else {
-			//取消：关闭滑动列表
-			mui.swipeoutClose(par);
-		}
-	});
-});
-
 
 //对推荐好友进行发起聊天时，向后端发送消息
 function sendMakeFri(userId,friendId){
