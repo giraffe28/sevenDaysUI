@@ -45,6 +45,7 @@ mui.plusReady(function() {
 	//点击保存按键
 	document.getElementById("confirmBtn").addEventListener('tap', function() {
 		tagNum = 0;//置零
+		newTags="";
 		for (var i = 0; i < selectedTags.length; i++) {
 			if (selectedTags[i].type == "checkbox" && selectedTags[i].checked) {
 				tagNum++;

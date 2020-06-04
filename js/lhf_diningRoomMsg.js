@@ -53,7 +53,7 @@ mui.plusReady(function () {
 				extras:{
 					userId:userId,
 					roomId:roomId,
-					roomName:creatorDom.innerHTML,
+					roomName:titleNameDom.innerHTML,
 					theTags:roomTag
 				},
 				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
@@ -76,8 +76,9 @@ function addmodifyEntrance(){
 //修改食堂信息后的配套动作，将被修改食堂信息的功能模块调用
 //这里是修改食堂名和食堂主营
 function reload(roomName,tags){
+	//console.log(tags);
 	titleNameDom.innerHTML=roomName;
-	tags=tags.splice(" ");
+	tags=tags.split(" ");
 	if (app.isNotNull(tags)) {
 		var theTagsHtml = "";
 		for (var i = 0; i < tags.length; i++) {
