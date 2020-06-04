@@ -1,8 +1,13 @@
-body {
-    background-image: url("../images/ocean.JPG");
-    background-size: cover;
+.bodystyle {
+    background-image: url("../images/driftBackground.jpg");
+    height: 90%;
+	width: 100%;
+	opacity: 0.8;
     background-repeat: no-repeat;
-    background-attachment: fixed
+    background-attachment: fixed;
+	background-size: cover;
+	position: absolute;
+	overflow: hidden;
 }
 
 .playstyle{	
