@@ -3,11 +3,7 @@ mui.plusReady(function () {
 	var user = app.getUserGlobalInfo();
 	var Webview=plus.webview.currentWebview();
 	bottleid=Webview.bottleid;
-	//icon=Webview.icon;
-	//nickname=Webview.nickname;
-	//content=Webview.content;
-	//date=Webview.date;
-	//postlike=Webview.postlike;
+	
     mui.ajax(app.serverUrl+"/drift/view",{
     	data:{
     		driftId:bottleid
@@ -35,16 +31,4 @@ mui.plusReady(function () {
 			}
     	}
     });
-	/*mui.ajax(app.serverUrl+"/drift/getAllComment",{
-		data:{
-			bottleId:bottleid,
-		},
-		dataType:'json',
-		type:'GET',
-		timeout:10000,
-		contentType:'application/json;charset=utf-8',
-		success:function(data){
-			
-		}
-	});*/
 })
