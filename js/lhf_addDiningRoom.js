@@ -86,7 +86,7 @@ function renderNewTag(newTags){
 //创建成功，返回true，创建失败，返回false
 function createRoomRequests(){
 	var roomName=document.getElementById("roomName").value;
-	
+	var result=false;
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/create",{
 		//async:false,
@@ -105,8 +105,8 @@ function createRoomRequests(){
 			if(data.status==200){
 				//修改重新获取自己创建的食堂
 				plus.webview.currentWebview().opener().evalJS("createRoomRequests()");
+				result=true;
 				plus.nativeUI.closeWaiting();
-				return true;
 			}
 			else{
 				plus.nativeUI.closeWaiting();
@@ -120,5 +120,5 @@ function createRoomRequests(){
 			// console.log(JSON.stringify(data.data));
 		}
 	});
-	return false;
+	return result;
 }

@@ -100,7 +100,6 @@ function renderNewTag(newTags){
 function modifyRequests(){
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/update",{
-		async:false, 
 		data:{
 			chatroomId:roomId,
 			chatroomName:roomName,
@@ -112,9 +111,9 @@ function modifyRequests(){
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应
+			plus.nativeUI.closeWaiting();
 			//console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
-				plus.nativeUI.closeWaiting();
 				mui.toast("修改成功(๑>؂<๑）");
 				app.changeRoomMsg(roomId,roomName,theTags);//修改缓存中的数据
 				fatherWebview.evalJS("reload("+roomName+","+theTags+")");
@@ -126,6 +125,7 @@ function modifyRequests(){
 		},
 		error: function(xhr, type, errorThrown) {
 			//异常处理；
+			plus.nativeUI.closeWaiting();
 			console.log("发送修改食堂信息error");
 			// console.log(JSON.stringify(data.data));
 		}

@@ -15,7 +15,7 @@ var btnArray = ['确认', '取消'];
 mui.plusReady(function () {
 	
 	me = app.getUserGlobalInfo();
-	console.log(me.userId);
+	//console.log(me.userId);
 	//加载页面信息
 	loadAllRoom();
 	
@@ -27,7 +27,7 @@ mui.plusReady(function () {
 		renderStoredCreateRoom();
 		renderStoredOpenRoom();
 		//加载聊天快照
-		//TODO
+		loadingChatSnapshot();
 	});
 	
 	//刷新聊天室推荐(食堂街道)
@@ -142,7 +142,8 @@ function renderStoredOpenRoom(){
 					roomId:roomId,
 					isMine:false,
 					userId:me.userId,
-					roomName:roomName
+					roomName:roomName,
+					myIcon:me.icon
 				},
 				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 			});
@@ -186,7 +187,8 @@ function renderStoredCreateRoom(){
 					roomId:roomId,
 					isMine:true,
 					userId:me.userId,
-					roomName:roomName
+					roomName:roomName,
+					myIcon:me.icon
 				},
 				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 			});
@@ -245,6 +247,7 @@ function renderClosedRoom(room) {
 		    '<div class="mui-slider-handle">'+
 				'<img class="mui-media-object mui-pull-left" src="../images/diner.png">'+
 		        '<span>'+room.chatroomName+'</span>'+
+				'<p class="mui-ellipsis"></p>'+
 		    '</div>'+
 		'</li>';
 	// console.log(html);
@@ -275,7 +278,7 @@ function renderCreateRoom(room) {
 	html='<li class="mui-table-view-cell createRoom room mui-media" roomId="'+room.chatroomId+'" roomName="'+room.chatroomName+'">'+
 				'<img class="mui-media-object mui-pull-left" src="../images/diner.png">'+
 				'<div class="mui-media-body">'+
-					'<span>'+room.chatroomName+'</span>'+
+					'<span roomId="'+room.chatroomId+'">'+room.chatroomName+'</span>'+
 					'<p class="mui-ellipsis"></p>'+
 				'</div>'+
 		'</li>';
@@ -293,7 +296,8 @@ function renderOpenRoom(room) {
 		    '</div>'+
 		    '<div class="mui-slider-handle">'+
 				'<img class="mui-media-object mui-pull-left" src="../images/diner.png">'+
-		        '<span>'+room.chatroomName+'</span>'+
+		        '<span roomId="'+room.chatroomId+'">'+room.chatroomName+'</span>'+
+				'<p class="mui-ellipsis"></p>'+
 		    '</div>'+
 		'</li>';
 	// console.log(html);
@@ -392,7 +396,11 @@ function createRoomRequests(){
 					//批量绑定点击事件
 					mui("#createRoom").on("tap",".createRoom",function(e){
 						var roomId = this.getAttribute("roomId");
-						var roomName=this.getAttribute("roomName")
+						var roomName=this.getAttribute("roomName");
+						var roomNameNode = this.getElementsByTagName('span');//获取食堂名的项
+						
+						roomNameNode[0].setAttribute("class","");//去掉红点
+						
 						//打开聊天子页面
 						mui.openWindow({
 							url:"lhf_diningRoom.html",
@@ -401,10 +409,14 @@ function createRoomRequests(){
 								roomId:roomId,
 								isMine:true,
 								userId:me.userId,
-								roomName:roomName
+								roomName:roomName,
+								myIcon:me.icon
 							},
 							createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 						});
+						
+						//点击进入聊天页面后，标记未读状态为已读
+						app.readUserChatRoomSnapshot(me.userId,roomId);
 					});
 				}
 				else{
@@ -453,6 +465,10 @@ function openRoomRequests(){
 					mui("#openRoom").on("tap",".openRoom",function(e){
 						var roomId = this.getAttribute("roomId");
 						var roomName=this.getAttribute("roomName");
+						var roomNameNode = this.getElementsByTagName('span');//获取食堂名的项
+						
+						roomNameNode[0].setAttribute("class","");//去掉红点
+						
 						//打开食堂子页面
 						mui.openWindow({
 							url:"lhf_diningRoom.html",
@@ -461,10 +477,14 @@ function openRoomRequests(){
 								roomId:roomId,
 								isMine:false,
 								userId:me.userId,
-								roomName:roomName
+								roomName:roomName,
+								myIcon:me.icon
 							},
 							createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 						});
+						
+						//点击进入聊天页面后，标记未读状态为已读
+						app.readUserChatRoomSnapshot(me.userId,roomId);
 					});
 					//退出已加入且开启状态的食堂
 					mui('#openRoom').on('tap','.mui-btn-blue',function() {
@@ -601,3 +621,35 @@ function sendLeaveRoom(userId,roomId){
 	});
 	return status;
 }
+
+
+//加载食堂的聊天快照
+function loadingChatSnapshot(){
+	console.log("加载食堂的聊天快照");
+	var chatSnapshotList = app.getUserChatRoomSnapshot(me.userId);
+	
+	var roomsList = document.getElementById("rooms");//获取食堂列表
+	
+	// 表示显示聊天快照的项
+	var snapshotNode = null;
+	var roomChatItem,roomId,roomItem,roomNameNode;
+	
+	//根据缓存中的快照表进行聊天列表的渲染
+	for (var i = 0 ; i < chatSnapshotList.length ; i ++) {
+		roomChatItem = chatSnapshotList[i];
+		roomId = roomChatItem.roomId;//获取聊天快照对应的食堂id
+	//	console.log(JSON.stringify(roomChatItem));
+	//	console.log(roomId);
+		roomItem = roomsList.querySelector('li[roomId="'+roomId+'"]');//获取指定id食堂的项
+		//console.log(roomId);
+		snapshotNode = roomItem.getElementsByClassName("mui-ellipsis")[0];//获取食堂的关于聊天快照的填写区域
+		roomNameNode = roomItem.querySelector('span[roomId="'+roomId+'"]');//获取食堂的关于昵称的项
+		// 判断消息的已读或未读状态
+		var isRead = roomChatItem.isRead;
+		if (!isRead && app.isNotNull(roomNameNode)) {
+			roomNameNode.setAttribute("class","red_point");//未读消息标记红点
+		}
+		snapshotNode.innerHTML=roomChatItem.msg;//对html的对应区域赋值
+	}
+}
+

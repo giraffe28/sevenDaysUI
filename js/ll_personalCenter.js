@@ -32,12 +32,12 @@ document.getElementById("confirmBtn").addEventListener('tap', function() {
 	var btnArray = ['是', '否'];
 	mui.confirm('你确定要退出登录吗？', '提示', btnArray, function(e) {
 		if (e.index == 0) {
+			mui.toast("退出登录成功！");
 			requestLogOff();
-			//清空缓存
-
-			plus.storage.removeItem("userInfo");
 			
-			var webviews= plus.webview.all();
+			//清空缓存
+			//plus.storage.removeItem("userInfo");
+			//var webviews= plus.webview.all();
 
 			/*plus.storage.removeItem("userInfo");
 			
@@ -85,8 +85,7 @@ function requestLogOff(){
 				var webviews= plus.webview.all();
 				//打开login页面		
 				mui.openWindow("crb_login1.html","crb_login1.html");
-				console.log("执行至跳转到登录页面");			
-				mui.toast("退出登录成功！");
+				console.log("执行至跳转到登录页面");
 				setTimeout(function(){
 					for(var i=0;i<webviews.length;i++){
 						webviews[i].close();
@@ -99,6 +98,7 @@ function requestLogOff(){
 		},
 		error: function(xhr, type, errorThrown) {
 			//异常处理；
+			mui.toast("好像有点问题？QAQ");
 			// console.log(JSON.stringify(data.data));
 		}
 	});

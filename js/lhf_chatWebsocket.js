@@ -4,9 +4,20 @@
 本文件的任务是利用websocket建立与后端的连接，不仅用于聊天消息的收发，更是有心跳的定时动作
 */
 
+//获取个人中心页面
+var personalCenterPage;
+var midnightDinerPage;
+var chatRecordPage;
+var me = app.getUserGlobalInfo();
+
 
 mui.plusReady(function () {
 	console.log("websocket的plusReady");
+	
+	personalCenterPage = plus.webview.getWebviewById("ll_personalCenter.html");
+	midnightDinerPage = plus.webview.getWebviewById("lhf_midnightDiner.html");
+	chatRecordPage = plus.webview.getWebviewById("lhf_chatRecord.html");
+	
 	var myinterval=null;
 	// 构建聊天业务CHAT
 	window.CHAT = {
@@ -55,7 +66,6 @@ mui.plusReady(function () {
 		},
 		wsopen: function() {
 			console.log("websocket连接已建立...");
-			var me = app.getUserGlobalInfo();//获取用户信息
 			// 构建ChatMsg
 			var chatMsg = new app.ChatMsg(me.userId, null, null, null);
 			// 构建DataContent
@@ -67,6 +77,7 @@ mui.plusReady(function () {
 			// 每次连接之后，获取用户的未读未签收消息列表
 			//console.log("连接建立的时候获取未读的消息");
 			fetchUnReadMsg();
+			fetchUnReadRoomMsg();
 			
 			// 定时发送心跳
 			if(myinterval!=null) clearInterval(myinterval);//先清空心跳
@@ -77,35 +88,75 @@ mui.plusReady(function () {
 			// 转换DataContent为对象
 			var dataContent = JSON.parse(e.data);
 			var action = dataContent.action;
+			var chatMsg = dataContent.msg;
+			
 			if (action === app.PULL_FRIEND) {//需要重新拉取好友列表
-				fetchContactList();
+				chatRecordPage.evalJS("fetchContactList()");
 				return false;
 			}
-			// 如果不是重新拉取好友列表，则获取聊天消息模型，渲染接收到的聊天记录
-			var chatMsg = dataContent.msg;
+			else if(action === app.USEROUT){//用户被封禁
+				closeUserAction(chatMsg.content);
+				return false;
+			}
+			else if(action === app.CHATROOMOUT){//聊天室状态变更
+				roomBeClose(chatMsg.senderId);
+				return false;
+			}
+			else if(action === app.MUTIUSER){//多登录的弹出
+				kickoutUserAction(chatMsg.content);
+				return false;
+			}
+			
+			// 如果不是上面的操作，则获取聊天消息模型，渲染接收到的聊天记录
 			var msg = chatMsg.content;
-			var friendUserId = chatMsg.senderId;
+			var senderId = chatMsg.senderId;
 			var myId = chatMsg.receiverId;
-			// 调用聊天webview的receiveMsg方法
-			console.log("获取到的朋友id" + friendUserId);
-			var chatWebview = plus.webview.getWebviewById("lhf_chat_" + friendUserId);
-			var isRead = true;	// 设置消息的默认状态为已读
-			if (chatWebview != null) {
-				chatWebview.evalJS("receiveMsgFunc('" + msg + "')");
-				chatWebview.evalJS("resizeScreen()");//让滚动条在最下方
+			
+			if(action === app.CHAT){
+				// 调用聊天webview的receiveMsg方法
+				console.log("获取到的朋友id" + senderId);
+				var chatWebview = plus.webview.getWebviewById("lhf_chat_" + senderId);
+				var isRead = true;	// 设置消息的默认状态为已读
+				if (chatWebview != null) {
+					chatWebview.evalJS("receiveMsgFunc('" + msg + "')");
+					chatWebview.evalJS("resizeScreen()");//让滚动条在最下方
+				}
+				else {
+					isRead = false;	// chatWebview 聊天页面没有打开，标记消息未读状态
+				}
+				// 接受到消息之后，对消息记录进行签收
+				var dataContentSign = new app.DataContent(app.SIGNED, null, chatMsg.msgId);
+				CHAT.chat(JSON.stringify(dataContentSign));
+				// 保存聊天历史记录到本地缓存
+				app.saveUserChatHistory(myId, senderId, msg, app.FRIEND);//朋友发给我的信息进行保存
+				//聊天快照
+				app.saveUserChatSnapshot(myId, senderId, msg, isRead);
+				// 渲染快照列表进行展示
+				reloadChatSnapshot();
 			}
-			else {
-				isRead = false;	// chatWebview 聊天页面没有打开，标记消息未读状态
+			else if(action === app.CHATROOM){//这时：myId是食堂id，senderId是发送者id
+				// 调用聊天webview的receiveMsg方法
+				console.log("获取到的食堂id" + senderId);
+				var chatWebview = plus.webview.getWebviewById("lhf_diningRoom_"+senderId);
+				var isRead = true;	// 设置消息的默认状态为已读
+				if (chatWebview != null) {
+					chatWebview.evalJS("receiveMsgFunc('" + msg + "')");
+					chatWebview.evalJS("resizeScreen()");//让滚动条在最下方
+				}
+				else {
+					isRead = false;	// chatWebview 聊天页面没有打开，标记消息未读状态
+				}
+				// 接受到消息之后，对消息记录进行签收
+				var dataContentSign = new app.DataContent(app.SIGNED, null, chatMsg.msgId);
+				CHAT.chat(JSON.stringify(dataContentSign));
+				// 保存食堂的聊天历史记录到本地缓存app.FRIEND表示是别人发的
+				app.saveUserChatRoomHistory(me.userId, senderId, myId, msg, app.FRIEND, chatMsg.extend);
+				//食堂的聊天快照
+				app.saveUserChatRoomSnapshot(me.userId, myId, msg, isRead);
+				// 渲染食堂的快照列表进行展示
+				reloadChatRoomSnapshot();
 			}
-			// 接受到消息之后，对消息记录进行签收
-			var dataContentSign = new app.DataContent(app.SIGNED, null, chatMsg.msgId);
-			CHAT.chat(JSON.stringify(dataContentSign));
-			// 保存聊天历史记录到本地缓存
-			app.saveUserChatHistory(myId, friendUserId, msg, app.FRIEND);//朋友发给我的信息进行保存
-			//聊天快照
-			app.saveUserChatSnapshot(myId, friendUserId, msg, isRead);
-			// 渲染快照列表进行展示
-			reloadChatSnapshot();
+			
 		},
 		wsclose: function(e) {
 			console.log("连接关闭QAQ"+e.code+"reason:"+e.reason);
@@ -135,13 +186,13 @@ mui.plusReady(function () {
 			//fetchUnReadMsg();//似乎并不需要，利用onmessage进行数据获取即可
 		}
 	};
-})
+});
 
 
 
 // 每次获取服务器的未签收消息
 function fetchUnReadMsg() {
-	var user = app.getUserGlobalInfo();
+	var user = me;
 	console.log("获取后端未读消息");
 	var msgIds = ",";	// 格式：  ,1001,1002,1003,
 	mui.ajax(app.serverUrl + "/unreadMsgs?acceptUserId=" + user.userId,{
@@ -184,7 +235,114 @@ function fetchUnReadMsg() {
 	});
 }
 
+
+// 每次获取服务器的聊天室未签收消息
+function fetchUnReadRoomMsg() {
+	var userId = me.userId;
+	console.log("获取后端聊天室未读消息");
+	var msgIds = ",";	// 格式：  ,1001,1002,1003,
+	mui.ajax(app.serverUrl + "/chatRoomMsg/unreadMsgs",{
+		data:{
+			acceptUserId:userId
+		},
+		dataType:'json',//服务器返回json格式数据
+		type:'post',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},	              
+		success:function(data){
+			if (data.status == 200) {
+				var unReadMsgList = data.data;
+				//console.log("获取未读的消息" + JSON.stringify(unReadMsgList));
+				// 1. 保存聊天记录到本地
+				// 2. 保存聊天快照到本地
+				// 3. 对这些未签收的消息，批量签收
+				if (unReadMsgList==null || unReadMsgList==undefined) {
+					return false;
+				}
+				if(unReadMsgList.length == 0 ) {
+					return false;
+				} 
+				for (var i = 0 ; i < unReadMsgList.length ; i ++) {
+					var msgObj = unReadMsgList[i];
+					// 逐条存入聊天记录app.FRIEND表示是别人发的
+					app.saveUserChatRoomHistory(userId, msgObj.senderId, msgObj.chatroomId, msgObj.msgContent, app.FRIEND, msgObj.senderIcon);
+					
+					// 存入聊天快照
+					app.saveUserChatRoomSnapshot(userId, msgObj.chatroomId, msgObj.cmsgContent, false);
+					// 拼接批量接受的消息id字符串，逗号间隔
+					msgIds += msgObj.msgId;
+					msgIds += ",";
+				}
+				console.log("获取服务器未签收聊天室消息并加载聊天快照");
+				// 调用批量签收的方法
+				CHAT.signMsgList(msgIds);
+				// 刷新快照
+				reloadChatRoomSnapshot();
+			}
+		}
+	});
+}
+
+
 //重新加载聊天快照
 function reloadChatSnapshot(){
-	plus.webview.getWebviewById("lhf_chatRecord.html").evalJS("loadingChatSnapshot()");
+	chatRecordPage.evalJS("loadingChatSnapshot()");
+}
+
+//重新加载聊天室的聊天快照
+function reloadChatRoomSnapshot(){
+	midnightDinerPage.evalJS("loadingChatSnapshot()");
+}
+
+
+//用户被封禁的退出
+function closeUserAction(msg){
+	mui.toast(msg);
+	personCenterPage.evalJS("requestLogOff()");
+}
+
+
+//用户被多登录挤下
+function kickoutUserAction(msg){
+	mui.toast(msg);
+	mui.ajax(app.serverUrl+'/user/loginoff', {
+		data: {},
+		dataType: 'json', //服务器返回json格式数据
+		type: 'post', //HTTP请求类型
+		timeout: 10000, //超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},	
+		success: function(data) {
+			//服务器返回响应，根据响应结果，分析是否成功获取用户信息；
+			if (data.status == 200) {
+				var webviews= plus.webview.all();
+				//打开login页面
+				mui.openWindow("crb_login1.html","crb_login1.html");
+				console.log("执行至跳转到登录页面");
+				setTimeout(function(){
+					for(var i=0;i<webviews.length;i++){
+						webviews[i].close();
+					}
+				},1000);
+			}
+			else{
+				app.showToast(data.msg, "error");
+			}
+		},
+		error: function(xhr, type, errorThrown) {
+			//异常处理
+			mui.toast("好像出了一些问题？QAQ")
+			// console.log(JSON.stringify(data.data));
+		}
+	});
+}
+
+
+//聊天室封禁的弹出
+function roomBeClose(roomId){
+	midnightDinerPage.evalJS("loadAllRoom()");
+	
+	closedRoom=plus.webview.getWebviewById("lhf_diningRoom_"+roomId);
+	if(app.isNotNull(closedRoom)){
+		closedRoom.evalJS("outThisPage()");
+	}
 }
