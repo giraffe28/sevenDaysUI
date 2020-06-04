@@ -392,6 +392,7 @@ function createRoomRequests(){
 					//批量绑定点击事件
 					mui("#createRoom").on("tap",".createRoom",function(e){
 						var roomId = this.getAttribute("roomId");
+						var roomName=this.getAttribute("roomName")
 						//打开聊天子页面
 						mui.openWindow({
 							url:"lhf_diningRoom.html",
@@ -399,7 +400,8 @@ function createRoomRequests(){
 							extras:{
 								roomId:roomId,
 								isMine:true,
-								userId:me.userId
+								userId:me.userId,
+								roomName:roomName
 							},
 							createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 						});
@@ -429,7 +431,7 @@ function openRoomRequests(){
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
-		headers:{'Content-Type':'application/json'},	              
+		headers:{'Content-Type':'application/json'},
 		success:function(data){
 			//服务器返回响应
 			//console.log(JSON.stringify(data.data));//输出返回的数据
@@ -449,7 +451,8 @@ function openRoomRequests(){
 					
 					//批量绑定点击事件
 					mui("#openRoom").on("tap",".openRoom",function(e){
-						var roomId = this.getAttribute("roomId");		
+						var roomId = this.getAttribute("roomId");
+						var roomName=this.getAttribute("roomName");
 						//打开食堂子页面
 						mui.openWindow({
 							url:"lhf_diningRoom.html",
@@ -457,7 +460,8 @@ function openRoomRequests(){
 							extras:{
 								roomId:roomId,
 								isMine:false,
-								userId:me.userId
+								userId:me.userId,
+								roomName:roomName
 							},
 							createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 						});
