@@ -47,7 +47,7 @@ function pulldownRefresh() {
 	}*/
 	//请求最新列表信息流
 	mui.post(app.serverUrl + "/square/find", data, function(rsp) {
-//		console.log(JSON.stringify(rsp));
+		console.log(JSON.stringify(rsp));
 		mui('#post').pullRefresh().endPulldownToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
@@ -170,4 +170,8 @@ function convert(items) {
 		});
 	});
 	return postItems;
-}
+};
+
+window.addEventListener('refresh', function(e){//执行刷新
+    location.reload();
+});

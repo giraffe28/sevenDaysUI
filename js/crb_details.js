@@ -21,6 +21,14 @@ mui.init({
 			callback: pullupRefresh
 		}
 	},
+	
+	beforeback: function() {　　　　
+	    var list = plus.webview.currentWebview().opener();　　　　
+	    //refresh是A页面自定义事件
+	    mui.fire(list, 'refresh');
+	    //返回true,继续页面关闭逻辑
+	    return true;
+	}
 })
 
 mui.plusReady(function () {
@@ -160,7 +168,7 @@ function likeornot(){
 		async: false, 
 		success:function(data){
 			if (data.status == 200) {
-//				console.log(JSON.stringify(data));
+				console.log(JSON.stringify(data));
 				if(data.data=="已经点赞"){
 					like="已赞";
 					//return like;
@@ -198,6 +206,8 @@ function likeclick(){
 				if (data.status == 200) {
 					console.log(JSON.stringify(data));
 					like.innerHTML="已赞";
+					postlike+=1;
+					location.reload();
 				}
 				else{
 					app.showToast(data.msg, "error");
@@ -218,6 +228,8 @@ function likeclick(){
 				if (data.status == 200) {
 					console.log(JSON.stringify(data));
 					like.innerHTML="赞";
+					postlike-=1;
+					location.reload();
 				}
 				else{
 					app.showToast(data.msg, "error");
@@ -405,5 +417,4 @@ function sendMakeFri(userId,friendId){
 		},
 	});
 	return status;
-}
-
+};
