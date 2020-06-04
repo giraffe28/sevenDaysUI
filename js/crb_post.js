@@ -22,7 +22,7 @@ mui.plusReady(function () {
 				userId:user.userId
 			},
 	   		postContent:content,
-			postImage:imgUrl,
+			postImage:imgUrl
 	   	},
 	   	dataType: 'json', //服务器返回json格式数据
 	   	type: 'post', //HTTP请求类型

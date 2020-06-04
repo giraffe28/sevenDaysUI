@@ -28,7 +28,7 @@ document.getElementById("upload").addEventListener('tap', function() {
 	var result = $image.cropper("getCroppedCanvas");
 	if (result) {
 		var base64Url = result.toDataURL();
-		//console.log("base64:"+base64Url);
+		console.log("base64:"+base64Url);
 		mui.ajax(app.serverUrl + "/upload/getToken", {
 			data: {},
 			dataType: 'json', //服务器返回json格式数据
