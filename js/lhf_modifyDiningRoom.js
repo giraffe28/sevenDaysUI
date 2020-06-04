@@ -85,7 +85,7 @@ function renderNewTag(newTags){
 	if (app.isNotNull(newTags)) {
 		var theTagsHtml = "";
 		for (var i = 0; i < newTags.length; i++) {
-			theTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
+			theTagsHtml += '<label style="background-color: lightgreen; border-radius: 7px;width: auto;margin:10px 0px 0px 5px ;padding: 0;">'
 			+newTags[i]+'</label>';
 		}
 		addTagDom.innerHTML = theTagsHtml;
