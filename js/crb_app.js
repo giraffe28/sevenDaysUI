@@ -1,10 +1,15 @@
 
 window.app = {
+	//后端服务发布的URL地址
+				serverUrl: 'http://192.168.56.1:8080/RATE_MAX_sevenDays_war_exploded',
+				//netty服务后端发布的url地址
+				nettyServerUrl:'ws://192.168.56.1:7888/ws', //172.17.243.33
 	
+	/*
 	//后端服务发布的URL地址
 	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_7_war_exploded',
 	//netty服务后端发布的url地址
-	nettyServerUrl:'ws://192.168.0.3:7888/ws', //172.17.243.33
+	nettyServerUrl:'ws://192.168.0.3:7888/ws', //172.17.243.33*/
 
 	
 	/**
@@ -461,9 +466,10 @@ window.app = {
 			// 如果有，在list中的原有位置修改食堂名和标签
 			for (var i = 0 ; i < createRoomList.length ; i ++) {
 				var item = createRoomList[i];
-				if (item.roomId == roomId) {
-					item.roomName=roomName;
-					item.newTags=newTags;
+				console.log(item.chatroomId );
+				if (item.chatroomId == roomId) {
+					item.chatroomName=roomName;
+					item.chatroomTag=newTags;
 					createRoomList.splice(i, 1, item);	// 替换原有的食堂数据
 					console.log("app中的修改指定id食堂信息");
 					break;
