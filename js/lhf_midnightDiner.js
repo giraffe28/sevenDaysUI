@@ -433,7 +433,7 @@ function createRoomRequests(){
 
 //发送获取加入且开启中的食堂列表的资源请求以及加载
 function openRoomRequests(){
-	console.log("openRoomRequests()");
+//	console.log("openRoomRequests()");
 	
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/getMyJoinRoomListById",{

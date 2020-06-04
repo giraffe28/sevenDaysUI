@@ -200,7 +200,7 @@ function loadPersonalCenter(user){
 //加载本周标签
 function loadThisWeekTags(tags){
 	user=app.getUserGlobalInfo();
-	console.log("加载缓存中的本周标签:"+tags);
+//	console.log("加载缓存中的本周标签:"+tags);
 	var tags = tags.split(" ");
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
@@ -258,7 +258,7 @@ function refreshMyImage(imageUrl){
 //加载过往标签
 function loadPastTags(){
 	var user=app.getUserGlobalInfo();
-	console.log("从后端加载过往标签");
+//	console.log("从后端加载过往标签");
 	mui.ajax(app.serverUrl+'/user/pastTag', {//发送请求返回用户的过往标签
 		data: {
 			userId:user.userId,

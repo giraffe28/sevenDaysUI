@@ -122,7 +122,7 @@ function likeornot(){
 		async: false, 
 		success:function(data){
 			if (data.status == 200) {
-				console.log(JSON.stringify(data));
+//				console.log(JSON.stringify(data));
 				if(data.data=="已经点赞"){
 					like="已赞";
 					//return like;

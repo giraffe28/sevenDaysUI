@@ -259,7 +259,7 @@ function receiveMsgFunc(otherMsg,otherIcon,otherId){
 
 // 初始化食堂的聊天记录
 function initChatHistory() {
-	var myId = me.userId;
+	var myId = userId;
 	var chatHistoryList = app.getUserChatRoomHistory(myId, roomId);//获取缓存中的聊天记录
 //	console.log("初始化聊天内容" + JSON.stringify(chatHistoryList));
 	for (var i = 0 ; i < chatHistoryList.length ; i ++) {
