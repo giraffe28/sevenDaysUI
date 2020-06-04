@@ -136,11 +136,18 @@ function renderMemoryPage() {
 //设置十字记忆列表的单个列表项
 function renderMemory(memory) {
 	var html = "";
+	var date=new Date(memory.memoryDate);
 	html = '<li class="mui-table-view-cell memoryRecord" id="' + memory.memoryId + '">' +
 		'<div class="mui-slider-right mui-disabled">' +
 		'<span class="mui-btn mui-btn-red">删除</span>' +
 		'</div>' +
-		'<div class="mui-slider-handle">' + memory.memoryTitle + '</div>' +
+		'<div class="mui-slider-handle">' + memory.memoryTitle +'<br> <span style="font-size: smaller;">' +
+		 date.getFullYear()+'.'+t(date.getMonth()+1)+'.'+t(date.getDate())+' '+
+		 t(date.getHours())+':'+t(date.getMinutes())+':'+t(date.getSeconds())+'</span>'+ '</div>' +
 		'</li>';
 	return html;
 };
+
+function t(s){
+	return s<10?"0"+s:s;
+}

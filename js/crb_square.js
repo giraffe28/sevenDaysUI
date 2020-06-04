@@ -47,7 +47,7 @@ function pulldownRefresh() {
 	}*/
 	//请求最新列表信息流
 	mui.post(app.serverUrl + "/square/find", data, function(rsp) {
-
+		console.log(JSON.stringify(rsp));
 		mui('#post').pullRefresh().endPulldownToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
@@ -66,6 +66,7 @@ function pulldownRefresh() {
 }
 
 function addpost(post) {
+	//console.log(post.image);
 	var html="";
 	year=post.date.getFullYear();
 	month=parseInt(post.date.getMonth()+1);
@@ -73,7 +74,6 @@ function addpost(post) {
 	hour=post.date.getHours();
 	minute=post.date.getMinutes();
 	second=post.date.getSeconds();
-		
 	html=
 		'<div class="mui-card postItem" id="'+post.postId+'">'+
 			'<div class="mui-card-header mui-card-media">'+
@@ -87,6 +87,7 @@ function addpost(post) {
 			'</div>'+
 			'<div class="mui-card-content">'+
 				'<p class="line-limit-length content">'+post.content+'</p>'+
+				'<img src="'+post.postImage+'" alt="" width="100%">'+
 			'</div>'+
 			'<div class="mui-card-footer">'+
 				'赞:'+post.postlike+
@@ -125,7 +126,7 @@ function pullupRefresh() {
 		start:head,
 		max:max//需要的字段名
 	}
-	if(index>=head){
+	//if(index>=head){
 	//请求历史列表信息流
 	mui.post(app.serverUrl + "/square/find", data, function(rsp) {
 		mui('#post').pullRefresh().endPullupToRefresh();
@@ -142,10 +143,10 @@ function pullupRefresh() {
 			list.innerHTML=postHtml;
 		}		
 	},'json');
-	}
-	else{
-		mui('#post').pullRefresh().endPullupToRefresh(true);
-	}
+	//}
+	//else{
+	//	mui('#post').pullRefresh().endPullupToRefresh(true);
+	//}
 }
 
 var posts = new Vue({
@@ -163,6 +164,7 @@ function convert(items) {
 			nickname:item.user.nickname,
 			date:new Date(item.postDate),
 			content:item.postContent,
+			postImage:item.postImage,
 			postId:item.postId,
 			postlike:item.postLike
 		});

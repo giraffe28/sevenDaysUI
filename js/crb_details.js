@@ -2,6 +2,8 @@
 var head;
 var max;
 var index;
+var reportDom=document.getElementById("report");
+
 mui.init({
 	pullRefresh: {
 		container: '#comment',
@@ -27,6 +29,7 @@ mui.plusReady(function () {
 	icon=Webview.icon;
 	nickname=Webview.nickname;
 	content=Webview.content;
+	postImage=Webview.postImage;
 	date=Webview.date;
 	postlike=Webview.postlike;
 	
@@ -70,6 +73,7 @@ mui.plusReady(function () {
 					'<p class="content">'+
 						content+
 					'</p>'+
+					'<img src="'+postImage+'" alt="" width="100%">'+
 				'</div>'+
 				'<div class="mui-card-footer">'+
 					'<p>'+postlike+'</p>'+
@@ -78,6 +82,20 @@ mui.plusReady(function () {
 			'</div>';
 			post.innerHTML=html;
 		},
+	});
+	
+	reportDom.addEventListener('tap',function(){
+		console.log("到达举报的事件监听");
+		//跳转到对应的朋友的举报页面
+		mui.openWindow({
+			url:"lhf_report.html",
+			id:"lhf_report.html",
+			extras:{
+				reportType:app.POSTVIOLATION,
+				reportObjectId:postid
+			},
+			createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+		});
 	});
 })
 
@@ -226,7 +244,7 @@ function send(){
 	}
 
 function pulldownRefresh() {
-	mui('#comment').pullRefresh().endPullupToRefresh(false);
+	mui('#comment').pullRefresh().endPullupToRefresh();
 	//location.reload();
 	if(window.plus && plus.networkinfo.getCurrentType() === plus.networkinfo.CONNECTION_NONE) {
 		plus.nativeUI.toast('似乎已断开与互联网的连接', {
@@ -258,7 +276,6 @@ function pulldownRefresh() {
 			list.innerHTML=postHtml;
 			//addlistNer();
 		}
-		console.log(index);
 		/*
 		if(rsp.data==""){
 			
@@ -295,7 +312,7 @@ function pullupRefresh() {
 
 	head += max;
 	max = 10;
-	if(index>=head){
+	//if(index>=head){
 	var data = {
 		start:head,
 		max:max,//需要的字段名
@@ -322,17 +339,16 @@ function pullupRefresh() {
 		}
 	},'json');
 	//this.endPullupToRefresh(true);
-	}
-	else{
-		mui('#comment').pullRefresh().endPullupToRefresh(true);
-	}
+	//}
+	//else{
+	//	mui('#comment').pullRefresh().endPullupToRefresh(true);
+	//}
 	
 }
 
 function addcomment(comment,j) {
 	var html="";
 	html='<div class="mui-card comment" id="commentItem">'+
-			'评论'+j+'<br/>'+
 			comment.sendUser+':'+comment.postContent+
 		'</div>';
 		
@@ -359,3 +375,56 @@ function convert(items) {
 	//console.log(postItems);
 	return postItems;
 };
+
+mui('.makeChat').on('tap','.mui-btn-blue',function() {
+	//获取当前DOM对象
+	var elem1 = this;
+	//获取DOM对象
+	var par = elem1.parentElement.parentNode;
+	mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
+		if (e.index == 0) {
+			var user=app.getUserGlobalInfo();//获取用户全局对象
+			var par1=par.getAttribute("friendId");
+		//	console.log(par1);
+		
+			var user=app.getUserGlobalInfo();//获取用户全局对象
+			if(sendMakeFri(user.userId,par1)==true){
+				//获取朋友列表，并且渲染到页面
+				fetchContactList();
+				setTimeout("loadingRecFriendRequests()",500);
+				//页面跳转至对应的聊天页面todo
+			}
+			else{
+				mui.toast("发送闲聊请求出错啦！QAQ");
+				//取消：关闭滑动列表
+				mui.swipeoutClose(par);
+			}
+		} 
+		else {
+			//取消：关闭滑动列表
+			mui.swipeoutClose(par);
+		}
+	});
+});
+
+
+//对推荐好友进行发起聊天时，向后端发送消息
+function sendMakeFri(userId,friendId){
+	var status =false;
+	mui.ajax(app.serverUrl+"/Friend/add?userId="+userId+"&friendUserId="+friendId,{
+		data:{},//上传的数据
+		dataType:'json',//服务器返回json格式数据
+		async:false,
+		type:'post',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},	              
+		success:function(data){
+			//服务器返回响应,进行数据的重新加载
+			if(data.status==200){
+				status = true;
+			}
+		},
+	});
+	return status;
+}
+

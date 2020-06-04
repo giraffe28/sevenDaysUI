@@ -33,11 +33,12 @@ mui.plusReady(function () {
 	roomId=thisWebview.roomId;
 	roomName=thisWebview.roomName;
 	fatherWebview=thisWebview.opener();
-	addTagDom=mui("#addTag");
+	addTagDom=document.getElementById("addTag");
 	//获取结束
 	
 	//加载页面数据
-	mui("#modifyRoomName").value=roomName;
+	document.getElementById("modifyRoomName").value=roomName;
+	//console.log(roomName);
 	renderNewTag(theTags);
 	
     
@@ -55,7 +56,7 @@ mui.plusReady(function () {
 	});
 	//点击确认键时的动作
 	document.getElementById("confirmBtn").addEventListener('tap',function(){
-		roomName=mui("#modifyRoomName").value;//获取当前的食堂名
+		roomName=document.getElementById("modifyRoomName").value;//获取当前的食堂名
 		if(app.isNotNull(roomName)==true){
 			if(roomName.length<18){
 				if(modifyRequests()==true){
@@ -84,7 +85,7 @@ function renderNewTag(newTags){
 	if (app.isNotNull(newTags)) {
 		var theTagsHtml = "";
 		for (var i = 0; i < newTags.length; i++) {
-			theTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
+			theTagsHtml += '<label style="background-color: lightgreen; border-radius: 7px;width: auto;margin:10px 0px 0px 5px ;padding: 0;">'
 			+newTags[i]+'</label>';
 		}
 		addTagDom.innerHTML = theTagsHtml;
@@ -115,8 +116,9 @@ function modifyRequests(){
 			//console.log(JSON.stringify(data.data));//输出返回的数据
 			if(data.status==200){
 				mui.toast("修改成功(๑>؂<๑）");
+				renderNewTag(theTags);
 				app.changeRoomMsg(roomId,roomName,theTags);//修改缓存中的数据
-				fatherWebview.evalJS("reload("+roomName+","+theTags+")");
+				fatherWebview.evalJS("reload('"+roomName+"','"+theTags+"')");
 				mui.back();
 			}	
 			else{

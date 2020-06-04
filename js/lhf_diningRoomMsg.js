@@ -29,13 +29,13 @@ mui.plusReady(function () {
 	roomId=thisWebview.roomId;
 	isMine=thisWebview.isMine;
 	
-	titleNameDom=mui("#titleName");
-	roomIdDom=mui("#roomId");
-	creatorDom=mui("#creator");
-	tagsDom=mui("#tags");
-	roomPeoplesDom=mui("#roomPeoples");
-	creationTimeDom=mui("#creationTime");
-	closeTimeDom=mui("#closeTime");
+	titleNameDom=document.getElementById("roomName");
+	roomIdDom=document.getElementById("roomId");
+	creatorDom=document.getElementById("creator");
+	tagsDom=document.getElementById("tags");
+	roomPeoplesDom=document.getElementById("roomPeoples");
+	creationTimeDom=document.getElementById("creationTime");
+	closeTimeDom=document.getElementById("closeTime");
 	
 	userId=app.getUserGlobalInfo().userId;
 	//获取结束
@@ -53,7 +53,7 @@ mui.plusReady(function () {
 				extras:{
 					userId:userId,
 					roomId:roomId,
-					roomName:creatorDom.innerHTML,
+					roomName:titleNameDom.innerHTML,
 					theTags:roomTag
 				},
 				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
@@ -67,7 +67,7 @@ mui.plusReady(function () {
 function addmodifyEntrance(){
 	if(isMine==true){
 		modifyHtml='<button type="button" class="mui-btn mui-btn-primary" id="modifyBtn" >修改食堂信息</button>';
-		mui("#modifyRow").innerHTML=modifyHtml;
+		document.getElementById("modifyRow").innerHTML=modifyHtml;
 	}
 }
 
@@ -76,8 +76,9 @@ function addmodifyEntrance(){
 //修改食堂信息后的配套动作，将被修改食堂信息的功能模块调用
 //这里是修改食堂名和食堂主营
 function reload(roomName,tags){
+	//console.log(tags);
 	titleNameDom.innerHTML=roomName;
-	tags=tags.splice(" ");
+	tags=tags.split(" ");
 	if (app.isNotNull(tags)) {
 		var theTagsHtml = "";
 		for (var i = 0; i < tags.length; i++) {
@@ -107,7 +108,7 @@ function renderRoomMsg(room){
 	roomTag=room.chatroomTag;//记录返回的食堂标签，用于进入修改食堂信息时的页面传参
 	
 	var tags=room.chatroomTag;
-	tags=tags.splice(" ");
+	tags=tags.split(" ");
 	if (app.isNotNull(tags)) {
 		var theTagsHtml = "";
 		for (var i = 0; i < tags.length; i++) {
@@ -120,11 +121,16 @@ function renderRoomMsg(room){
 		tagsDom.innerHTML = "";
 	}
 	
-	roomPeoplesDom=room.chatroomNumber;
-	creationTimeDom=room.chatroomStart;
-	closeTimeDom=room.chatroomEnd;
+	roomPeoplesDom.innerHTML=room.chatroomNumber;
+	startDate=new Date(room.chatroomStart);
+	creationTimeDom.innerHTML=startDate.getFullYear()+'.'+t(startDate.getMonth()+1)+'.'+t(startDate.getDate())+' '+t(startDate.getHours())+':'+t(startDate.getMinutes())+':'+t(startDate.getSeconds());
+	endDate=new Date(room.chatroomEnd);
+	closeTimeDom.innerHTML=endDate.getFullYear()+'.'+t(endDate.getMonth()+1)+'.'+t(endDate.getDate())+' '+t(endDate.getHours())+':'+t(endDate.getMinutes())+':'+t(endDate.getSeconds());
 }
 
+function t(s){
+	return s<10?"0"+s:s;
+}
 
 //从后端获取指定id的食堂信息的请求
 function getRoomMsgRequests(){
