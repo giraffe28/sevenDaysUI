@@ -47,12 +47,4 @@ mui.plusReady(function () {
 			
 		}
 	});*/
-	console.log(bottleid);
-    /*
-    document.getElementById("title").innerHTML=nickname;
-    document.getElementById("time").innerHTML=date;
-    document.getElementById("content").innerHTML=content;
-    document.getElementById("postlike").innerHTML=postlike;
-	*/
-   
 })

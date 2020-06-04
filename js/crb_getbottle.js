@@ -1,4 +1,6 @@
 var randomId;
+var reportDom=document.getElementById("report");
+
 mui.init();
 mui.plusReady(function(){
 	var user = app.getUserGlobalInfo();
@@ -71,5 +73,19 @@ mui.plusReady(function(){
 			});
 		}
 	});	
+	
+	reportDom.addEventListener('tap',function(){
+		console.log("到达举报的事件监听");
+		//跳转到对应的朋友的举报页面
+		mui.openWindow({
+			url:"lhf_report.html",
+			id:"lhf_report.html",
+			extras:{
+				reportType:app.BOTTLEVIOLATION,
+				reportObjectId:randomId
+			},
+			createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+		});
+	});
 })
 
