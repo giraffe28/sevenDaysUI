@@ -1,10 +1,10 @@
 
 window.app = {
 	//后端服务发布的URL地址
-				serverUrl: 'http://192.168.56.1:8080/RATE_MAX_sevenDays_war_exploded',
-				//netty服务后端发布的url地址
-				nettyServerUrl:'ws://192.168.56.1:7888/ws', //172.17.243.33
-	
+	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_8_war_exploded',
+	//netty服务后端发布的url地址
+	nettyServerUrl:'ws://192.168.1.2:7888/ws', //172.17.243.33
+				
 	/*
 	//后端服务发布的URL地址
 	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_7_war_exploded',
@@ -60,6 +60,7 @@ window.app = {
 	USEROUT:7,      // 用户退出
 	CHATROOMOUT:8,  // 聊天室退出
 	MUTIUSER:9,     // 用户多登录问题
+	CHATROOMMSGSIGNED:10, //聊天室消息签收
 	
 	/*
 	 * 和后端的 ChatMsg 聊天模型对象保持一致

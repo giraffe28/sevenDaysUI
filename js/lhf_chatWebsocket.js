@@ -8,11 +8,13 @@
 var personalCenterPage;
 var midnightDinerPage;
 var chatRecordPage;
-var me = app.getUserGlobalInfo();
+var me;
 
 
 mui.plusReady(function () {
 	console.log("websocket的plusReady");
+	
+	me = app.getUserGlobalInfo();
 	
 	personalCenterPage = plus.webview.getWebviewById("ll_personalCenter.html");
 	midnightDinerPage = plus.webview.getWebviewById("lhf_midnightDiner.html");
@@ -81,7 +83,7 @@ mui.plusReady(function () {
 			
 			// 定时发送心跳
 			if(myinterval!=null) clearInterval(myinterval);//先清空心跳
-			myinterval=setInterval("CHAT.keepalive()", 7000);
+			myinterval=setInterval("CHAT.keepalive()", 4000);
 		},
 		wsmessage: function(e) {
 			console.log("接受到消息：" + e.data);	
@@ -172,18 +174,27 @@ mui.plusReady(function () {
 			// 发送批量签收的请求
 			CHAT.chat(JSON.stringify(dataContentSign));
 		},
+		signroomMsgList: function(unSignedMsgIds) {
+			// 构建批量签收对象的模型
+			console.log("进入了签收消息的方法");
+			var dataContentSign = new app.DataContent(app.CHATROOMMSGSIGNED,null,unSignedMsgIds);
+			// 发送批量签收的请求
+			CHAT.chat(JSON.stringify(dataContentSign));
+		},
 		keepalive: function() {
 			//心跳
 			console.log("心跳");
 			
+			// 构建ChatMsg
+			var checkMsg = new app.ChatMsg(me.userId, null, null, null);
 			// 构建对象
-			var dataContent = new app.DataContent(app.KEEPALIVE, null, null);
+			var dataContent = new app.DataContent(app.KEEPALIVE, checkMsg, null);
 			// 发送心跳
 			CHAT.chat(JSON.stringify(dataContent));
 			
 			// 定时执行函数
 			//fetchContactList();//似乎多余了，会导致频繁刷新
-			//fetchUnReadMsg();//似乎并不需要，利用onmessage进行数据获取即可
+			//fetchUnReadMsg();//故意的读取操作，用于保存连接
 		}
 	};
 });
@@ -265,17 +276,18 @@ function fetchUnReadRoomMsg() {
 				for (var i = 0 ; i < unReadMsgList.length ; i ++) {
 					var msgObj = unReadMsgList[i];
 					// 逐条存入聊天记录app.FRIEND表示是别人发的
-					app.saveUserChatRoomHistory(userId, msgObj.senderId, msgObj.chatroomId, msgObj.msgContent, app.FRIEND, msgObj.senderIcon);
+					app.saveUserChatRoomHistory(userId, msgObj.senderId, msgObj.chatroomId, msgObj.cmsgContent, app.FRIEND, msgObj.senderIcon);
 					
 					// 存入聊天快照
 					app.saveUserChatRoomSnapshot(userId, msgObj.chatroomId, msgObj.cmsgContent, false);
 					// 拼接批量接受的消息id字符串，逗号间隔
-					msgIds += msgObj.msgId;
+					msgIds += msgObj.cmsgId;
 					msgIds += ",";
 				}
 				console.log("获取服务器未签收聊天室消息并加载聊天快照");
 				// 调用批量签收的方法
-				CHAT.signMsgList(msgIds);
+				
+				CHAT.signroomMsgList(msgIds);
 				// 刷新快照
 				reloadChatRoomSnapshot();
 			}
