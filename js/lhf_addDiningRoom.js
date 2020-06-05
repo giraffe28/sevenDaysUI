@@ -71,8 +71,8 @@ function renderNewTag(newTags){
 		newTags = newTags.split(" ");
 		var theTagsHtml = "";
 		for (var i = 0; i < newTags.length; i++) {
-			theTagsHtml += '<label style="background-color: lightgreen; border-radius: 7px;width: auto;margin:10px 0px 0px 5px ;padding: 0;">'
-							+newTags[i]+'</label>';
+			theTagsHtml += '<span  class="mui-badge mui-badge-success" style="margin-top: 10px;">'
+							+newTags[i]+'</span>';
 		}
 		addTagDom.innerHTML = theTagsHtml;
 	}
