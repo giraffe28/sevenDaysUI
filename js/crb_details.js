@@ -318,11 +318,17 @@ function pulldownRefresh() {
 		postId:postid,
 	}
 	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
-		
+		var num=document.getElementById("num");
 		mui('#comment').pullRefresh().endPulldownToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
 			length=rsp.length;
+			if(length>=10){
+				num.innerHTML="评论：10+";
+			}
+			else{
+				num.innerHTML="评论："+length;
+			}
 			console.log(rsp.length);
 			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用			
 			posts.items = convert(rsp);
