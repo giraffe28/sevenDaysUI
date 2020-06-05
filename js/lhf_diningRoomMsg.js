@@ -82,8 +82,8 @@ function reload(roomName,tags){
 	if (app.isNotNull(tags)) {
 		var theTagsHtml = "";
 		for (var i = 0; i < tags.length; i++) {
-			theTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
-			+tags[i]+'</label>';
+			theTagsHtml += '<span class="mui-badge mui-badge-success" style="margin-top: 10px;">'
+			+tags[i]+'</span>';
 		}
 		tagsDom.innerHTML = theTagsHtml;
 	}
