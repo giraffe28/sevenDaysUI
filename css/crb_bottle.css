@@ -1,3 +1,18 @@
+.drift {
+  justify-content: center;
+  align-items: center;
+  padding:0 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+
+  box-shadow: 0 10px 30px 0px rgba(208, 208, 208, 0.5);
+  -moz-box-shadow: 0 10px 30px 0px rgba(208, 208, 208, 0.5);
+  -webkit-box-shadow: 0 10px 30px 0px rgba(208, 208, 208, 0.5);
+  -o-box-shadow: 0 10px 30px 0px rgba(208, 208, 208, 0.5);
+  -ms-box-shadow: 0 10px 30px 0px rgba(208, 208, 208, 0.5);
+
+}
+
 .footer-right {  
 	position: absolute;  
 	width: 60px;  
