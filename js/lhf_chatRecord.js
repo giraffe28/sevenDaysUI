@@ -334,10 +334,16 @@ function sendMakeFri(userId,friendId){
 		async:false,
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
-		headers:{'Content-Type':'application/json'},	              
+		headers:{'Content-Type':'application/json'},
 		success:function(data){
 			//服务器返回响应,进行数据的重新加载
 			if(data.status==200){
+				
+				var indexWebview = plus.webview.getWebviewById("index.html");
+				var chatMsg = new app.ChatMsg(userId, friendId, null, null);
+				var dataContent = new app.DataContent(app.PULL_FRIEND, chatMsg, null);
+				indexWebview.evalJS("CHAT.chat('"+JSON.stringify(dataContent)+"')");
+				
 				status = true;
 			}
 		},

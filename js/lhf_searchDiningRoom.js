@@ -141,8 +141,8 @@ function renderResult(roomList){
 			mui.confirm('确定入座该食堂？', '提示', btnArray, function(e) {
 				if (e.index == 0) {
 					var par1=par.getAttribute("roomId");
-			//		console.log(par1);
-					if(midDinerWebview.evalJS("sendIntoRoom("+me.userId+","+par1+")")==true){
+					//console.log(par1);
+					if(midDinerWebview.evalJS("sendIntoRoom("+userId+","+par1+")")==true){
 						mui.toast("入座成功(≧∇≦)");
 						//获取新的已加入且开启中的食堂列表，并且渲染到页面
 						midDinerWebview.evalJS("loadingOpenRoom()");

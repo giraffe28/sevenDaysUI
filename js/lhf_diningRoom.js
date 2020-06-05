@@ -56,7 +56,7 @@ mui.plusReady(function () {
     isMine=thisWebview.isMine;
 	userId=thisWebview.userId;
 	roomName=thisWebview.roomName;
-	if(thisWebview.icon!="")
+	if(app.isNotNull(thisWebview.icon))
 		myIcon=thisWebview.icon;
 	//获取index页面
 	chatWebSocket = plus.webview.getWebviewById("index.html");

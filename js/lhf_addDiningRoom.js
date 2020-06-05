@@ -106,6 +106,7 @@ function createRoomRequests(){
 				//修改重新获取自己创建的食堂
 				plus.webview.currentWebview().opener().evalJS("createRoomRequests()");
 				result=true;
+				console.log(result);
 				plus.nativeUI.closeWaiting();
 			}
 			else{
@@ -114,11 +115,11 @@ function createRoomRequests(){
 			}
 		},
 		error: function(xhr, type, errorThrown) {
-			//异常处理；
-			plus.nativeUI.closeWaiting();
+			//异常处理
 			console.log("发送新建食堂出错error");
 			// console.log(JSON.stringify(data.data));
 		}
 	});
+	console.log("result:"+result);
 	return result;
 }

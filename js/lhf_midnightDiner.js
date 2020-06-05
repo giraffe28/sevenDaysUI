@@ -12,10 +12,14 @@ var me;
 //通用的二次确认使用
 var btnArray = ['确认', '取消'];
 
+//记录通用的几处用于显示食堂数的位置
+var closedRoomNums=document.getElementById("closedRoomNums");
+var myRoomNums=document.getElementById("myRoomNums");
+var openRoomNums=document.getElementById("openRoomNums");
+
 mui.plusReady(function () {
 	
 	me = app.getUserGlobalInfo();
-	//console.log(me.userId);
 	//加载页面信息
 	loadAllRoom();
 	
@@ -86,6 +90,7 @@ function renderStoredClosedRoom(){
 	var closedRoomUlist = document.getElementById("closedRoom");
 	if(closedRoomList!=null&&closedRoomList.length>0){
 		var closedHtml="";
+		closedRoomNums.innerHTML=closedRoomList.length;//显示房间数
 		for(var i=0;i<closedRoomList.length;i++){
 			closedHtml+=renderClosedRoom(closedRoomList[i]);
 		}
@@ -112,6 +117,7 @@ function renderStoredClosedRoom(){
 		});
 	}
 	else{
+		closedRoomNums.innerHTML=0;//显示房间数
 		closedRoomUlist.innerHTML="";
 	}
 }
@@ -126,6 +132,7 @@ function renderStoredOpenRoom(){
 	var openRoomUlist = document.getElementById("openRoom");
 	if(openRoomList!=undefined && openRoomList!=null && openRoomList.length>0){
 		var openHtml="";
+		openRoomNums.innerHTML=openRoomList.length;//显示房间数
 		for(var i=0;i<openRoomList.length;i++){
 			openHtml+=renderOpenRoom(openRoomList[i]);
 		}
@@ -157,6 +164,7 @@ function renderStoredOpenRoom(){
 	}
 	else{
 		openRoomUlist.innerHTML="";
+		openRoomNums.innerHTML=0;//显示房间数
 	}
 }
 
@@ -170,6 +178,7 @@ function renderStoredCreateRoom(){
 	var createRoomUlist = document.getElementById("createRoom");
 	if(createRoomList!=undefined && createRoomList!=null && createRoomList.length>0){
 		var createHtml="";
+		myRoomNums.innerHTML=createRoomList.length;//显示房间数
 		for(var i=0;i<createRoomList.length;i++){
 			createHtml+=renderCreateRoom(createRoomList[i]);
 		}
@@ -195,6 +204,7 @@ function renderStoredCreateRoom(){
 		});
 	}
 	else{
+		myRoomNums.innerHTML=0;//显示房间数
 		createRoomUlist.innerHTML="";
 	}
 }
@@ -328,6 +338,7 @@ function closedRoomRequests(){
 				var closedRoomUlist=document.getElementById("closedRoom");
 				if(closedRoomList!=null&&closedRoomList.length>0){
 					var closedHtml="";
+					closedRoomNums.innerHTML=closedRoomList.length;//显示房间数
 					for(var i=0;i<closedRoomList.length;i++){
 						closedHtml+=renderClosedRoom(closedRoomList[i]);
 					}
@@ -356,6 +367,7 @@ function closedRoomRequests(){
 				}
 				else{
 					closedRoomUlist.innerHTML="";
+					closedRoomNums.innerHTML=0;//显示房间数
 				}
 			}
 			else{
@@ -389,6 +401,7 @@ function createRoomRequests(){
 				var createRoomUlist=document.getElementById("createRoom");
 				if(createRoomList!=null&&createRoomList.length>0){
 					var createHtml="";
+					myRoomNums.innerHTML=createRoomList.length;//显示房间数
 					for(var i=0;i<createRoomList.length;i++){
 						createHtml+=renderCreateRoom(createRoomList[i]);
 					}
@@ -420,6 +433,7 @@ function createRoomRequests(){
 					});
 				}
 				else{
+					myRoomNums.innerHTML=0;//显示房间数
 					createRoomUlist.innerHTML="";
 				}
 			}
@@ -456,6 +470,7 @@ function openRoomRequests(){
 				var openRoomUlist=document.getElementById("openRoom");
 				if(openRoomList!=null&&openRoomList.length>0){
 					var openHtml="";
+					openRoomNums.innerHTML=openRoomList.length;//显示房间数
 					for(var i=0;i<openRoomList.length;i++){
 						openHtml+=renderOpenRoom(openRoomList[i]);
 					}
@@ -495,6 +510,7 @@ function openRoomRequests(){
 				}
 				else{
 					openRoomUlist.innerHTML="";
+					openRoomNums.innerHTML=0;//显示房间数
 				}
 			}
 			else{
@@ -577,7 +593,9 @@ function recommendRoomRequests(){
 
 //对入座推荐食堂时，向后端发送消息
 function sendIntoRoom(userId,roomId){
+	console.log("roomId:"+roomId+" userId:"+userId);
 	var status =false;
+	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/add",{
 		data:{
 			userId:userId,
@@ -592,9 +610,14 @@ function sendIntoRoom(userId,roomId){
 			//服务器返回响应,进行数据的重新加载
 			if(data.status==200){
 				status = true;
+				plus.nativeUI.closeWaiting();
+			}
+			else{
+				plus.nativeUI.closeWaiting();
 			}
 		},
 	});
+	console.log(status);
 	return status;
 }
 
