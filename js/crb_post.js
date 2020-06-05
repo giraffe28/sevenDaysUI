@@ -66,37 +66,6 @@ mui.plusReady(function () {
 function showImage(imageUrl){
 	console.log("暂时显示动态照片");
 	imgUrl=imageUrl;
-	/*
-	mui.ajax(app.serverUrl+'/user/modifyIcon', {
-			data: {
-				userId:app.getUserGlobalInfo().userId,
-				icon:imageUrl,
-			},
-			dataType: 'json', //服务器返回json格式数据
-			type: 'post', //HTTP请求类型
-			timeout: 10000, //超时时间设置为10秒；
-			headers:{'Content-Type':'application/json'},	
-			success: function(data) {
-				//服务器返回响应，根据响应结果，分析是否成功获取信息；
-				if (data.status == 200) {
-					var userJson= app.getUserGlobalInfo();
-					userJson.icon=imageUrl;
-					//console.log(JSON.stringify(memoryJson));
-					plus.storage.setItem("userInfo", JSON.stringify(userJson));
-					document.getElementById("myImage").src=imageUrl;
-					var imageWebview=plus.webview.getWebviewById("ll_updateImage.html");
-					imageWebview.evalJS("refreshImage()");
-					var currentWebview=plus.webview.currentWebview();
-					mui.fire(currentWebview,'refresh');
-					mui.toast('修改成功！');
-				}
-				else{
-					app.showToast(data.msg, "error");
-				}
-			},
-		
-		});*/
-	//console.log(imageUrl)
 	var img=document.getElementById("imgs");
 	var html="";
 	html='<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
@@ -106,5 +75,4 @@ function showImage(imageUrl){
 		'</a>'+
 	'</li>';
 	img.innerHTML=html;
-	
 }

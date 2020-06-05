@@ -39,7 +39,6 @@ mui.plusReady(function () {
 	icon=Webview.icon;
 	nickname=Webview.nickname;
 	content=Webview.content;
-	postImage=Webview.postImage;
 	date=Webview.date;
 	postlike=Webview.postlike;
 	
@@ -59,7 +58,7 @@ mui.plusReady(function () {
 			date=new Date(data.data.postDate);
 			content=data.data.postContent;
 			postlike=data.data.postLike;
-			//console.log(icon);
+			postImage=data.data.postImage;
 			var post=document.getElementById("post");
 			var html="";
 			year=date.getFullYear();
@@ -70,27 +69,78 @@ mui.plusReady(function () {
 			second=date.getSeconds();
 			
 			html=
-				'<div class="mui-card-header mui-card-media">'+
-					'<img src="'+icon+'"/>'+
-					'<div class="mui-media-body">'+
-						nickname+
-						'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
-						t(hour)+':'+t(minute)+':'+t(second)+
-						'</p>'+
+				'<div class="mui-card-header mui-card-media">';
+			if(icon!=""){
+			html+=
+				'<img src="'+icon+'"/>'+
+						'<div class="mui-media-body">'+
+							nickname+
+							'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
+							t(hour)+':'+t(minute)+':'+t(second)+
+							'</p>'+
+						'</div>'+
 					'</div>'+
-				'</div>'+
-				'<div class="mui-card-content">'+
-					//<img v-html="image" id="post_image" width="100%"-->
-					'<p class="content">'+
-						content+
-					'</p>'+
-					'<img src="'+postImage+'" alt="" width="100%">'+
-				'</div>'+
-				'<div class="mui-card-footer">'+
-					'<p>'+postlike+'</p>'+
-					'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
-				'</div>'+
-			'</div>';
+					'<div class="mui-card-content">'+
+						//<img v-html="image" id="post_image" width="100%"-->
+						'<p class="content">'+
+							content+
+						'</p>';
+					if(postImage!=""){
+						html+='<img src="'+postImage+'" alt="" width="100%">'+
+							'</div>'+
+							'<div class="mui-card-footer">'+
+								'<p>'+postlike+'</p>'+
+								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+							'</div>'+
+						'</div>';
+					}
+					else{
+						html+=
+						//'<img src="'+postImage+'" alt="" width="100%">'+
+							'</div>'+
+							'<div class="mui-card-footer">'+
+								'<p>'+postlike+'</p>'+
+								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+							'</div>'+
+						'</div>';
+					}
+						
+			}else{
+			html+=
+				'<img src="../images/1.jpg"/>'+
+						'<div class="mui-media-body">'+
+							nickname+
+							'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
+							t(hour)+':'+t(minute)+':'+t(second)+
+							'</p>'+
+						'</div>'+
+					'</div>'+
+					'<div class="mui-card-content">'+
+						//<img v-html="image" id="post_image" width="100%"-->
+						'<p class="content">'+
+							content+
+						'</p>';
+					if(postImage!=""){
+						html+='<img src="'+postImage+'" alt="" width="100%">'+
+							'</div>'+
+							'<div class="mui-card-footer">'+
+								'<p>'+postlike+'</p>'+
+								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+							'</div>'+
+						'</div>';
+					}
+					else{
+						html+=
+						//'<img src="'+postImage+'" alt="" width="100%">'+
+							'</div>'+
+							'<div class="mui-card-footer">'+
+								'<p>'+postlike+'</p>'+
+								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+							'</div>'+
+						'</div>';
+					}
+			}
+					
 			post.innerHTML=html;
 		},
 	});

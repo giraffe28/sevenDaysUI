@@ -95,8 +95,9 @@ function putb64(picBase,myUptoken) {
 				/* 前面是七牛云空间网址，keyText.key 是返回的图片文件名*/
 				picUrl = "http://qazbuv5y2.bkt.clouddn.com/" + keyText.key;
 				//console.log(picUrl);
-				var personalWebview=plus.webview.getWebviewById("crb_post.html");
-				personalWebview.evalJS("showImage('"+picUrl+"')");
+				var postWebview=plus.webview.getWebviewById("crb_post.html");
+				postWebview.evalJS("showImage('"+picUrl+"')");
+				//postWebview.evalJS("pulldownRefresh()");
 			}
 		}
 		xhr.open("POST", url, true);
