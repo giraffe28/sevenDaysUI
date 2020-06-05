@@ -111,24 +111,26 @@ mui.plusReady(function () {
 	
 	//mui('.makeChat').on('tap','.mui-btn-blue',function() {
 	chatDom.addEventListener('tap',function(){
-		console.log(user.userId);
-		console.log(postuser);
+		
 		//获取当前DOM对象
 		//var elem1 = this;
 		//获取DOM对象
 		//var par = elem1.parentElement.parentNode;
 		var btnArray = ['是', '否'];
 		mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
-			if (e.index == 0) {
+			console.log(user.userId);
+			console.log(postuser);
+			if (e.index == 0) {			
+				var chatWebview=plus.webview.getWebviewById("lhf_chatRecord.html");
+				//chatWebview.evalJS("sendMakeFri('"+user.userId+"','"+postuser+"')");				
+				//console.log(chatWebview);
 				//var user=app.getUserGlobalInfo();//获取用户全局对象
-				//var par1=par.getAttribute("friendId");
-			//	console.log(par1);
-			
-				//var user=app.getUserGlobalInfo();//获取用户全局对象
-				if(sendMakeFri(user.userId,postuser)==true){
+				console.log(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")"));
+				//if(chatWebview.evalJS("uploadDelFri("+me.userId+","+friendUserId+")")==true){
+				if(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")")==true){
 					//获取朋友列表，并且渲染到页面
-					//fetchContactList();
-					//setTimeout("loadingRecFriendRequests()",500);
+					chatWebview.evalJS("fetchContactList()");
+					setTimeout("loadingRecFriendRequests()",500);
 					//页面跳转至对应的聊天页面todo
 				}
 				else{
@@ -397,24 +399,4 @@ function convert(items) {
 	});
 	//console.log(postItems);
 	return postItems;
-};
-
-//对推荐好友进行发起聊天时，向后端发送消息
-function sendMakeFri(userId,friendId){
-	var status =false;
-	mui.ajax(app.serverUrl+"/Friend/add?userId="+userId+"&friendUserId="+friendId,{
-		data:{},//上传的数据
-		dataType:'json',//服务器返回json格式数据
-		async:false,
-		type:'post',//HTTP请求类型
-		timeout:10000,//超时时间设置为10秒；
-		headers:{'Content-Type':'application/json'},	              
-		success:function(data){
-			//服务器返回响应,进行数据的重新加载
-			if(data.status==200){
-				status = true;
-			}
-		},
-	});
-	return status;
 };

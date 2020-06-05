@@ -21,9 +21,12 @@ mui.plusReady(function () {
 				for(var i=0;i<data.data.comments.length;i++){
 					//console.log(JSON.stringify(data.data.comments.length));
 					//console.log(JSON.stringify(data.data.comments[i].comment));
-					Html+='<div class="mui-card comment" id="commentItem">'+
-							data.data.comments[i].comment+
-						'</div>';
+					Html+='<li class="mui-table-view-cell comment" id="commentItem">'+
+							'<div class="mui-slider-handle">'+
+								//'<span class="mui-badge mui-badge-primary mui-badge-inverted">'+parseInt(i+1)+'</span> '+
+								data.data.comments[i].comment+
+							'</div>'+
+						'</li>';
 				}
 				list.innerHTML=Html;
 			}else{
