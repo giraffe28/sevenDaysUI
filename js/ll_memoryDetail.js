@@ -17,7 +17,7 @@ mui.plusReady(function() {
 		}
 	}
 	document.getElementById("edit").addEventListener('tap', function() {
-		mui.toast('edit');
+		mui.toast('现在你想怎么改就怎么改啦ψ(｀∇´)ψ');
 		title.disabled = false;
 		content.disabled = false;
 	})
@@ -32,7 +32,14 @@ mui.plusReady(function() {
 		var memoryContent = content.value;
 		if (memoryTitle.trim() == "" || memoryContent.trim() == "") {
 			mui.toast('内容不能为空哦');
-		} else {
+		} 
+		else if(memoryTitle.length>20){
+			mui.toast('标题长度不能超过12个字哦');
+		}
+		else if(memoryContent.length>100){
+			mui.toast('内容不能超过100个字哦');
+		}
+		else {
 			mui.ajax(app.serverUrl + '/memory/edit', {
 				data: {
 					memoryId: memoryId,
@@ -62,7 +69,7 @@ mui.plusReady(function() {
 						var chatWebview = plus.webview.getWebviewById("ll_crossingMemory.html");
 						chatWebview.evalJS("requestMemory()");
 						chatWebview.evalJS("renderMemoryPage()");
-						mui.toast('保存成功！');
+						mui.toast('修改完毕(˶‾᷄ ⁻̫ ‾᷅˵) 为您保存好了呢');
 						mui.back();
 					}
 				},
