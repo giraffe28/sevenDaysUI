@@ -5,9 +5,6 @@
 */
 
 //获取个人中心页面
-var personalCenterPage;
-var midnightDinerPage;
-var chatRecordPage;
 var me;
 
 
@@ -15,10 +12,6 @@ mui.plusReady(function () {
 	console.log("websocket的plusReady");
 	
 	me = app.getUserGlobalInfo();
-	
-	personalCenterPage = plus.webview.getWebviewById("ll_personalCenter.html");
-	midnightDinerPage = plus.webview.getWebviewById("lhf_midnightDiner.html");
-	chatRecordPage = plus.webview.getWebviewById("lhf_chatRecord.html");
 	
 	var myinterval=null;
 	// 构建聊天业务CHAT
@@ -35,6 +28,7 @@ mui.plusReady(function () {
 					console.log(CHAT.socket.readyState);
 					//CHAT.socket.close();
 				}
+				
 				CHAT.socket = new WebSocket(app.nettyServerUrl);
 			
 				CHAT.socket.onopen = CHAT.wsopen,
@@ -54,6 +48,7 @@ mui.plusReady(function () {
 				CHAT.socket.send(msg);
 			} 
 			else {
+				offWebConnect();//先注销用户登录
 				// 重连websocket
 				CHAT.init();
 				setTimeout("CHAT.reChat('" + msg + "')", "1000");//延时一秒重新发送
@@ -80,7 +75,15 @@ mui.plusReady(function () {
 			//console.log("连接建立的时候获取未读的消息");
 			fetchUnReadMsg();
 			fetchUnReadRoomMsg();
-			
+		/*	
+			// 构建ChatMsg
+			var checkMsg = new app.ChatMsg(me.userId, null, null, null);
+			// 构建对象
+			dataContent = new app.DataContent(app.USEROUT, checkMsg, null);
+			// 发送自己当前用户状态监测请求
+			CHAT.chat(JSON.stringify(dataContent));
+		*/
+		   
 			// 定时发送心跳
 			if(myinterval!=null) clearInterval(myinterval);//先清空心跳
 			myinterval=setInterval("CHAT.keepalive()", 4000);
@@ -93,7 +96,7 @@ mui.plusReady(function () {
 			var chatMsg = dataContent.msg;
 			
 			if (action === app.PULL_FRIEND) {//需要重新拉取好友列表
-				chatRecordPage.evalJS("fetchContactList()");
+				plus.webview.getWebviewById("lhf_chatRecord.html").evalJS("fetchContactList()");
 				return false;
 			}
 			else if(action === app.USEROUT){//用户被封禁
@@ -185,15 +188,15 @@ mui.plusReady(function () {
 			//心跳
 			console.log("心跳");
 			
-			// 构建ChatMsg
 			var checkMsg = new app.ChatMsg(me.userId, null, null, null);
-			// 构建对象
 			var dataContent = new app.DataContent(app.KEEPALIVE, checkMsg, null);
-			// 发送心跳
-			CHAT.chat(JSON.stringify(dataContent));
+			CHAT.chat(JSON.stringify(dataContent));//发送心跳
+			
+			checkMsg = new app.ChatMsg(me.userId, null, null, null);
+			dataContent = new app.DataContent(app.USEROUT, checkMsg, null);
+			CHAT.chat(JSON.stringify(dataContent));// 发送自己当前用户状态监测请求
 			
 			// 定时执行函数
-			//fetchContactList();//似乎多余了，会导致频繁刷新
 			//fetchUnReadMsg();//故意的读取操作，用于保存连接
 		}
 	};
@@ -298,19 +301,19 @@ function fetchUnReadRoomMsg() {
 
 //重新加载聊天快照
 function reloadChatSnapshot(){
-	chatRecordPage.evalJS("loadingChatSnapshot()");
+	plus.webview.getWebviewById("lhf_chatRecord.html").evalJS("loadingChatSnapshot()");
 }
 
 //重新加载聊天室的聊天快照
 function reloadChatRoomSnapshot(){
-	midnightDinerPage.evalJS("loadingChatSnapshot()");
+	plus.webview.getWebviewById("lhf_midnightDiner.html").evalJS("loadingChatSnapshot()");
 }
 
 
 //用户被封禁的退出
 function closeUserAction(msg){
 	mui.toast(msg);
-	personCenterPage.evalJS("requestLogOff()");
+	plus.webview.getWebviewById("ll_personalCenter.html").evalJS("requestLogOff()");
 }
 
 
@@ -351,10 +354,36 @@ function kickoutUserAction(msg){
 
 //聊天室封禁的弹出
 function roomBeClose(roomId){
-	midnightDinerPage.evalJS("loadAllRoom()");
+	plus.webview.getWebviewById("lhf_midnightDiner.html").evalJS("loadAllRoom()");
 	
 	closedRoom=plus.webview.getWebviewById("lhf_diningRoom_"+roomId);
 	if(app.isNotNull(closedRoom)){
 		closedRoom.evalJS("outThisPage()");
 	}
+}
+
+
+//重连webSocket前，先注销用户的在线状态
+function offWebConnect(){
+	mui.ajax(app.serverUrl+'/user/loginoff', {
+		data: {},
+		dataType: 'json', //服务器返回json格式数据
+		type: 'post', //HTTP请求类型
+		timeout: 10000, //超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},	
+		success: function(data) {
+			//服务器返回响应，根据响应结果，分析是否成功；
+			if (data.status == 200) {
+				console.log("重连webSocket前，先注销用户的在线状态");
+			}
+			else{
+				console.log("重连webSocket前，先注销用户的在线状态返回非200");
+			}
+		},
+		error: function(xhr, type, errorThrown) {
+			//异常处理
+			mui.toast("好像出了一些问题？QAQ");
+			// console.log(JSON.stringify(data.data));
+		}
+	});
 }

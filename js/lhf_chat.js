@@ -40,7 +40,7 @@ mui.plusReady(function () {
 	
 	//设置信赖开关,如果为信赖，则要初始化成开启状态，否则默认关闭状态
 	if(friendLevel==1){
-		mui("#trustSwitch").switch().toggle();
+		trustSwitch.switch().toggle();
 		console.log("调整信赖开关状态为开启");
 	}
 	
@@ -183,7 +183,7 @@ mui.plusReady(function () {
 						//服务器返回响应，根据响应结果，分析是否添加成功；
 						if (data.status == 200) {
 							//去掉聊天快照
-							app.deleteUserChatSnapshot(user.userId,friendUserId);
+							app.deleteUserChatSnapshot(me.userId,friendUserId);
 							//从缓存中获取朋友列表，并且渲染到页面
 							chatWebview.evalJS("fetchContactList()");
 							mui.toast("╭( ･ㅂ･)و 好！已经加入黑名单了！");

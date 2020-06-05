@@ -1,7 +1,7 @@
 
 window.app = {
 	//后端服务发布的URL地址
-	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_8_war_exploded',
+	serverUrl: 'http://192.168.1.2:8080/RATE_MAX_sevenDays2_10_war_exploded',
 	//netty服务后端发布的url地址
 	nettyServerUrl:'ws://192.168.1.2:7888/ws', //172.17.243.33
 				
