@@ -17,7 +17,7 @@ mui.plusReady(function(){
 				var Html="";
 				for(var i=0;i<data.data.length;i++){
 					//console.log(JSON.stringify(data.data[i].bottleId));
-					Html+='<li class="mui-table-view-cell memoryRecord" id="'+data.data[i].bottleId+'" style="height: 60px;">'+
+					Html+='<li class="mui-table-view-cell bottleItem" id="'+data.data[i].bottleId+'">'+
 							'<div class="mui-slider-right mui-disabled">'+
 								'<span class="mui-btn mui-btn-red">删除</span>'+
 							'</div>'+
