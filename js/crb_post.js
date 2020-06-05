@@ -1,22 +1,32 @@
 var imgUrl="";
 mui.init();
 mui.plusReady(function () {
-	var post=document.getElementById("post");
-	post.addEventListener('tap',function(){
-		console.log(imgUrl);
-		var content=document.getElementById('post_content').value;
-		if(content==''){
-			mui.toast('内容不能为空');
-			return false; 
-		}
-		else if(content.length>100){
-		   mui.toast('正文不得超过100个字');
-		   return false; 
-	   }
-	   else{
-	   var user = app.getUserGlobalInfo();
-	   var myDate = new Date();
-	   mui.ajax(app.serverUrl+"/corner/talk", {
+});
+document.getElementById('headImage').addEventListener('tap', function() {
+	//mui.openWindow('../html/crb_postimage.html','crb_postimage.html');
+	mui("#sheet-myImage").popover("toggle");
+});
+	
+document.getElementById('choose').addEventListener('tap', function() {
+	mui.openWindow('../html/crb_postimage.html','crb_postimage.html');
+	mui("#sheet-myImage").popover("toggle");
+});
+
+document.getElementById("post").addEventListener('tap',function(){
+	console.log(imgUrl);
+	var content=document.getElementById('post_content').value;
+	if(content==''){
+		mui.toast('内容不能为空');
+		return false; 
+	}
+	else if(content.length>100){
+	   mui.toast('正文不得超过100个字');
+	   return false; 
+	}
+	else{
+		var user = app.getUserGlobalInfo();
+		//var myDate = new Date();
+		mui.ajax(app.serverUrl+"/corner/talk", {
 	   	data: {
 			user:{
 				userId:user.userId
@@ -36,8 +46,8 @@ mui.plusReady(function () {
 	   			//显示成功信息
 	   			mui.toast("发送动态成功");
 				console.log(data.data);
-				var chatWebview = plus.webview.getWebviewById("crb_square.html");
-				chatWebview.evalJS("pulldownRefresh()");
+				var squareWebview = plus.webview.getWebviewById("crb_square.html");
+				squareWebview.evalJS("pulldownRefresh()");
 				mui.back();
 	   		}
 	   		else{
@@ -51,18 +61,6 @@ mui.plusReady(function () {
 	   });
 	   }
 	});	
-
-	document.getElementById('headImage').addEventListener('tap', function() {
-		//mui.openWindow('../html/crb_postimage.html','crb_postimage.html');
-		mui("#sheet-myImage").popover("toggle");
-	});
-	
-	document.getElementById('choose').addEventListener('tap', function() {
-		mui.openWindow('../html/crb_postimage.html','crb_postimage.html');
-		mui("#sheet-myImage").popover("toggle");
-	});
-})
-
 function showImage(imageUrl){
 	console.log("暂时显示动态照片");
 	imgUrl=imageUrl;
@@ -75,4 +73,5 @@ function showImage(imageUrl){
 		'</a>'+
 	'</li>';
 	img.innerHTML=html;
+	mui.back();
 }

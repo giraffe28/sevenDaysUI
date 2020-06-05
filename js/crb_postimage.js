@@ -45,6 +45,7 @@ document.getElementById("upload").addEventListener('tap', function() {
 					// 关闭等待框
 					plus.nativeUI.closeWaiting();
 					mui.back();
+					//mui.openWindow("crb_post.html", "crb_post.html");
 				} else {
 					app.showToast(data.msg, "error");
 				}
@@ -97,7 +98,6 @@ function putb64(picBase,myUptoken) {
 				//console.log(picUrl);
 				var postWebview=plus.webview.getWebviewById("crb_post.html");
 				postWebview.evalJS("showImage('"+picUrl+"')");
-				//postWebview.evalJS("pulldownRefresh()");
 			}
 		}
 		xhr.open("POST", url, true);
