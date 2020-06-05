@@ -8,8 +8,15 @@ mui.plusReady(function () {
     document.getElementById("save").addEventListener('tap',function(){
 		memoryTitle=document.getElementById("title").value;
 		memoryContent=document.getElementById("content").value;
+		console.log("22222");
 		if(memoryTitle.trim()==""||memoryContent.trim()==""){
 			mui.toast('内容不能为空哦');
+		}
+		else if(memoryTitle.length>20){
+			mui.toast('标题长度不能超过12个字哦');
+		}
+		else if(memoryContent.length>100){
+			mui.toast('内容不能超过100个字哦');
 		}
 		else{
 			mui.ajax(app.serverUrl+'/memory/create',{

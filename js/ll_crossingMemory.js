@@ -78,7 +78,7 @@ mui('.memoryList').on('tap', '.mui-btn', function() {
 
 mui('.memoryList').on('tap', '.memoryRecord', function() {
 	var li = this;
-	mui.toast(li.attributes["id"].value);
+	//mui.toast(li.attributes["id"].value);
 	//打开十字记忆详情页面
 	mui.openWindow({
 		url: "../html/ll_memoryDetail.html",
@@ -131,6 +131,7 @@ function renderMemoryPage() {
 		ulMemory.innerHTML = memoryHtml;
 	} else {
 		ulMemory.innerHTML = "";
+		mui.toast("空空如也呢 赶快来创建属于你的十字记忆吧ψ(｀∇´)ψ");
 	}
 };
 //设置十字记忆列表的单个列表项

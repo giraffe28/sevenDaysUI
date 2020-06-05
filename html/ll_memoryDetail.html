@@ -10,22 +10,23 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav ">
-			<button id="edit" class="mui-pull-right" style="color:red;margin: 4px;">编辑</button>
+			<h1 class="mui-title">十字记忆详情</h1>
 			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 		</header>
 		<div class="mui-content" style="margin: 5px;">
 			<div class="mui-input-group">
 			    <div class="mui-input-row">
-			        <label>标题</label>
+			        <label style="font-weight: bold;">标题</label>
 					<input id="title" type="text" class="mui-input-clear" disabled="disabled">
 			    </div>
-				<div class="mui-input-row" style="margin: 5px;height: 150px;">
-				    <label>内容</label>
-					<textarea id="content" type="text" class="mui-input-clear" disabled="disabled"></textarea>
+				<div class="mui-input-row" style="height: 350px;">
+				    <label style="font-weight: bold;">内容</label>
+					<textarea id="content" type="text" class="mui-input-clear" disabled="disabled" style="border:0;border-radius:10px;background-color:rgba(241,241,241,.98);width: 450px;height: 270px;padding: 10px;resize: none;margin: 9px;"></textarea>
 		 
 				</div>
 			    <div class="mui-button-row">
-			        <button id="save"  class="mui-btn mui-btn-primary" >保存</button>
+					<button id="edit" type="button" class="mui-btn mui-btn-success" style="margin-right: 15px;">编辑</button>
+			        <button id="save"  class="mui-btn mui-btn-primary" style="margin-left: 15px;">保存</button>
 			    </div>
 			</div>
 		</div>
