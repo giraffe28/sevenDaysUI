@@ -1,8 +1,9 @@
 //mui初始化，配置下拉刷新
 var head;
 var max;
-var length;
 var index;
+var length=0;
+
 mui.init({
 	pullRefresh: {
 		container: '#post',
@@ -37,10 +38,12 @@ function pulldownRefresh() {
 	
 	head = 0;
 	max = 10;
+	
 	var data = {
 		start:head,
 		max:max//需要的字段名
 	}
+	
 	/*if(lastId) { //说明已有数据，目前处于下拉刷新，增加时间戳，触发服务端立即刷新，返回最新数据
 		data.lastId = lastId;
 		data.time = new Date().getTime() + "";
@@ -66,7 +69,8 @@ function pulldownRefresh() {
 }
 
 function addpost(post) {
-	//console.log(post.image);
+	//console.log(post.postcontent);
+	
 	var html="";
 	year=post.date.getFullYear();
 	month=parseInt(post.date.getMonth()+1);
@@ -74,45 +78,42 @@ function addpost(post) {
 	hour=post.date.getHours();
 	minute=post.date.getMinutes();
 	second=post.date.getSeconds();
+	var data = {
+		start:0,
+		max:10000,//需要的字段名
+		postId:post.postId,
+	}
+	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
+		rsp=rsp.data;
+		length=rsp.length;
+	},'json');
 	html=
 		'<div class="mui-card postItem" id="'+post.postId+'">'+
 			'<div class="mui-card-header mui-card-media">';
 	if(post.icon!=""){
-		html+='<img src="'+post.icon+'"/>'+
-				'<div class="mui-media-body">'+
-					post.nickname+
-					'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
-					t(hour)+':'+t(minute)+':'+t(second)+
-					'</p>'+
-				'</div>'+
-			'</div>'+
-			'<div class="mui-card-content">'+
-				'<p class="line-limit-length content">'+post.content+'</p>'+
-				//'<img src="'+post.postImage+'" alt="" width="100%">'+
-			'</div>'+
-			'<div class="mui-card-footer">'+
-				'赞:'+post.postlike+
-			'</div>'+
-		'</div>';
+		html+='<img src="'+post.icon+'"/>';			
 	}else{
-		html+='<img src="../images/1.jpg"/>'+
-				'<div class="mui-media-body">'+
-					post.nickname+
-					'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
-					t(hour)+':'+t(minute)+':'+t(second)+
-					'</p>'+
-				'</div>'+
+		html+='<img src="../images/1.jpg"/>';
+	}
+	html+=
+	'<div class="mui-media-body">'+
+				post.nickname+
+				'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
+				t(hour)+':'+t(minute)+':'+t(second)+
+				'</p>'+
 			'</div>'+
-			'<div class="mui-card-content">'+
-				'<p class="line-limit-length content">'+post.content+'</p>'+
-				//'<img src="'+post.postImage+'" alt="" width="100%">'+
+		'</div>'+
+		'<div class="mui-card-content">'+
+			'<p class="line-limit-length content">'+post.content+'</p>'+
+			//'<img src="'+post.postImage+'" alt="" width="100%">'+
+		'</div>'+
+		'<div class="mui-card-footer">'+
+			'<div>'+
+				'<img src="../images/like.png" style="height:8%;width:8%;">'+
+				'<span>'+post.postlike+'</span>'+
 			'</div>'+
-			'<div class="mui-card-footer">'+
-				'赞:'+post.postlike+
-			'</div>'+
-		'</div>';
-	}		
-			
+		'</div>'+
+	'</div>';		
 						
 	return html;
 }
