@@ -73,11 +73,14 @@ function showFrimsg(friMsg){
 	console.log("朋友信息开始加载");
 	
 	var nickName=friMsg.nickname; //假名
-	//var friImage=friMsg.icon;//头像
 	var noteName=friMsg.remark;//备注
 	var gender=friMsg.gender; //性别
 	var profile=friMsg.profile; //简介
 	var tags=friMsg.thisweektags;//本周标签
+	
+	if(friMsg.icon=""){//如果朋友有设置头像
+		document.getElementById("friImage").src=friMsg.icon;
+	}
 	
 	document.getElementById("titleName").innerHTML=nickName+"的资料";//标题加载
 	//document.getElementById("friImage").src=friImage;//头像加载
@@ -95,8 +98,8 @@ function showFrimsg(friMsg){
 		tags = tags.split(" ");
 		var weekTagsHtml = "";
 		for (var i = 0; i <tags.length; i++) {
-			weekTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
-			+tags[i]+'</label>';
+			weekTagsHtml += '<span class="mui-badge mui-badge-success" style="margin-top: 10px;">'
+			+tags[i]+'</span>';
 		}
 		weekTagsDom.innerHTML = weekTagsHtml;
 	} 

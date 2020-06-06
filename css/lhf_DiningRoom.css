@@ -1,3 +1,11 @@
+#midnightdinerBody{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
 .msgNoteFont{
 	font-size: 16px;
 }
@@ -34,21 +42,59 @@
 	color: gray;
 }
 
+#roomleft{
+	background-image: url(../images/midnightdiner.jpg);
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+#newDiningRoom{
+	padding-top: 4px !important;
+	padding-right: 7px !important;
+	font-size: 37px !important;
+}
+
+#rooms{
+	opacity: 0.8;
+}
+
 .room{
 	padding: 5px 0px 5px;
 }
 
+.roomListTitleContent{
+	margin-left: 15px;
+}
+
+.roomListTitleItem{
+	padding: 5px;
+}
+
+#closedRoomItem,#createRoomItem,#openRoomItem,#recommendRoomItem{
+	padding-top: 9px !important;
+}
+
+.roomListIcon{
+	font-size: 30px !important;
+	padding: 2px !important;
+	border-style:solid;
+	border-width: thin;
+}
 
 #msg{
 	width:80%;
 	padding: 4px;
 	margin:3px 0 0px 3px;
-	font-size:14px;
+	font-size:18px;
 }
 
 #sendMsg{
-	margin: 5px 7px;
-	padding: 3px 10px;
+	margin: 3px 7px;
+	padding: 3px 8px;
+	font-size: 20px !important;
 }
 
 
@@ -88,7 +134,10 @@
 }
 
 /*气泡*/
-.msgLeftWhite {/*朋友的发言*/
+.msgLeftWhite {/*他人的发言*/
+	word-wrap:break-word;
+	word-break:normal;
+	max-width: 200px;
 	background-color: #FFFFFF;
 	font-size: 16px;
 	color: black;
@@ -97,10 +146,13 @@
 	position: relative;
 	border-radius: 5px;
 	float: left;
-	margin:0px 10px 10px 40px;
+	margin:10px 10px 10px 51px;
 }
 
 .msgRightGreen {/*自己的发言*/
+	word-wrap:break-word;
+	word-break:normal;
+	max-width: 200px;
 	background-color: #a0e759;
 	font-size: 16px;
 	float: right;

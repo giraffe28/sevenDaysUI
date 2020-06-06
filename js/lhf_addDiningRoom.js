@@ -43,7 +43,10 @@ mui.plusReady(function () {
 		}
 		//已经正确填写
 		else{
-			if(createRoomRequests()==true){
+			if(roomName.length>18){
+				mui.toast("听说食堂名太长不好推广呢！(＞ ＜)");
+			}
+			else if(createRoomRequests()==true){
 				//var fatherWebview=plus.webview.currentWebview().opener();
 				//fatherWebview.evalJS("renderStoredCreateRoom()");//重新渲染自己创建的食堂列表
 				mui.toast("开业大吉♫ヽ(゜∇゜ヽ)♪");

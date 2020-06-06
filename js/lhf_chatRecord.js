@@ -97,6 +97,7 @@ function renderFriPage(){
 			var friendNoteName = this.getAttribute("friendNoteName");
 			var friendLevel = this.getAttribute("friendLevel");
 			var friNicknameNode = this.getElementsByTagName('span');//获取朋友的关于昵称的项
+			var friendIcon = this.getElementsByTagName('img')[0].src;//获取朋友头像
 			
 			var friName=friendUserNickname;
 			if(app.isNotNull(friendNoteName)){
@@ -113,7 +114,7 @@ function renderFriPage(){
 					friUserId:friendUserId,
 					friendLevel:friendLevel,
 					friName:friName,
-					friFaceImage:"../images/1.jpg"
+					friFaceImage:friendIcon
 				},
 				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 			});
@@ -131,8 +132,8 @@ function renderFriPage(){
 function loadingFriendRequests(){
 	var user=app.getUserGlobalInfo();//获取用户全局对象
 	//console.log("发送朋友的请求"+user.userId);
+	plus.nativeUI.showWaiting("请稍后");
 	mui.ajax(app.serverUrl+"/Friends?userId="+user.userId,{
-		async:false, 
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
@@ -144,10 +145,17 @@ function loadingFriendRequests(){
 			if(data.status==200){
 				var frilist = data.data;
 				app.setFriList(frilist);//缓存朋友数据
+				plus.nativeUI.closeWaiting();
 			}
 			else{
 				mui.toast("发送好友列表加载请求出错啦！QAQ");
 			}
+		},
+		error: function(xhr, type, errorThrown) {
+			//异常处理；
+			plus.nativeUI.closeWaiting();
+			console.log("发送朋友列表加载error");
+			// console.log(JSON.stringify(data.data));
 		}
 	});
 }
@@ -155,13 +163,12 @@ function loadingFriendRequests(){
 //发送朋友推荐列表信息的资源请求以及加载
 function loadingRecFriendRequests(){
 	var user=app.getUserGlobalInfo();//获取用户全局对象
-	plus.nativeUI.showWaiting("请稍等");
+	plus.nativeUI.showWaiting("等等给你推荐几个知己(ง ˙ω˙)ว ");
 	mui.ajax(app.serverUrl+"/Friend/getInterest/?userId="+user.userId,{
-		async:false, 
 		data:{},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
-		timeout:10000,//超时时间设置为10秒；
+		timeout:15000,//超时时间设置为15秒；
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			plus.nativeUI.closeWaiting();
@@ -181,11 +188,13 @@ function loadingRecFriendRequests(){
 				}
 			}
 			else{
+				plus.nativeUI.closeWaiting();
 				mui.toast("发送好友推荐列表加载请求出错啦！QAQ");
 			}
 		},
 		error: function(xhr, type, errorThrown) {
 			//异常处理；
+			plus.nativeUI.closeWaiting();
 			console.log("发送获取推荐朋友列表出错error");
 			// console.log(JSON.stringify(data.data));
 		}
@@ -196,13 +205,17 @@ function loadingRecFriendRequests(){
 //设置推荐朋友的html项内容
 function renderFriendRecommend(friend) {
 	var html="";
+	var friIcon=friend.icon;
+	if(friend.icon==""){
+		friIcon="../images/1.jpg";
+	}
 	// console.log("friend的信息"+JSON.stringify(friend));
 	html='<li class="mui-table-view-cell" friendId="'+friend.userId+'" friendNickname="'+friend.nickname+'">'+
 		    '<div class="mui-slider-right mui-disabled" friendId="'+friend.userId+'">'+
 		        '<span class="mui-btn mui-btn-blue">发起闲聊</span>'+
 		    '</div>'+
 		    '<div class="mui-slider-handle">'+
-				'<img class="mui-media-object mui-pull-left" src="../images/1.jpg">'+
+				'<img class="mui-media-object mui-pull-left" src="'+friIcon+'">'+
 		        '<a href="">'+friend.nickname+'</a>'+
 		    '</div>'+
 		'</li>';
@@ -218,13 +231,17 @@ function renderFriends(friend){
 	if(app.isNotNull(friend.remark)){
 		nameShow=friend.remark;
 	}
+	var friIcon=friend.icon;
+	if(friend.icon!=""){
+		friIcon="../images/1.jpg";
+	}
 	// console.log("这是朋友"+JSON.stringify(friend));
 	html='<li class="chatWithFriend mui-table-view-cell mui-media" friendId="'+friend.userId+'" friendNickname="'+friend.nickname+'" friendLevel="'+friend.level+'" friendNoteName="'+friend.remark+'">'+
 				'<div class="mui-slider-right mui-disabled">'+
 					'<span class="mui-btn mui-btn-red">删除</span>'+
 				'</div>'+
 				'<div class="mui-slider-handle">'+
-					'<img class="mui-media-object mui-pull-left" src="../images/1.jpg">'+
+					'<img class="mui-media-object mui-pull-left" src="'+friIcon+'">'+
 					'<span friId="'+friend.userId+'">'+nameShow+'</span>'+
 					'<p class="mui-ellipsis"></p>'+
 				'</div>'+
@@ -280,11 +297,9 @@ function uploadDelFri(userId,friendId){
 				status=true;
 				mui.toast("Σ(っ °Д °;)っ 刚刚那个家伙，原地消失了!!!");
 			}
-			else{
-				mui.toast("发送结束闲聊请求出错啦！QAQ");
-			}
 		},
 	});
+	console.log(status);
 	return status;
 }
 
@@ -308,7 +323,7 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 			if(sendMakeFri(user.userId,par1)==true){
 				//获取朋友列表，并且渲染到页面
 				fetchContactList();
-				setTimeout("loadingRecFriendRequests()",500);
+				loadingRecFriendRequests();
 				//页面跳转至对应的聊天页面todo
 			}
 			else{
