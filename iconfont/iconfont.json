@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4656997",
+      "name": "添加好友",
+      "font_class": "tianjiahaoyou",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "6353251",
+      "name": "名街",
+      "font_class": "hunjiashangyejie-gai",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "3464947",
+      "name": "临时关店",
+      "font_class": "temporary-closet-shop",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "10911704",
+      "name": "我的-店铺管理",
+      "font_class": "wode-dianpuguanli",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "14288951",
+      "name": "开店",
+      "font_class": "kaidian",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "4891155",
+      "name": "退出登录",
+      "font_class": "tuichudenglu",
+      "unicode": "e677",
+      "unicode_decimal": 58999
+    },
+    {
       "icon_id": "13939922",
       "name": "bottle",
       "font_class": "bottle",

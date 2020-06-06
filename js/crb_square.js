@@ -47,7 +47,7 @@ function pulldownRefresh() {
 	}*/
 	//请求最新列表信息流
 	mui.post(app.serverUrl + "/square/find", data, function(rsp) {
-//		console.log(JSON.stringify(rsp));
+		//console.log(JSON.stringify(rsp));
 		mui('#post').pullRefresh().endPulldownToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
@@ -76,8 +76,9 @@ function addpost(post) {
 	second=post.date.getSeconds();
 	html=
 		'<div class="mui-card postItem" id="'+post.postId+'">'+
-			'<div class="mui-card-header mui-card-media">'+
-			'<img src="'+post.icon+'"/>'+
+			'<div class="mui-card-header mui-card-media">';
+	if(post.icon!=""){
+		html+='<img src="'+post.icon+'"/>'+
 				'<div class="mui-media-body">'+
 					post.nickname+
 					'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
@@ -87,12 +88,32 @@ function addpost(post) {
 			'</div>'+
 			'<div class="mui-card-content">'+
 				'<p class="line-limit-length content">'+post.content+'</p>'+
-				'<img src="'+post.postImage+'" alt="" width="100%">'+
+				//'<img src="'+post.postImage+'" alt="" width="100%">'+
 			'</div>'+
 			'<div class="mui-card-footer">'+
 				'赞:'+post.postlike+
 			'</div>'+
-		'</div>';			
+		'</div>';
+	}else{
+		html+='<img src="../images/1.jpg"/>'+
+				'<div class="mui-media-body">'+
+					post.nickname+
+					'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
+					t(hour)+':'+t(minute)+':'+t(second)+
+					'</p>'+
+				'</div>'+
+			'</div>'+
+			'<div class="mui-card-content">'+
+				'<p class="line-limit-length content">'+post.content+'</p>'+
+				//'<img src="'+post.postImage+'" alt="" width="100%">'+
+			'</div>'+
+			'<div class="mui-card-footer">'+
+				'赞:'+post.postlike+
+			'</div>'+
+		'</div>';
+	}		
+			
+						
 	return html;
 }
 
@@ -164,10 +185,13 @@ function convert(items) {
 			nickname:item.user.nickname,
 			date:new Date(item.postDate),
 			content:item.postContent,
-			postImage:item.postImage,
 			postId:item.postId,
 			postlike:item.postLike
 		});
 	});
 	return postItems;
-}
+};
+
+window.addEventListener('refresh', function(e){//执行刷新
+    location.reload();
+});

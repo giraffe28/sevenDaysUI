@@ -71,6 +71,7 @@ function renderBlackListPage() {
 		ulBlackList.innerHTML = blackListHtml;
 	} else {
 		ulBlackList.innerHTML = "";
+		mui.toast("这里什么也没有 看来你在这里玩的很愉快呢ψ(｀∇´)ψ");
 	}
 }
 

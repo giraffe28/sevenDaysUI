@@ -9,7 +9,7 @@ var msgText=document.getElementById("msg");
 var send=document.getElementById("sendMsg");
 var setObj=document.getElementsByClassName('mui-icon-settings');
 var trustSwitch=document.getElementById("trustSwitch");//信赖与否的开关
-var myFaceImg="../images/2.jpg";//自己的头像，实际上应该由app.js处获取
+var myFaceImg="../images/2.jpg";//自己的头像
 var me;//用户信息
 var friendUserId;
 var friendName;
@@ -31,6 +31,10 @@ mui.plusReady(function () {
 	friendLevel=chatview.friendLevel;
 	//获取用户信息
 	me = app.getUserGlobalInfo();
+	//若用户有上传头像
+	if(me.icon!=""){
+		myFaceImg=me.icon;
+	}
 	//获取聊天记录页面
 	chatWebview = plus.webview.getWebviewById("lhf_chatRecord.html");
 	//获取index页面
@@ -220,6 +224,7 @@ mui.plusReady(function () {
 					//获取朋友列表，并且渲染到页面
 					chatWebview.evalJS("fetchContactList()");
 					mui.back();
+					console.log("结束了聊天");
 				}
 			}
 			else{
@@ -230,10 +235,10 @@ mui.plusReady(function () {
 	
 	
 	//监听结清空聊天快照的操作//仅仅测试时用
-	document.getElementById("clearChat").addEventListener("tap",function(event){
+/*	document.getElementById("clearChat").addEventListener("tap",function(event){
 		app.clearUserChatSnapshot(me.userId);
 	});
-	
+	*/
 });
 
 
@@ -288,7 +293,7 @@ function sendMsgFunc(myMsg){
 function receiveMsgFunc(friMsg){
 	var friMsgHtml='<div class="friLists">'+
 					'<div class="headerImg">'+
-						'<img src="'+"../images/1.jpg"+'" class="imgMsg" />'+
+						'<img src="'+friendFaceImg+'" class="imgMsg" />'+
 					'</div>'+
 					'<div class="friMsgWrapper">'+
 						'<p class="msgLeftWhite">'+friMsg+'</p>'+

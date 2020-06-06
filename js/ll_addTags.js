@@ -35,7 +35,7 @@ mui.plusReady(function() {
 					user.thisWeekTag = thisWeekTagStr;
 					plus.storage.setItem("userInfo",JSON.stringify(user));
 					//console.log("thisweektag"+user.thisWeekTag);
-					alert("保存成功");
+					mui.toast("已经为您换上标签了哦(˶‾᷄ ⁻̫ ‾᷅˵)");
 					var chatWebview = plus.webview.getWebviewById("ll_personalCenter.html");
 					chatWebview.evalJS("refreshThisWeekTags('"+user.thisWeekTag+"')");
 					mui.back();

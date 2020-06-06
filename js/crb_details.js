@@ -2,7 +2,9 @@
 var head;
 var max;
 var index;
+var postuser;
 var reportDom=document.getElementById("report");
+var chatDom=document.getElementById("chat");
 
 mui.init({
 	pullRefresh: {
@@ -19,6 +21,14 @@ mui.init({
 			callback: pullupRefresh
 		}
 	},
+	
+	beforeback: function() {　　　　
+	    var list = plus.webview.currentWebview().opener();　　　　
+	    //refresh是A页面自定义事件
+	    mui.fire(list, 'refresh');
+	    //返回true,继续页面关闭逻辑
+	    return true;
+	}
 })
 
 mui.plusReady(function () {
@@ -29,7 +39,6 @@ mui.plusReady(function () {
 	icon=Webview.icon;
 	nickname=Webview.nickname;
 	content=Webview.content;
-	postImage=Webview.postImage;
 	date=Webview.date;
 	postlike=Webview.postlike;
 	
@@ -43,12 +52,13 @@ mui.plusReady(function () {
 		contentType:'application/json;charset=utf-8',
 		success:function(data){
 			//console.log(JSON.stringify(data));
+			postuser=data.data.user.userId;
 			icon=data.data.user.icon;
 			nickname=data.data.user.nickname;
 			date=new Date(data.data.postDate);
 			content=data.data.postContent;
 			postlike=data.data.postLike;
-			//console.log(icon);
+			postImage=data.data.postImage;
 			var post=document.getElementById("post");
 			var html="";
 			year=date.getFullYear();
@@ -59,27 +69,78 @@ mui.plusReady(function () {
 			second=date.getSeconds();
 			
 			html=
-				'<div class="mui-card-header mui-card-media">'+
-					'<img src="'+icon+'"/>'+
-					'<div class="mui-media-body">'+
-						nickname+
-						'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
-						t(hour)+':'+t(minute)+':'+t(second)+
-						'</p>'+
+				'<div class="mui-card-header mui-card-media">';
+			if(icon!=""){
+			html+=
+				'<img src="'+icon+'"/>'+
+						'<div class="mui-media-body">'+
+							nickname+
+							'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
+							t(hour)+':'+t(minute)+':'+t(second)+
+							'</p>'+
+						'</div>'+
 					'</div>'+
-				'</div>'+
-				'<div class="mui-card-content">'+
-					//<img v-html="image" id="post_image" width="100%"-->
-					'<p class="content">'+
-						content+
-					'</p>'+
-					'<img src="'+postImage+'" alt="" width="100%">'+
-				'</div>'+
-				'<div class="mui-card-footer">'+
-					'<p>'+postlike+'</p>'+
-					'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
-				'</div>'+
-			'</div>';
+					'<div class="mui-card-content">'+
+						//<img v-html="image" id="post_image" width="100%"-->
+						'<p class="content">'+
+							content+
+						'</p>';
+					if(postImage!=""){
+						html+='<img src="'+postImage+'" alt="" width="100%">'+
+							'</div>'+
+							'<div class="mui-card-footer">'+
+								'<p>'+postlike+'</p>'+
+								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+							'</div>'+
+						'</div>';
+					}
+					else{
+						html+=
+						//'<img src="'+postImage+'" alt="" width="100%">'+
+							'</div>'+
+							'<div class="mui-card-footer">'+
+								'<p>'+postlike+'</p>'+
+								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+							'</div>'+
+						'</div>';
+					}
+						
+			}else{
+			html+=
+				'<img src="../images/1.jpg"/>'+
+						'<div class="mui-media-body">'+
+							nickname+
+							'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
+							t(hour)+':'+t(minute)+':'+t(second)+
+							'</p>'+
+						'</div>'+
+					'</div>'+
+					'<div class="mui-card-content">'+
+						//<img v-html="image" id="post_image" width="100%"-->
+						'<p class="content">'+
+							content+
+						'</p>';
+					if(postImage!=""){
+						html+='<img src="'+postImage+'" alt="" width="100%">'+
+							'</div>'+
+							'<div class="mui-card-footer">'+
+								'<p>'+postlike+'</p>'+
+								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+							'</div>'+
+						'</div>';
+					}
+					else{
+						html+=
+						//'<img src="'+postImage+'" alt="" width="100%">'+
+							'</div>'+
+							'<div class="mui-card-footer">'+
+								'<p>'+postlike+'</p>'+
+								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+							'</div>'+
+						'</div>';
+					}
+			}
+					
 			post.innerHTML=html;
 		},
 	});
@@ -95,6 +156,43 @@ mui.plusReady(function () {
 				reportObjectId:postid
 			},
 			createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+		});
+	});
+	
+	//mui('.makeChat').on('tap','.mui-btn-blue',function() {
+	chatDom.addEventListener('tap',function(){
+		
+		//获取当前DOM对象
+		//var elem1 = this;
+		//获取DOM对象
+		//var par = elem1.parentElement.parentNode;
+		var btnArray = ['是', '否'];
+		mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
+			console.log(user.userId);
+			console.log(postuser);
+			if (e.index == 0) {			
+				var chatWebview=plus.webview.getWebviewById("lhf_chatRecord.html");
+				//chatWebview.evalJS("sendMakeFri('"+user.userId+"','"+postuser+"')");				
+				//console.log(chatWebview);
+				//var user=app.getUserGlobalInfo();//获取用户全局对象
+				console.log(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")"));
+				//if(chatWebview.evalJS("uploadDelFri("+me.userId+","+friendUserId+")")==true){
+				if(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")")==true){
+					//获取朋友列表，并且渲染到页面
+					chatWebview.evalJS("fetchContactList()");
+					setTimeout("loadingRecFriendRequests()",500);
+					//页面跳转至对应的聊天页面todo
+				}
+				else{
+					mui.toast("发送闲聊请求出错啦！QAQ");
+					//取消：关闭滑动列表
+					//mui.swipeoutClose(par);
+				}
+			} 
+			else {
+				//取消：关闭滑动列表
+				//mui.swipeoutClose(par);
+			}
 		});
 	});
 })
@@ -122,7 +220,7 @@ function likeornot(){
 		async: false, 
 		success:function(data){
 			if (data.status == 200) {
-//				console.log(JSON.stringify(data));
+				console.log(JSON.stringify(data));
 				if(data.data=="已经点赞"){
 					like="已赞";
 					//return like;
@@ -160,6 +258,8 @@ function likeclick(){
 				if (data.status == 200) {
 					console.log(JSON.stringify(data));
 					like.innerHTML="已赞";
+					postlike+=1;
+					location.reload();
 				}
 				else{
 					app.showToast(data.msg, "error");
@@ -180,6 +280,8 @@ function likeclick(){
 				if (data.status == 200) {
 					console.log(JSON.stringify(data));
 					like.innerHTML="赞";
+					postlike-=1;
+					location.reload();
 				}
 				else{
 					app.showToast(data.msg, "error");
@@ -276,33 +378,6 @@ function pulldownRefresh() {
 			list.innerHTML=postHtml;
 			//addlistNer();
 		}
-		/*
-		if(rsp.data==""){
-			
-		}else{
-			//console.log(rsp.data[0].commentId);
-			//console.log(JSON.stringify(rsp.data));
-			mui('#comment').pullRefresh().endPulldownToRefresh();
-			rsp=rsp.data;
-			if(rsp && rsp.length > 0) {
-				lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用
-				posts.items = convert(rsp);
-			
-				var list=document.getElementById("commentlist");
-				var postHtml="";
-				for(var i=0;i<posts.items.length;i++){
-					var j=parseInt(i)+parseInt(1);
-					postHtml+=addcomment(posts.items[i],j);
-				}
-				if(max>posts.items.length){
-					index=posts.items.length;
-				}else{
-					index=max;
-				}
-				console.log(index);
-				list.innerHTML=postHtml;
-			}
-		}	*/
 	},'json');
 }
 
@@ -375,56 +450,3 @@ function convert(items) {
 	//console.log(postItems);
 	return postItems;
 };
-
-mui('.makeChat').on('tap','.mui-btn-blue',function() {
-	//获取当前DOM对象
-	var elem1 = this;
-	//获取DOM对象
-	var par = elem1.parentElement.parentNode;
-	mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
-		if (e.index == 0) {
-			var user=app.getUserGlobalInfo();//获取用户全局对象
-			var par1=par.getAttribute("friendId");
-		//	console.log(par1);
-		
-			var user=app.getUserGlobalInfo();//获取用户全局对象
-			if(sendMakeFri(user.userId,par1)==true){
-				//获取朋友列表，并且渲染到页面
-				fetchContactList();
-				setTimeout("loadingRecFriendRequests()",500);
-				//页面跳转至对应的聊天页面todo
-			}
-			else{
-				mui.toast("发送闲聊请求出错啦！QAQ");
-				//取消：关闭滑动列表
-				mui.swipeoutClose(par);
-			}
-		} 
-		else {
-			//取消：关闭滑动列表
-			mui.swipeoutClose(par);
-		}
-	});
-});
-
-
-//对推荐好友进行发起聊天时，向后端发送消息
-function sendMakeFri(userId,friendId){
-	var status =false;
-	mui.ajax(app.serverUrl+"/Friend/add?userId="+userId+"&friendUserId="+friendId,{
-		data:{},//上传的数据
-		dataType:'json',//服务器返回json格式数据
-		async:false,
-		type:'post',//HTTP请求类型
-		timeout:10000,//超时时间设置为10秒；
-		headers:{'Content-Type':'application/json'},	              
-		success:function(data){
-			//服务器返回响应,进行数据的重新加载
-			if(data.status==200){
-				status = true;
-			}
-		},
-	});
-	return status;
-}
-

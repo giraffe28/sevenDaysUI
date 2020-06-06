@@ -44,7 +44,7 @@ mui.plusReady(function () {
 			// 如果当前websocket的状态是已打开，则直接发送， 否则重连
 			// console.log("发送的消息" + msg);
 			if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
-				console.log("发送的消息" + msg);
+				//console.log("发送的消息" + msg);
 				CHAT.socket.send(msg);
 			} 
 			else {
@@ -58,11 +58,11 @@ mui.plusReady(function () {
 			//reloadChatSnapshot();//大概率多余
 		},
 		reChat: function(msg) {
-			console.log("消息重新发送...");
+		//	console.log("消息重新发送...");
 			CHAT.socket.send(msg);
 		},
 		wsopen: function() {
-			console.log("websocket连接已建立...");
+		//	console.log("websocket连接已建立...");
 			// 构建ChatMsg
 			var chatMsg = new app.ChatMsg(me.userId, null, null, null);
 			// 构建DataContent
@@ -89,7 +89,7 @@ mui.plusReady(function () {
 			myinterval=setInterval("CHAT.keepalive()", 4000);
 		},
 		wsmessage: function(e) {
-			console.log("接受到消息：" + e.data);	
+		//	console.log("接受到消息：" + e.data);	
 			// 转换DataContent为对象
 			var dataContent = JSON.parse(e.data);
 			var action = dataContent.action;
@@ -186,7 +186,7 @@ mui.plusReady(function () {
 		},
 		keepalive: function() {
 			//心跳
-			console.log("心跳");
+		//	console.log("心跳");
 			
 			var checkMsg = new app.ChatMsg(me.userId, null, null, null);
 			var dataContent = new app.DataContent(app.KEEPALIVE, checkMsg, null);

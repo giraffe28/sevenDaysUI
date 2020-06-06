@@ -1,30 +1,3 @@
-body {
-    background-image: url("../images/letter.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-
-.playstyle{	
-	position: fixed; /*or前面的是absolute就可以用*/  
-	bottom: 20px;
-	margin:0 auto;
-}
-
-.leftstyle,.middlestyle,.rightstyle {
-	width:33%;
-	float:left;
-	margin:0 auto;
-	vertical-align: middle;
-	text-align:center;
-}
-
-img{
-	vertical-align: middle;
-	width:50%;
-	height:50%;
-
 .footer-right {  
 	position: absolute;  
 	width: 60px;  
@@ -83,19 +56,4 @@ img{
 	line-height: 18px !important;  
 	font-family: verdana !important;  
 	overflow: hidden;  
-}
-
-.line-limit-length {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; //文本不换行，这样超出一行的部分被截取，显示...
-}
-
-.card {
-	width:250px;
-	box-shadow:0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-	text-align:center;
-	display:inline-block;
-	background-color:#FFF;
-
 }

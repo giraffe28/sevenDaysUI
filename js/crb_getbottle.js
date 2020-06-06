@@ -76,6 +76,7 @@ mui.plusReady(function(){
 	
 	reportDom.addEventListener('tap',function(){
 		console.log("到达举报的事件监听");
+		console.log(randomId);
 		//跳转到对应的朋友的举报页面
 		mui.openWindow({
 			url:"lhf_report.html",
