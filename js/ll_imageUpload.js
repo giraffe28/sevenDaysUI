@@ -13,7 +13,8 @@ mui.plusReady(function() {
 		$image.attr('src', path);
 		faceCutter();
 	}, function(e) {
-		mui.openWindow("index1.html", "index1.html");
+		mui.back();
+		//mui.openWindow("index1.html", "index1.html");
 	}, {
 		filter: "image"
 	});
