@@ -11,13 +11,43 @@ var searchTag;//用于记录用于搜索的标签
 //通用的二次确认使用
 var btnArray = ['确认', '取消'];
 
+//获取共用的几个选项卡切换与搜索结果框的dom
+var searchByNameTab=document.getElementById("searchByNameTab");
+var searchByIdTab=document.getElementById("searchByIdTab");
+var searchByTagTab=document.getElementById("searchByTagTab");
+var searchResult=document.getElementById("searchResult");
+//获取几个搜索值的dom
+var searchByIdInput=document.getElementById("searchByIdInput");
+var addTagDom=document.getElementById("diningRoomTags");
+var searchByNameInput=document.getElementById("searchByNameInput");
+
 mui.init();
+
 
 mui.plusReady(function () {
 	
 	var thisWebview=plus.webview.currentWebview();
 	userId=thisWebview.userId;
     
+	//点击用食堂名搜索的选项卡时，清空其余的选项卡内的填写内容与搜索结果
+	searchByNameTab.addEventListener('tap',function(){
+		addTagDom.innerHTML="";
+		searchResult.innerHTML="";
+		searchByIdInput.value="";
+	});
+	//点击用食堂id的选项卡时，清空其余的选项卡内的填写内容与搜索结果
+	searchByIdTab.addEventListener('tap',function(){
+		searchByNameInput.value="";
+		addTagDom.innerHTML="";
+		searchResult.innerHTML="";
+	});
+	//点击用食堂主营的选项卡时，清空其余的选项卡内的填写内容与搜索结果
+	searchByTagTab.addEventListener('tap',function(){
+		searchByNameInput.value="";
+		searchResult.innerHTML="";
+		searchByIdInput.value="";
+	});
+	
 	/* 点击“添加标签” */
 	document.getElementById("addTag").addEventListener('tap', function() {
 		mui.openWindow({
@@ -45,7 +75,7 @@ mui.plusReady(function () {
 	});
 	//点击用id搜索的确认键
 	document.getElementById('searchByIdConfirm').addEventListener('tap',function(){
-		var searchstr=document.getElementById("searchByIdInput").value;
+		var searchstr=searchByIdInput.value;
 		if(app.isNotNull(searchstr)){//如果已经填写了食堂id
 			searchByIdRequests(searchstr);
 		}
@@ -59,7 +89,7 @@ mui.plusReady(function () {
 	});
 	//点击用食堂名搜索的确认键
 	document.getElementById('searchByNameConfirm').addEventListener('tap',function(){
-		var searchstr=document.getElementById("searchByNameInput").value;
+		var searchstr=searchByNameInput.value;
 		if(app.isNotNull(searchstr)){//如果已经填写了食堂名称
 			searchByNameRequests(searchstr);
 		}
@@ -71,13 +101,14 @@ mui.plusReady(function () {
 	document.getElementById('nameCancel').addEventListener('tap',function(){
 		mui.back();
 	});
+
+
 });
 
 
 //渲染标签内容
 function renderNewTag(newTags){
 	searchTag=newTags;
-	var addTagDom=document.getElementById("diningRoomTags");
 	newTags = newTags.split(" ");
 	if (app.isNotNull(newTags)) {
 		var theTagsHtml = "";
@@ -96,7 +127,6 @@ function renderNewTag(newTags){
 //渲染搜索的结果（顺便绑定点击事件）
 function renderResult(roomList){
 	console.log("渲染搜索食堂的结果");
-	var resultShowDom=document.getElementById("searchResult");
 	var room;
 //	console.log(roomList.length);
 //	console.log(roomList);
@@ -115,7 +145,7 @@ function renderResult(roomList){
 						'</li>';
 		}
 		//console.log(resultHtml);
-		resultShowDom.innerHTML=resultHtml;
+		searchResult.innerHTML=resultHtml;
 		
 		//批量绑定点击事件
 		mui("#searchResult").on("tap",".room",function(e){
@@ -162,7 +192,7 @@ function renderResult(roomList){
 		});
 	}
 	else{
-		resultShowDom.innerHTML='<li class="tipStyle">'+
+		searchResult.innerHTML='<li class="tipStyle">'+
 									'没找到对应的开启中的食堂呀，或者您已经加入了呢！'+
 								'</li>';
 	}
