@@ -17,12 +17,13 @@ a:active {color:black;}
 	width:80%;
 	padding: 4px;
 	margin:3px 0 0px 3px;
-	font-size:14px;
+	font-size:18px;
 }
 
 #sendMsg{
-	margin: 5px 7px;
-	padding: 3px 10px;
+	margin: 3px 7px;
+	padding: 3px 8px;
+	font-size: 20px !important;
 }
 
 
@@ -48,6 +49,25 @@ a:active {color:black;}
 	top: 5px;
 }
 
+.recommendListTitleContent{
+	margin-left: 15px;
+}
+
+.recommendListTitleItem{
+	padding: 5px;
+}
+
+.recommendListTitleIcon{
+	font-size: 30px !important;
+	padding: 2px !important;
+	border-style:solid;
+	border-width: thin;
+}
+
+#recomendBtn{
+	padding-top: 10px !important;
+}
+
 .myLists {
 	position: relative;
 	margin: 0 10px 0px 50px;
@@ -61,8 +81,12 @@ a:active {color:black;}
 	right: 0px;
 }
 
+
 /*气泡*/
 .msgLeftWhite {/*朋友的发言*/
+	word-wrap:break-word;
+	word-break:normal;
+	max-width: 200px;
 	background-color: #FFFFFF;
 	font-size: 16px;
 	color: black;
@@ -75,6 +99,9 @@ a:active {color:black;}
 }
 
 .msgRightGreen {/*自己的发言*/
+	word-wrap:break-word;
+	word-break:normal;
+	max-width: 200px;
 	background-color: #a0e759;
 	font-size: 16px;
 	float: right;
