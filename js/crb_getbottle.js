@@ -15,9 +15,9 @@ mui.plusReady(function(){
 				randomId=data.data.bottleId;
 				var content=document.getElementById("content");
 				var Html="";
-				Html='<ul class="mui-view-cell">'+
+				Html='<div class="mui-card drift">'+
 						data.data.content+
-					'</ul>';
+					'</div>';
 				content.innerHTML=Html;
 			}
 			else{

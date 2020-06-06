@@ -205,9 +205,9 @@ function loadThisWeekTags(tags){
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		var weekTagsHtml = "";
-		for (var i = 0; i <tags.length; i++) {
-			weekTagsHtml += '<label style="background-color: lightgreen; margin-left: 5px;border-radius: 7px;">'
-			+tags[i]+'</label>';
+		for (var i = 0; i <tags.length-1; i++) {
+			weekTagsHtml += ' <div class="mui-badge mui-badge-success" style="margin-top: 10px;">'
+			+tags[i]+'</div>';
 		}
 		weekTagsDom.innerHTML = weekTagsHtml;
 	} else {
@@ -276,8 +276,8 @@ function loadPastTags(){
 				if (pastTags!= null && pastTags.length > 0) {
 					var pastTagsHtml = "";
 					for (var i = 0; i <pastTags.length; i++) { //过往标签目前只显示3个
-						pastTagsHtml += '<label style="background-color: dimgray; margin-left: 5px;border-radius: 7px;">'
-						+pastTags[i]+'</label>'
+						pastTagsHtml += ' <div class="mui-badge" style="margin-top: 10px;">'
+						+pastTags[i]+'</div>'
 					}
 					pastTagsDom.innerHTML = pastTagsHtml;
 				} else {

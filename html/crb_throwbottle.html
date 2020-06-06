@@ -17,15 +17,18 @@
 		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 		    <h1 class="mui-title">编辑</h1>	
 		</header>
-		<div class="mui-content" style="opacity: 0.6;" id="content">		
-			<div class="mui-input-row">
-			    <textarea type="text" class="mui-input-clear" placeholder="请输入内容(不超过100字)" id="throw_content" rows="6"></textarea>
-			</div>
-			
+		<div class="mui-content" id="content" style="margin: 5px;">		
+			<form class="mui-input-group">
+				<div class="mui-input-row" style="height: 350px;">
+					<label style="font-weight: bold;">内容</label>
+					<textarea id="throw_content" type="text" class="mui-input-clear" placeholder="在这里输入内容" style="border:0;border-radius:10px;background-color:rgba(241,241,241,.98);width: 450px;height: 270px;padding: 10px;resize: none;margin: 9px;"></textarea>					 
+				</div>
+				<div class="mui-content-padded" align="center">
+					<button type="button" class="mui-btn mui-btn-blue" id="post">扔出</button>
+				</div>
+			</form>
 		</div>
-		<div class="mui-content-padded" align="center">
-		    <button type="button" class="mui-btn mui-btn-blue" id="post">扔出</button>
-		</div>
+		
 		<script src="../js/crb_app.js"></script>
 		<script src="../js/crb_throwbottle.js"></script>
 	</body>

@@ -2,6 +2,7 @@
 var head;
 var max;
 var index;
+var length;
 var postuser;
 var reportDom=document.getElementById("report");
 var chatDom=document.getElementById("chat");
@@ -71,44 +72,11 @@ mui.plusReady(function () {
 			html=
 				'<div class="mui-card-header mui-card-media">';
 			if(icon!=""){
-			html+=
-				'<img src="'+icon+'"/>'+
-						'<div class="mui-media-body">'+
-							nickname+
-							'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
-							t(hour)+':'+t(minute)+':'+t(second)+
-							'</p>'+
-						'</div>'+
-					'</div>'+
-					'<div class="mui-card-content">'+
-						//<img v-html="image" id="post_image" width="100%"-->
-						'<p class="content">'+
-							content+
-						'</p>';
-					if(postImage!=""){
-						html+='<img src="'+postImage+'" alt="" width="100%">'+
-							'</div>'+
-							'<div class="mui-card-footer">'+
-								'<p>'+postlike+'</p>'+
-								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
-							'</div>'+
-						'</div>';
-					}
-					else{
-						html+=
-						//'<img src="'+postImage+'" alt="" width="100%">'+
-							'</div>'+
-							'<div class="mui-card-footer">'+
-								'<p>'+postlike+'</p>'+
-								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
-							'</div>'+
-						'</div>';
-					}
-						
+				html+='<img src="'+icon+'"/>';
 			}else{
-			html+=
-				'<img src="../images/1.jpg"/>'+
-						'<div class="mui-media-body">'+
+				html+='<img src="../images/1.jpg"/>';
+			}
+			html+='<div class="mui-media-body">'+
 							nickname+
 							'<p>发表于 '+year+'.'+t(month)+'.'+t(day)+' '+
 							t(hour)+':'+t(minute)+':'+t(second)+
@@ -120,27 +88,18 @@ mui.plusReady(function () {
 						'<p class="content">'+
 							content+
 						'</p>';
-					if(postImage!=""){
-						html+='<img src="'+postImage+'" alt="" width="100%">'+
-							'</div>'+
-							'<div class="mui-card-footer">'+
-								'<p>'+postlike+'</p>'+
-								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
-							'</div>'+
-						'</div>';
-					}
-					else{
-						html+=
-						//'<img src="'+postImage+'" alt="" width="100%">'+
-							'</div>'+
-							'<div class="mui-card-footer">'+
-								'<p>'+postlike+'</p>'+
-								'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
-							'</div>'+
-						'</div>';
-					}
+			if(postImage!=""){
+				html+='<img src="'+postImage+'" alt="" width="100%">';
 			}
-					
+			html+='</div>'+
+					'<div class="mui-card-footer">'+
+					'<div>'+
+						'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+						'：'+postlike+
+					'</div>'+
+						'<label id="num"></label>'+
+					'</div>'+
+				'</div>';	
 			post.innerHTML=html;
 		},
 	});
@@ -362,10 +321,18 @@ function pulldownRefresh() {
 		postId:postid,
 	}
 	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
-		
+		var num=document.getElementById("num");
 		mui('#comment').pullRefresh().endPulldownToRefresh();
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
+			length=rsp.length;
+			if(length>=10){
+				num.innerHTML="评论：10+";
+			}
+			else{
+				num.innerHTML="评论："+length;
+			}
+			console.log(rsp.length);
 			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用			
 			posts.items = convert(rsp);
 			var list=document.getElementById("commentlist");
@@ -405,7 +372,6 @@ function pullupRefresh() {
 			var list=document.getElementById("commentlist");
 			var postHtml="";
 			index=posts.items.length
-			console.log(post.ite.length);
 			for(var i=0;i<posts.items.length;i++){
 				var j=parseInt(i)+parseInt(1);
 				postHtml+=addcomment(posts.items[i],j);

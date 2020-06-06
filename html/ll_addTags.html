@@ -10,11 +10,13 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav ">
-			<button id="save" type="button" class="mui-btn mui-btn-primary mui-pull-right" >保存</button>
+			
 			<a href="ll_personalCenter.html" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title ">我的标签</h1>
+			<h1 class="mui-title ">本周标签</h1>
 		</header>
 		<div class="mui-content">
+			<br>
+			<p style="text-align: center;color: #ccc;text-indent: 0;font-size: 15px;">小贴士：最多只能选择3个标签哦 不可贪心~</p>
 			<div class="mui-card">
 				<form id="tagForm" class="mui-input-group">
 					<!-- <div class="mui-input-row mui-checkbox">
@@ -31,6 +33,10 @@
 					</div> -->
 				</form>
 			</div>
+		</div>
+		<div class="mui-button-row"  style="position:fixed; bottom:15px;width:100%;">
+			<button type="button" class="mui-btn mui-btn-primary" id="save" >保存</button>
+			<button type="button" class="mui-btn mui-btn-danger" id="cancel">取消</button>
 		</div>
 		<script src="../js/crb_app.js"></script>
 		<script src="../js/mui.min.js"></script>
