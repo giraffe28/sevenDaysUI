@@ -48,6 +48,9 @@ mui.plusReady(function() {
 			mui.toast('保存失败啦=.= 最多只能选择三个哦！');
 		}
 	})
+	document.getElementById("cancel").addEventListener("tap",function(){
+		mui.back();
+	});
 });
 
 //从后台获取标签，渲染页面
