@@ -15,12 +15,12 @@ mui.init({
 			offset: '0px',
 			auto: true,
 			callback: pulldownRefresh
-		},
+		}/*,
 		up: {
 			contentrefresh: '正在加载...',
 			contentnomore:'评论到底了',
 			callback: pullupRefresh
-		}
+		}*/
 	},
 	
 	beforeback: function() {　　　　
@@ -127,16 +127,10 @@ mui.plusReady(function () {
 		//var par = elem1.parentElement.parentNode;
 		var btnArray = ['是', '否'];
 		mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
-			console.log(user.userId);
-			console.log(postuser);
 			if (e.index == 0) {			
 				var chatWebview=plus.webview.getWebviewById("lhf_chatRecord.html");
-				//chatWebview.evalJS("sendMakeFri('"+user.userId+"','"+postuser+"')");				
-				//console.log(chatWebview);
-				//var user=app.getUserGlobalInfo();//获取用户全局对象
-				console.log(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")"));
-				//if(chatWebview.evalJS("uploadDelFri("+me.userId+","+friendUserId+")")==true){
-				if(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")")==true){
+				//console.log(sendMakeFri(user.userId,postuser)==true);
+				if(sendMakeFri(user.userId,postuser)==true){
 					//获取朋友列表，并且渲染到页面
 					chatWebview.evalJS("fetchContactList()");
 					setTimeout("loadingRecFriendRequests()",500);
@@ -253,7 +247,6 @@ function likeclick(){
 }
 
 function send(){
-//document.getElementById("send-bn").addEventListener('tap',function(){
 		var user = app.getUserGlobalInfo();
 		var content=document.getElementById('comment-text').value;
 		if(content==''){
@@ -306,7 +299,6 @@ function send(){
 
 function pulldownRefresh() {
 	mui('#comment').pullRefresh().endPullupToRefresh();
-	//location.reload();
 	if(window.plus && plus.networkinfo.getCurrentType() === plus.networkinfo.CONNECTION_NONE) {
 		plus.nativeUI.toast('似乎已断开与互联网的连接', {
 			verticalAlign: 'top'
@@ -314,7 +306,7 @@ function pulldownRefresh() {
 		return;
 	}
 	head = 0;
-	max = 10;
+	max = 100000;
 	var data = {
 		start:head,
 		max:max,//需要的字段名
@@ -326,13 +318,7 @@ function pulldownRefresh() {
 		rsp=rsp.data;
 		if(rsp && rsp.length > 0) {
 			length=rsp.length;
-			if(length>=10){
-				num.innerHTML="评论：10+";
-			}
-			else{
-				num.innerHTML="评论："+length;
-			}
-			console.log(rsp.length);
+			num.innerHTML="评论："+length;
 			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用			
 			posts.items = convert(rsp);
 			var list=document.getElementById("commentlist");
@@ -347,7 +333,7 @@ function pulldownRefresh() {
 		}
 	},'json');
 }
-
+/*
 function pullupRefresh() {
 	console.log(index);
 	console.log(head);
@@ -385,7 +371,7 @@ function pullupRefresh() {
 	//	mui('#comment').pullRefresh().endPullupToRefresh(true);
 	//}
 	
-}
+}*/
 
 function addcomment(comment,j) {
 	var html="";
@@ -416,3 +402,28 @@ function convert(items) {
 	//console.log(postItems);
 	return postItems;
 };
+
+function sendMakeFri(userId,friendId){
+	var status =false;
+	mui.ajax(app.serverUrl+"/Friend/add?userId="+userId+"&friendUserId="+friendId,{
+		data:{},//上传的数据
+		dataType:'json',//服务器返回json格式数据
+		async:false,
+		type:'post',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		headers:{'Content-Type':'application/json'},
+		success:function(data){
+			//服务器返回响应,进行数据的重新加载
+			if(data.status==200){
+				
+				var indexWebview = plus.webview.getWebviewById("index.html");
+				var chatMsg = new app.ChatMsg(userId, friendId, null, null);
+				var dataContent = new app.DataContent(app.PULL_FRIEND, chatMsg, null);
+				indexWebview.evalJS("CHAT.chat('"+JSON.stringify(dataContent)+"')");
+				
+				status = true;
+			}
+		},
+	});
+	return status;
+}

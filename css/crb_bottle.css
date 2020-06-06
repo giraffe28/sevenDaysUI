@@ -1,10 +1,34 @@
+body {
+    background-image: url("../images/letter.jpg");
+    height: 100%;
+	width: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+	background-size: cover;
+	position: absolute;
+	overflow: hidden;
+}
+
+.mui-content{
+	background-image: url("../images/letter.jpg");
+	height: 100%;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+	position: absolute;
+	overflow: hidden;
+}
 
 .drift {
+	font-size:20px;
   justify-content: center;
   align-items: center;
-  padding:0 15px;
+  padding:70px 50px;
   background-color: #ffffff;
+  
   border-radius: 10px;
+  margin:100px 50px;
 
   box-shadow: 0 10px 30px 0px rgba(208, 208, 208, 0.5);
   -moz-box-shadow: 0 10px 30px 0px rgba(208, 208, 208, 0.5);
@@ -24,20 +48,19 @@
 	vertical-align: middle;  
 	display: inline-block;  
 }  
-
 #send-btn {
   color: #fff;
   width: 100% !important;  
   height: 80% !important;
-  background-color: #55aa7f;
+  background-color: #55aaff;
   border-radius: 5px;
   margin-top: 5px; 
 
-  box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
-  -moz-box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
-  -webkit-box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
-  -o-box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
-  -ms-box-shadow: 0 10px 30px 0px rgba(183, 255, 200, 0.5);
+  box-shadow: 0 10px 30px 0px rgba(101, 219, 255, 0.5);
+  -moz-box-shadow: 0 10px 30px 0px rgba(101, 219, 255, 0.5);
+  -webkit-box-shadow: 0 10px 30px 0px rgba(101, 219, 255, 0.5);
+  -o-box-shadow: 0 10px 30px 0px rgba(101, 219, 255, 0.5);
+  -ms-box-shadow: 0 10px 30px 0px rgba(101, 219, 255, 0.5);
 }
 #send-btn:active  {
   background-color: #333333;
