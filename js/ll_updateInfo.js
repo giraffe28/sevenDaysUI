@@ -34,7 +34,16 @@ mui.plusReady(function() {
 		var index=myselect.selectedIndex ;
 		//向服务器发送请求保存用户信息
 		//console.log(app.serverUrl+"/user/modifyInformation");
-		if(document.getElementById("profile").value.length>256){
+		if(document.getElementById("nickname").value.trim()==""){
+			mui.toast("昵称不能为空哦");
+		}
+		else if(document.getElementById("profile").value.trim()==""){
+			mui.toast("简介不能为空哦");
+		}
+		else if(document.getElementById("nickname").value.length>20){
+			mui.toast("昵称不能超过20个字哦");
+		}
+		else if(document.getElementById("profile").value.length>256){
 			mui.toast("简介字数不能超过256个字哦");
 		}
 		else{
