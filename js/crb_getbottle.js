@@ -16,7 +16,9 @@ mui.plusReady(function(){
 				var content=document.getElementById("content");
 				var Html="";
 				Html='<div class="mui-card drift">'+
+						//'<p style="font-size:20px">'+
 						data.data.content+
+						//'</p>'+
 					'</div>';
 				content.innerHTML=Html;
 			}

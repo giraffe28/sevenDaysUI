@@ -127,16 +127,9 @@ mui.plusReady(function () {
 		//var par = elem1.parentElement.parentNode;
 		var btnArray = ['是', '否'];
 		mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
-			console.log(user.userId);
-			console.log(postuser);
 			if (e.index == 0) {			
 				var chatWebview=plus.webview.getWebviewById("lhf_chatRecord.html");
-				//chatWebview.evalJS("sendMakeFri('"+user.userId+"','"+postuser+"')");				
-				//console.log(chatWebview);
-				//var user=app.getUserGlobalInfo();//获取用户全局对象
-				console.log(sendMakeFri(user.userId,postuser)==true);
-				//if(chatWebview.evalJS("uploadDelFri("+me.userId+","+friendUserId+")")==true){
-				//if(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")")==true){
+				//console.log(sendMakeFri(user.userId,postuser)==true);
 				if(sendMakeFri(user.userId,postuser)==true){
 					//获取朋友列表，并且渲染到页面
 					chatWebview.evalJS("fetchContactList()");
@@ -254,7 +247,6 @@ function likeclick(){
 }
 
 function send(){
-//document.getElementById("send-bn").addEventListener('tap',function(){
 		var user = app.getUserGlobalInfo();
 		var content=document.getElementById('comment-text').value;
 		if(content==''){
@@ -307,7 +299,6 @@ function send(){
 
 function pulldownRefresh() {
 	mui('#comment').pullRefresh().endPullupToRefresh();
-	//location.reload();
 	if(window.plus && plus.networkinfo.getCurrentType() === plus.networkinfo.CONNECTION_NONE) {
 		plus.nativeUI.toast('似乎已断开与互联网的连接', {
 			verticalAlign: 'top'
@@ -328,7 +319,6 @@ function pulldownRefresh() {
 		if(rsp && rsp.length > 0) {
 			length=rsp.length;
 			num.innerHTML="评论："+length;
-			console.log(rsp.length);
 			lastId = rsp[0].commentId; //保存最新消息的id，方便下拉刷新时使用			
 			posts.items = convert(rsp);
 			var list=document.getElementById("commentlist");

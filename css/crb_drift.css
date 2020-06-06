@@ -13,13 +13,13 @@
 .playstyle{	
 	position: fixed; /*or前面的是absolute就可以用*/  
 	bottom: 20px;
-	margin:auto auto;
+	margin:0 0;
 }
 
 .leftstyle{
 	width:50%;
 	float:left;
-	margin:anto auto;
+	margin:0 0;
 	vertical-align: middle;
 	text-align:center;
 }
@@ -27,7 +27,7 @@
 .middlestyle {
 	width:50%;
 	float:left;
-	margin:anto auto;
+	margin:0 0;
 	vertical-align: middle;
 	text-align:center;
 }

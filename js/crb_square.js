@@ -69,7 +69,6 @@ function pulldownRefresh() {
 }
 
 function addpost(post) {
-	//console.log(post.postcontent);
 	
 	var html="";
 	year=post.date.getFullYear();
@@ -78,15 +77,7 @@ function addpost(post) {
 	hour=post.date.getHours();
 	minute=post.date.getMinutes();
 	second=post.date.getSeconds();
-	var data = {
-		start:0,
-		max:10000,//需要的字段名
-		postId:post.postId,
-	}
-	mui.post(app.serverUrl + "/corner/getcomment", data, function(rsp) {
-		rsp=rsp.data;
-		length=rsp.length;
-	},'json');
+	
 	html=
 		'<div class="mui-card postItem" id="'+post.postId+'">'+
 			'<div class="mui-card-header mui-card-media">';
@@ -139,8 +130,6 @@ function addlistNer(){
  * 上拉加载拉取历史列表 
  */
 function pullupRefresh() {
-	console.log(index);
-	console.log(head);
 	
 	head += max;
 	max = 10;	
