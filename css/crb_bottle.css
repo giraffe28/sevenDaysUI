@@ -1,25 +1,24 @@
 body {
-    background-image: url("../images/letter.jpg");
-    height: 100%;
-	width: 100%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-	background-size: cover;
-	position: absolute;
-	overflow: hidden;
-}
-
-.mui-content{
-	background-image: url("../images/letter.jpg");
-	height: 100%;
-	width: 100%;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-size: cover;
-	position: absolute;
-	overflow: hidden;
-}
-
+			    background-image: url("../images/letter.jpg");
+			    height: 100%;
+				width: 100%;
+			    background-repeat: no-repeat;
+			    background-attachment: fixed;
+				background-size: cover;
+				position: absolute;
+				overflow: hidden;
+			}
+			.mui-content{
+				background-image: url("../images/letter.jpg");
+				height: 100%;
+				width: 100%;
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: cover;
+				position: absolute;
+				overflow: hidden;
+			}
+			
 .drift {
 	font-size:20px;
   justify-content: center;
