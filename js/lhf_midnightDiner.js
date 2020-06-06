@@ -524,14 +524,14 @@ function openRoomRequests(){
 
 //发送获取推荐食堂列表的资源请求以及加载
 function recommendRoomRequests(){
-	plus.nativeUI.showWaiting("请稍等");
+	plus.nativeUI.showWaiting("正在四处寻找合口味的食堂...");
 	mui.ajax(app.serverUrl+"/chatRoom/recommend",{
 		data:{
 			userId:me.userId
 		},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
-		timeout:10000,//超时时间设置为10秒；
+		timeout:15000,//超时时间设置为15秒；
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应

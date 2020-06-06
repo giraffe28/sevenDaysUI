@@ -7,19 +7,23 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../css/mui.css" rel="stylesheet" />
 		<link href="../css/lhf_DiningRoom.css" rel="stylesheet" />
+		<link href="../iconfont/iconfont.css" rel="stylesheet" />
 	</head>
 
-	<body>
+	<body id="midnightdinerBody">
 		
 		<header class="mui-bar mui-bar-nav">
 			<h1 class="mui-title">深夜食堂</h1>
-			<a id="newDiningRoom" class="mui-icon mui-icon-plusempty mui-pull-right" href="#popover" style="padding-top: 4px;padding-right: 7px;font-size: 37px;"></a>
+			<a id="newDiningRoom" class="mui-icon mui-icon-plusempty mui-pull-right" href="#popover"></a>
 		</header>
 		
-		<div class="mui-content" style="padding-top: 30px;">
+		<div class="mui-content" style="padding-top: 30px;" id="roomleft">
 			 <ul class="mui-table-view" id="rooms">
 				<li class="mui-table-view-cell mui-collapse" id="recommendRoomItem">
-					<a class="mui-navigate-right" href="#" id="recommendRoomOpen">食堂街道</a>
+					<a class="mui-navigate-right" href="#" id="recommendRoomOpen">
+						<span class="mui-icon iconfont icon-hunjiashangyejie-gai roomListIcon" style="color: #9A6E3A;"></span>
+						<span class="roomListTitleContent">食堂街道</span>
+					</a>
 					<div class="mui-collapse-content" style="padding: 0px 0px 0px 15px;">
 						<ul id="recommendRoom" class="zeroPaddingLeft" style="margin-bottom: 0;">
 							
@@ -27,59 +31,35 @@
 					</div>
 				</li>
 				<li class="mui-table-view-cell mui-collapse" id="closedRoomItem">
-					<a href="#">留恋的足迹<span class="mui-badge mui-badge-primary" id="closedRoomNums"></span></a>
+					<a href="#" class="roomListTitleItem">
+						<span class="mui-icon iconfont icon-temporary-closet-shop roomListIcon"></span>
+						<span class="roomListTitleContent">留恋的足迹</span>
+						<span class="mui-badge mui-badge-primary" id="closedRoomNums"></span>
+					</a>
 					<div class="mui-collapse-content" style="padding: 0px 0px 0px 15px;">
 						<ul  id="closedRoom" class="zeroPaddingLeft" style="margin-bottom: 0;">
 							
-							<!--<li class="mui-table-view-cell closedRoom room mui-media" roomId="3">
-								<div class="mui-slider-right mui-disabled" roomId="3">
-									<span class="mui-btn mui-btn-red">离开食堂</span>
-								</div>
-								<div class="mui-slider-handle">
-									<img class="mui-media-object mui-pull-left" src="../images/diner.png">
-									<span>1212</span>
-									<p class="mui-ellipsis"></p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell closedRoom room mui-media" roomId="3">
-								<div class="mui-slider-right mui-disabled" roomId="3">
-									<span class="mui-btn mui-btn-red">离开食堂</span>
-								</div>
-								<div class="mui-slider-handle">
-									<img class="mui-media-object mui-pull-left" src="../images/diner.png">
-									<span>1212</span>
-									<p class="mui-ellipsis"></p>
-								</div>
-							</li>
-							-->
 						</ul>
 					</div>
 				</li>
 				<li class="mui-table-view-cell mui-collapse" id="createRoomItem">
-					<a href="#">我的食堂<span class="mui-badge mui-badge-primary" id="myRoomNums"></span></a>
+					<a href="#"  class="roomListTitleItem">
+						<span class="mui-icon iconfont icon-wode-dianpuguanli roomListIcon" style="color: #2AC845;"></span>
+						<span class="roomListTitleContent">我的食堂</span>
+						<span class="mui-badge mui-badge-primary" id="myRoomNums"></span>
+					</a>
 					<div class="mui-collapse-content" style="padding: 0px 0px 0px 15px;">
 						<ul id="createRoom" class="mui-table-view zeroPaddingLeft" style="margin-bottom: 0;">
-						<!--	
-							<li class="mui-table-view-cell room mui-media" roomId="1">
-								<img class="mui-media-object mui-pull-left" src="../images/diner.png">
-								<div class="mui-media-body">
-									<span>12121</span>
-									<p class="mui-ellipsis">1213</p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell room mui-media" roomId="1">
-								<img class="mui-media-object mui-pull-left" src="../images/diner.png">
-								<div class="mui-media-body">
-									<span>12121</span>
-									<p class="mui-ellipsis">1213</p>
-								</div>
-							</li>
-						-->	
+						
 						</ul>
 					</div>
 				</li>
 				<li class="mui-table-view-cell mui-collapse" id="openRoomItem">
-					<a href="#">入座的食堂 <span class="mui-badge mui-badge-primary" id="openRoomNums"></span></a>
+					<a href="#" class="roomListTitleItem">
+						<span class="mui-icon iconfont icon-kaidian roomListIcon" style="color: #55AAFF;"></span>
+						<span class="roomListTitleContent">入座的食堂</span>
+						<span class="mui-badge mui-badge-primary" id="openRoomNums"></span>
+					</a>
 					<div class="mui-collapse-content" style="padding: 0px 0px 0px 15px;">
 						<ul id="openRoom" class="zeroPaddingLeft" style="margin-bottom: 0;">
 							

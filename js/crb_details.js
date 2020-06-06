@@ -93,8 +93,11 @@ mui.plusReady(function () {
 			}
 			html+='</div>'+
 					'<div class="mui-card-footer">'+
-						'<p>'+postlike+'</p>'+
+					'<div>'+
 						'<label id="like" onclick="likeclick()">'+likeornot()+'</label>'+
+						'：'+postlike+
+					'</div>'+
+						'<label id="num"></label>'+
 					'</div>'+
 				'</div>';	
 			post.innerHTML=html;
