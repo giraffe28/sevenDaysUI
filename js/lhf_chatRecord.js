@@ -5,6 +5,7 @@
 
 mui.init();
 
+
 mui.plusReady(function () {
 	//从缓存中获取朋友列表，并且渲染到页面
     var thisWebview = plus.webview.currentWebview();
@@ -34,6 +35,7 @@ mui.plusReady(function () {
 		fetchContactList();
 	});
 });
+
 
 // 展示聊天快照，渲染列表
 function loadingChatSnapshot() {
@@ -160,6 +162,7 @@ function loadingFriendRequests(){
 	});
 }
 
+
 //发送朋友推荐列表信息的资源请求以及加载
 function loadingRecFriendRequests(){
 	var user=app.getUserGlobalInfo();//获取用户全局对象
@@ -252,6 +255,7 @@ function renderFriends(friend){
 
 
 var btnArray = ['确认', '取消'];
+//结束与朋友的聊天
 mui('.chatRecords').on('tap','.mui-btn-red',function() {
     //获取当前DOM对象
 	var elem1 = this;
@@ -308,6 +312,7 @@ function uploadDelFri(userId,friendId){
 mui('body').on('tap','a',function(){document.location.href=this.href;});
 
 
+//推荐朋友的展开聊天事件
 mui('.makeChat').on('tap','.mui-btn-blue',function() {
 	//获取当前DOM对象
 	var elem1 = this;
@@ -323,8 +328,13 @@ mui('.makeChat').on('tap','.mui-btn-blue',function() {
 			if(sendMakeFri(user.userId,par1)==true){
 				//获取朋友列表，并且渲染到页面
 				fetchContactList();
-				loadingRecFriendRequests();
-				//页面跳转至对应的聊天页面todo
+				//loadingRecFriendRequests();//用户进入聊天页了，不用加载推荐列表
+				document.getElementById("recomendBtn").setAttribute("class","mui-table-view-cell mui-collapse");//将折叠面板收起来
+				
+				//页面跳转至对应的聊天页面
+				var friendUserNickname = par.getAttribute("friendNickname");
+				var friendIcon = par.getElementsByTagName('img')[0].src;//获取朋友头像
+				gotoFriendChat(par1,friendUserNickname,friendIcon);//id、名称、头像
 			}
 			else{
 				mui.toast("发送闲聊请求出错啦！QAQ");
@@ -364,6 +374,22 @@ function sendMakeFri(userId,friendId){
 		},
 	});
 	return status;
+}
+
+
+//打开聊天页面
+function gotoFriendChat(friendUserId,friName,friendIcon){
+	mui.openWindow({
+		url:"lhf_chat.html",
+		id:"lhf_chat_"+friendUserId,//每个朋友的聊天页面独立
+		extras:{
+			friUserId:friendUserId,
+			friendLevel:0,//默认为不信任
+			friName:friName,
+			friFaceImage:friendIcon
+		},
+		createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+	});
 }
 
 
