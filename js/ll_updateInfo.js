@@ -14,10 +14,6 @@ mui.plusReady(function() {
 		var profile = user.profile; //简介
 		var telephone = user.telephone; //手机号，暂时不允许更改
 		//document.getElementById("myImage").src=myImage;
-		console.log(nickname);
-		console.log(gender);
-		console.log(profile);
-		console.log(telephone);
 		document.getElementById("nickname").innerHTML = nickname;
 		var maleOption = document.getElementById("male");
 		var femaleOption = document.getElementById("female");
@@ -38,39 +34,43 @@ mui.plusReady(function() {
 		var index=myselect.selectedIndex ;
 		//向服务器发送请求保存用户信息
 		//console.log(app.serverUrl+"/user/modifyInformation");
-		mui.ajax(app.serverUrl+"/user/modifyInformation", {
-			data: {
-				userId: user.userId,
-				nickname: document.getElementById("nickname").value,
-				gender: myselect.options[index].value,
-				profile: document.getElementById("profile").value,
-				telephone: document.getElementById("telephone").value,
-			},
-			dataType: 'json', //服务器返回json格式数据
-			type: 'post', //HTTP请求类型
-			timeout: 10000, //超时时间设置为10秒；
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			success: function(data) {
-//				console.log(data.data);
-				//console.log(app.serverUrl+"/user/modifyInformation");
-				//服务器返回响应，根据响应结果，分析是否修改成功；
-				if (data.status == 200) {
-					//刷新用户信息
-					var userInfoJson = data.data;
-					app.setUserGlobalInfo(userInfoJson);
-					// 跳转到个人中心页
-					mui.openWindow("ll_personalCenter.html", "ll_personalCenter.html");
-				}
-			},
-			error: function(xhr, type, errorThrown) {
-				//异常处理；
-				console.log(type);
-			}
-		});
-		alert("保存成功");
-		
+		if(document.getElementById("profile").value.length>256){
+			mui.toast("简介字数不能超过256个字哦");
+		}
+		else{
+			mui.ajax(app.serverUrl+"/user/modifyInformation", {
+						data: {
+							userId: user.userId,
+							nickname: document.getElementById("nickname").value,
+							gender: myselect.options[index].value,
+							profile: document.getElementById("profile").value,
+							telephone: document.getElementById("telephone").value,
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						success: function(data) {
+			//				console.log(data.data);
+							//console.log(app.serverUrl+"/user/modifyInformation");
+							//服务器返回响应，根据响应结果，分析是否修改成功；
+							if (data.status == 200) {
+								//刷新用户信息
+								var userInfoJson = data.data;
+								app.setUserGlobalInfo(userInfoJson);
+								mui.toast("已经为您保存啦~");
+								// 跳转到个人中心页
+								mui.openWindow("ll_personalCenter.html", "ll_personalCenter.html");
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							//异常处理；
+							console.log(type);
+						}
+					});
+		}
 		var chatWebview = plus.webview.getWebviewById("ll_personalCenter.html");
 		chatWebview.evalJS("refreshBasicInfo()");
 		mui.back();
