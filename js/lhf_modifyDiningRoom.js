@@ -84,7 +84,7 @@ function renderNewTag(newTags){
 	newTags = newTags.split(" ");
 	if (app.isNotNull(newTags)) {
 		var theTagsHtml = "";
-		for (var i = 0; i < newTags.length; i++) {
+		for (var i = 0; i < newTags.length-1; i++) {
 			theTagsHtml += '<span  class="mui-badge mui-badge-success" style="margin-top: 10px;">'
 			+newTags[i]+'</span>';
 		}

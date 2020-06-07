@@ -12,7 +12,7 @@ mui.plusReady(function () {
 	
 	thisWebview.addEventListener("show",function(){
 		//fetchUnReadMsg();
-		console.log("触发chatRecord的show事件");
+//		console.log("触发chatRecord的show事件");
 		//fetchContactList();
 		renderFriPage();
 		//加载聊天快照
@@ -39,7 +39,7 @@ mui.plusReady(function () {
 
 // 展示聊天快照，渲染列表
 function loadingChatSnapshot() {
-	console.log("加载聊天快照");
+//	console.log("加载聊天快照");
 	var user = app.getUserGlobalInfo();
 	var chatSnapshotList = app.getUserChatSnapshot(user.userId);
 	var chatFriendsList = document.getElementById("chatFriends");//获取朋友列表
@@ -51,7 +51,7 @@ function loadingChatSnapshot() {
 		chatItem = chatSnapshotList[i];
 		friendId = chatItem.friendId;//获取聊天快照对应的朋友id
 	//	console.log(JSON.stringify(chatItem));
-	//	console.log(friendId);
+//		console.log(friendId);
 		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+'"]');//获取指定id朋友的项
 //		console.log(friendId);
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
@@ -101,12 +101,14 @@ function renderFriPage(){
 			var friNicknameNode = this.getElementsByTagName('span');//获取朋友的关于昵称的项
 			var friendIcon = this.getElementsByTagName('img')[0].src;//获取朋友头像
 			
+			//console.log(friendIcon);
+			
 			var friName=friendUserNickname;
 			if(app.isNotNull(friendNoteName)){
 				friName=friendNoteName;
 			}
 			
-			friNicknameNode[0].setAttribute("class","");
+			friNicknameNode[1].setAttribute("class","");
 			//console.log(friendUserId);
 			//打开聊天子页面
 			mui.openWindow({
@@ -116,7 +118,7 @@ function renderFriPage(){
 					friUserId:friendUserId,
 					friendLevel:friendLevel,
 					friName:friName,
-					friFaceImage:friendIcon
+					friendFaceImg:friendIcon
 				},
 				createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 			});
@@ -137,6 +139,7 @@ function loadingFriendRequests(){
 	plus.nativeUI.showWaiting("请稍后");
 	mui.ajax(app.serverUrl+"/Friends?userId="+user.userId,{
 		data:{},//上传的数据
+		async:false,
 		dataType:'json',//服务器返回json格式数据
 		type:'post',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
@@ -212,6 +215,7 @@ function renderFriendRecommend(friend) {
 	if(friend.icon==""){
 		friIcon="../images/1.jpg";
 	}
+	//console.log(friIcon);
 	// console.log("friend的信息"+JSON.stringify(friend));
 	html='<li class="mui-table-view-cell" friendId="'+friend.userId+'" friendNickname="'+friend.nickname+'">'+
 		    '<div class="mui-slider-right mui-disabled" friendId="'+friend.userId+'">'+
@@ -235,9 +239,10 @@ function renderFriends(friend){
 		nameShow=friend.remark;
 	}
 	var friIcon=friend.icon;
-	if(friend.icon!=""){
+	if(friend.icon==""){
 		friIcon="../images/1.jpg";
 	}
+//	console.log(friIcon);
 	// console.log("这是朋友"+JSON.stringify(friend));
 	html='<li class="chatWithFriend mui-table-view-cell mui-media" friendId="'+friend.userId+'" friendNickname="'+friend.nickname+'" friendLevel="'+friend.level+'" friendNoteName="'+friend.remark+'">'+
 				'<div class="mui-slider-right mui-disabled">'+
@@ -300,6 +305,11 @@ function uploadDelFri(userId,friendId){
 			if(data.status==200){
 				status=true;
 				mui.toast("Σ(っ °Д °;)っ 刚刚那个家伙，原地消失了!!!");
+				
+				var indexWebview = plus.webview.getWebviewById("index.html");
+				var chatMsg = new app.ChatMsg(userId, friendId, null, null);
+				var dataContent = new app.DataContent(app.PULL_FRIEND, chatMsg, null);
+				indexWebview.evalJS("CHAT.chat('"+JSON.stringify(dataContent)+"')");
 			}
 		},
 	});

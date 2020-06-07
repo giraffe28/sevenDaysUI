@@ -32,9 +32,10 @@ mui.plusReady(function () {
 	//获取用户信息
 	me = app.getUserGlobalInfo();
 	//若用户有上传头像
-	if(me.icon!=""){
+	if(app.isNotNull(me.icon)){
 		myFaceImg=me.icon;
 	}
+	
 	//获取聊天记录页面
 	chatWebview = plus.webview.getWebviewById("lhf_chatRecord.html");
 	//获取index页面
@@ -218,14 +219,14 @@ mui.plusReady(function () {
 			if (e.index == 0) {
 				console.log("选择了结束聊天");
 				//发送消息给后端
-				if(chatWebview.evalJS("uploadDelFri("+me.userId+","+friendUserId+")")==true){
-					//去掉聊天快照
-					app.deleteUserChatSnapshot(user.userId,friendUserId);
-					//获取朋友列表，并且渲染到页面
-					chatWebview.evalJS("fetchContactList()");
-					mui.back();
-					console.log("结束了聊天");
-				}
+				chatWebview.evalJS("uploadDelFri("+me.userId+","+friendUserId+")");
+				//去掉聊天快照
+				app.deleteUserChatSnapshot(me.userId,friendUserId);
+				//获取朋友列表，并且渲染到页面
+				chatWebview.evalJS("fetchContactList()");
+				mui.back();
+				mui.back();
+				console.log("结束了聊天");
 			}
 			else{
 				mui.toast("缘分未尽|･ω･｀)");
@@ -291,6 +292,7 @@ function sendMsgFunc(myMsg){
 
 //接收消息
 function receiveMsgFunc(friMsg){
+	//console.log(friendFaceImg);
 	var friMsgHtml='<div class="friLists">'+
 					'<div class="headerImg">'+
 						'<img src="'+friendFaceImg+'" class="imgMsg" />'+
