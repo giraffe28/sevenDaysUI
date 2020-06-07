@@ -73,7 +73,7 @@ function renderNewTag(newTags){
 //		console.log("渲染食堂主营内容");
 		newTags = newTags.split(" ");
 		var theTagsHtml = "";
-		for (var i = 0; i < newTags.length; i++) {
+		for (var i = 0; i < newTags.length-1; i++) {
 			theTagsHtml += '<span  class="mui-badge mui-badge-success" style="margin-top: 10px;">'
 							+newTags[i]+'</span>';
 		}
@@ -92,7 +92,7 @@ function createRoomRequests(){
 	var result=false;
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/create",{
-		//async:false,
+		async:false,
 		data:{
 			userId:userId,
 			chatroomName:roomName,

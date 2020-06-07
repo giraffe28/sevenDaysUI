@@ -55,7 +55,7 @@ mui.plusReady(function() {
 
 //从后台获取标签，渲染页面
 function renderTagPage(thisWeekTags) {
-	console.log("渲染标签列表");
+//	console.log("渲染标签列表");
 	mui.ajax(app.serverUrl + '/tag/getTag', { //发送请求返回系统标签
 		data: {},
 		dataType: 'json', //服务器返回json格式数据

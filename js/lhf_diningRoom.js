@@ -112,7 +112,7 @@ mui.plusReady(function () {
 		}
 	});
 	
-	
+	//查看食堂信息
 	watchDiningRoomMsgDom.addEventListener('tap',function(){
 		//跳转到对应的食堂信息页
 		mui.openWindow({
@@ -126,6 +126,7 @@ mui.plusReady(function () {
 		});
 	});
 	
+	//举报食堂
 	reportDom.addEventListener('tap',function(){
 		console.log("到达举报的事件监听");
 		//跳转到对应的朋友的举报页面
@@ -140,6 +141,7 @@ mui.plusReady(function () {
 		});
 	});
 	
+	//退出食堂的按键
 	leaveDom.addEventListener('tap',function(){
 		var btnArray = ['确认', '取消'];
 		if(isMine==true){//这时候退出食堂等于关闭食堂
@@ -180,6 +182,23 @@ mui.plusReady(function () {
 			});
 		}
 	});
+	
+	//点击他人头像，查看对方信息
+/*	
+	mui("#msgs").on("tap",".friLists",function(e){
+		var otherId=this.otherId;
+		console.log(otherId);
+		mui.openWindow({
+			url:"lhf_friMsgPage.html",
+			id:"lhf_friMsgPage.html",
+			extras:{
+				friUserId:otherId
+			},
+			createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+		});
+	});
+*/
+
 });
 
 
@@ -242,14 +261,16 @@ function sendMsgFunc(myMsg){
 //接收的消息
 //如果对方头像为空，则默认使用系统配置的图片
 function receiveMsgFunc(otherMsg,otherIcon,otherId){
-	if(otherIcon==""){
+	if(!app.isNotNull(otherIcon)){
 		otherIcon="../images/1.jpg";
 	}
-	var otherMsgHtml='<div class="friLists">'+
-					'<div class="headerImg" otherId="'+otherId+'">'+
+	//console.log(otherIcon);
+	var otherMsgHtml='<div class="friLists" otherId="'+otherId+'">'+
+					'<div class="headerImg">'+
 						'<img src="'+otherIcon+'" class="imgMsg" />'+
 					'</div>'+
-					'<div class="friMsgWrapper">'+
+					'<div class="otherMsgWrapper">'+
+						'<p class="otherId">'+otherId+':</p>'+
 						'<p class="msgLeftWhite">'+otherMsg+'</p>'+
 					'</div>'+
 				'</div>';

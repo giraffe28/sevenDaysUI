@@ -42,7 +42,7 @@ mui.plusReady(function () {
 		},
 		chat: function(msg) {
 			// 如果当前websocket的状态是已打开，则直接发送， 否则重连
-			// console.log("发送的消息" + msg);
+			//console.log("发送的消息" + msg);
 			if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
 				//console.log("发送的消息" + msg);
 				CHAT.socket.send(msg);
@@ -89,7 +89,7 @@ mui.plusReady(function () {
 			myinterval=setInterval("CHAT.keepalive()", 4000);
 		},
 		wsmessage: function(e) {
-		//	console.log("接受到消息：" + e.data);	
+			//console.log("接受到消息：" + e.data);	
 			// 转换DataContent为对象
 			var dataContent = JSON.parse(e.data);
 			var action = dataContent.action;
@@ -118,15 +118,18 @@ mui.plusReady(function () {
 			var myId = chatMsg.receiverId;
 			
 			if(action === app.CHAT){
+			//if(action === 0){
 				// 调用聊天webview的receiveMsg方法
-				console.log("获取到的朋友id" + senderId);
+			//	console.log("获取到的朋友id" + senderId);
 				var chatWebview = plus.webview.getWebviewById("lhf_chat_" + senderId);
 				var isRead = true;	// 设置消息的默认状态为已读
 				if (chatWebview != null) {
+					//console.log("webview不为空");
 					chatWebview.evalJS("receiveMsgFunc('" + msg + "')");
 					chatWebview.evalJS("resizeScreen()");//让滚动条在最下方
 				}
 				else {
+					//console.log("webview为空");
 					isRead = false;	// chatWebview 聊天页面没有打开，标记消息未读状态
 				}
 				// 接受到消息之后，对消息记录进行签收
@@ -139,29 +142,36 @@ mui.plusReady(function () {
 				// 渲染快照列表进行展示
 				reloadChatSnapshot();
 			}
+			
 			else if(action === app.CHATROOM){//这时：myId是食堂id，senderId是发送者id
+			//else if(action === 0){
 				// 调用聊天webview的receiveMsg方法
-				console.log("获取到的食堂id" + senderId);
-				var chatWebview = plus.webview.getWebviewById("lhf_diningRoom_"+senderId);
+				//console.log("获取到的食堂id" + myId);
+				var chatWebview = plus.webview.getWebviewById("lhf_diningRoom_"+myId);
 				var isRead = true;	// 设置消息的默认状态为已读
 				if (chatWebview != null) {
-					chatWebview.evalJS("receiveMsgFunc('" + msg + "')");
+					//console.log(dataContent.extend);
+					chatWebview.evalJS("receiveMsgFunc('" + msg + "','"+ dataContent.extend+ "'," + senderId + ")");
 					chatWebview.evalJS("resizeScreen()");//让滚动条在最下方
 				}
 				else {
 					isRead = false;	// chatWebview 聊天页面没有打开，标记消息未读状态
 				}
 				// 接受到消息之后，对消息记录进行签收
-				var dataContentSign = new app.DataContent(app.SIGNED, null, chatMsg.msgId);
+				var dataContentSign = new app.DataContent(app.CHATROOMMSGSIGNED, null, chatMsg.msgId);
+				//console.log("1");
 				CHAT.chat(JSON.stringify(dataContentSign));
+				//console.log("2");
 				// 保存食堂的聊天历史记录到本地缓存app.FRIEND表示是别人发的
-				app.saveUserChatRoomHistory(me.userId, senderId, myId, msg, app.FRIEND, chatMsg.extend);
+				app.saveUserChatRoomHistory(me.userId, senderId, myId, msg, app.FRIEND, dataContent.extend);
+				//console.log("3");
 				//食堂的聊天快照
 				app.saveUserChatRoomSnapshot(me.userId, myId, msg, isRead);
+				//console.log("4");
 				// 渲染食堂的快照列表进行展示
 				reloadChatRoomSnapshot();
+				//console.log("5");
 			}
-			
 		},
 		wsclose: function(e) {
 			console.log("连接关闭QAQ"+e.code+"reason:"+e.reason);
@@ -172,14 +182,14 @@ mui.plusReady(function () {
 		},
 		signMsgList: function(unSignedMsgIds) {
 			// 构建批量签收对象的模型
-			console.log("进入了签收消息的方法");
+			//console.log("进入了签收消息的方法");
 			var dataContentSign = new app.DataContent(app.SIGNED,null,unSignedMsgIds);
 			// 发送批量签收的请求
 			CHAT.chat(JSON.stringify(dataContentSign));
 		},
 		signroomMsgList: function(unSignedMsgIds) {
 			// 构建批量签收对象的模型
-			console.log("进入了签收消息的方法");
+			//console.log("进入了签收消息的方法");
 			var dataContentSign = new app.DataContent(app.CHATROOMMSGSIGNED,null,unSignedMsgIds);
 			// 发送批量签收的请求
 			CHAT.chat(JSON.stringify(dataContentSign));

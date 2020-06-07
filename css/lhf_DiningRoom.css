@@ -44,6 +44,7 @@
 
 #roomleft{
 	background-image: url(../images/midnightdiner.jpg);
+	background-size:cover;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -146,7 +147,14 @@
 	position: relative;
 	border-radius: 5px;
 	float: left;
-	margin:10px 10px 10px 51px;
+	margin:0px 10px 10px 40px;
+}
+
+.otherId{/*显示他人id的位置样式*/
+	margin-left: 45px;
+	color: #000000;
+	font-size: 10px;
+	margin-bottom: 0px;
 }
 
 .msgRightGreen {/*自己的发言*/
@@ -177,7 +185,7 @@
 .otherMsgWrapper{
 	color: black;
 	display: inline-block;
-	padding: 12px;
+	padding: 0px 12px;
 	margin:0px;
 	position: relative;
 	border-radius: 5px;
