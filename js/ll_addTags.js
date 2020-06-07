@@ -20,7 +20,10 @@ mui.plusReady(function() {
 				tagNum++;
 			}
 		}
-		if (tagNum <= 3) {
+		if(tagNum==0){
+			mui.toast("请至少选择一个标签哦");
+		}
+		else if (tagNum <= 3) {
 			mui.ajax(app.serverUrl + "/user/setThisWeekTag", {
 				data: {
 					userId:user.userId,
