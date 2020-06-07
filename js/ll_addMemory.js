@@ -8,7 +8,10 @@ mui.plusReady(function () {
     document.getElementById("save").addEventListener('tap',function(){
 		memoryTitle=document.getElementById("title").value;
 		memoryContent=document.getElementById("content").value;
-		if(memoryTitle.trim()==""||memoryContent.trim()==""){
+		if(memoryTitle.trim()==""){
+			mui.toast('标题不能为空哦');
+		}
+		else if(memoryContent.trim()==""){
 			mui.toast('内容不能为空哦');
 		}
 		else if(memoryTitle.length>20){

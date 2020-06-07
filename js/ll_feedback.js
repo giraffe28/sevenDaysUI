@@ -7,7 +7,7 @@ mui.plusReady(function () {
 		if(bugContent.trim()==""){
 			mui.toast('内容不能为空哦');
 		}
-		else if(memoryContent.length>128){
+		else if(bugContent.length>128){
 			mui.toast('内容不能超过128个字哦');
 		}
 		else{
