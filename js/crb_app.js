@@ -447,7 +447,7 @@ window.app = {
 					item.chatroomName=roomName;
 					item.chatroomTag=newTags;
 					createRoomList.splice(i, 1, item);	// 替换原有的食堂数据
-					console.log("app中的修改指定id食堂信息");
+//					console.log("app中的修改指定id食堂信息");
 					break;
 				}
 			}

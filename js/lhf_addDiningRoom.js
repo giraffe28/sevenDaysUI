@@ -109,7 +109,7 @@ function createRoomRequests(){
 				//修改重新获取自己创建的食堂
 				plus.webview.currentWebview().opener().evalJS("createRoomRequests()");
 				result=true;
-				console.log(result);
+			//	console.log(result);
 				plus.nativeUI.closeWaiting();
 			}
 			else{
@@ -123,6 +123,6 @@ function createRoomRequests(){
 			// console.log(JSON.stringify(data.data));
 		}
 	});
-	console.log("result:"+result);
+//	console.log("result:"+result);
 	return result;
 }

@@ -128,7 +128,7 @@ mui.plusReady(function () {
 	
 	//举报食堂
 	reportDom.addEventListener('tap',function(){
-		console.log("到达举报的事件监听");
+//		console.log("到达举报的事件监听");
 		//跳转到对应的朋友的举报页面
 		mui.openWindow({
 			url:"lhf_report.html",
@@ -217,6 +217,7 @@ setObj[0].addEventListener("tap",function () {
 function reload(roomName,theTags){
 	roomNameDom.innerHTML=roomName;
 	midnightDiner.evalJS("renderStoredCreateRoom()");//由于修改了食堂名称，所以这里要重新加载食堂主页
+//	console.log("2");
 }
 
 

@@ -119,6 +119,7 @@ function modifyRequests(){
 				renderNewTag(theTags);
 				app.changeRoomMsg(roomId,roomName,theTags);//修改缓存中的数据
 				fatherWebview.evalJS("reload('"+roomName+"','"+theTags+"')");
+//				console.log("0");
 				mui.back();
 			}	
 			else{

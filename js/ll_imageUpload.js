@@ -8,7 +8,7 @@ mui.plusReady(function() {
 	// 获取屏幕宽度，设置图片
 	$image.attr('src', app.imgServerUrl + faceImage);
 	// 从相册中选择图片
-	console.log("从相册中选择图片:");
+//	console.log("从相册中选择图片:");
 	plus.gallery.pick(function(path) {
 		$image.attr('src', path);
 		faceCutter();

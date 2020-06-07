@@ -9,7 +9,7 @@ var me;
 
 
 mui.plusReady(function () {
-	console.log("websocket的plusReady");
+//	console.log("websocket的plusReady");
 	
 	me = app.getUserGlobalInfo();
 	
@@ -42,7 +42,7 @@ mui.plusReady(function () {
 		},
 		chat: function(msg) {
 			// 如果当前websocket的状态是已打开，则直接发送， 否则重连
-			//console.log("发送的消息" + msg);
+		//	console.log("发送的消息" + msg);
 			if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
 				//console.log("发送的消息" + msg);
 				CHAT.socket.send(msg);
@@ -217,7 +217,7 @@ mui.plusReady(function () {
 // 每次获取服务器的未签收消息
 function fetchUnReadMsg() {
 	var user = me;
-	console.log("获取后端未读消息");
+//	console.log("获取后端未读消息");
 	var msgIds = ",";	// 格式：  ,1001,1002,1003,
 	mui.ajax(app.serverUrl + "/unreadMsgs?acceptUserId=" + user.userId,{
 		data:{},
@@ -249,7 +249,7 @@ function fetchUnReadMsg() {
 					msgIds += msgObj.msgId;
 					msgIds += ",";
 				}
-				console.log("获取服务器未签收消息并加载聊天快照");
+			//	console.log("获取服务器未签收消息并加载聊天快照");
 				// 调用批量签收的方法
 				CHAT.signMsgList(msgIds);
 				// 刷新快照
@@ -263,7 +263,7 @@ function fetchUnReadMsg() {
 // 每次获取服务器的聊天室未签收消息
 function fetchUnReadRoomMsg() {
 	var userId = me.userId;
-	console.log("获取后端聊天室未读消息");
+//	console.log("获取后端聊天室未读消息");
 	var msgIds = ",";	// 格式：  ,1001,1002,1003,
 	mui.ajax(app.serverUrl + "/chatRoomMsg/unreadMsgs",{
 		data:{
@@ -297,7 +297,7 @@ function fetchUnReadRoomMsg() {
 					msgIds += msgObj.cmsgId;
 					msgIds += ",";
 				}
-				console.log("获取服务器未签收聊天室消息并加载聊天快照");
+//				console.log("获取服务器未签收聊天室消息并加载聊天快照");
 				// 调用批量签收的方法
 				
 				CHAT.signroomMsgList(msgIds);

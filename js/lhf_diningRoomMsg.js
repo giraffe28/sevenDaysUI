@@ -90,12 +90,13 @@ function reload(roomName,tags){
 	else {
 		tagsDom.innerHTML = "";
 	}
-	
+//	console.log("1");
 	var fatherWebview=plus.webview.currentWebview().opener();
-	fatherWebview.evalJS("reload("+roomName+","+tags+")");//修改食堂聊天页面的名称
-	
+	fatherWebview.evalJS("reload('"+roomName+"','"+tags+"')");//修改食堂聊天页面的名称
+//	console.log("3");
 	var midnightDinerWebview=plus.webview.getWebviewById("lhf_midnightDiner.html");
 	midnightDinerWebview.evalJS("renderStoredCreateRoom()");//重新渲染自己创建的食堂列表
+//	console.log("4");
 }
 
 
@@ -108,6 +109,7 @@ function renderRoomMsg(room){
 	roomTag=room.chatroomTag;//记录返回的食堂标签，用于进入修改食堂信息时的页面传参
 	
 	var tags=room.chatroomTag;
+	//console.log(tags);
 	tags=tags.split(" ");
 	if (app.isNotNull(tags)) {
 		var theTagsHtml = "";

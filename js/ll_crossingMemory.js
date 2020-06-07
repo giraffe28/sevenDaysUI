@@ -90,7 +90,7 @@ mui('.memoryList').on('tap', '.memoryRecord', function() {
 });
 
 function requestMemory() {
-	console.log("请求十字记忆");
+//	console.log("请求十字记忆");
 	mui.ajax(app.serverUrl + '/memory/getMemory', {
 		data: {
 			userId: app.getUserGlobalInfo().userId,
@@ -118,7 +118,7 @@ function requestMemory() {
 };
 //从缓存中获取十字记忆，并且渲染到页面
 function renderMemoryPage() {
-	console.log("渲染十字记忆界面");
+//	console.log("渲染十字记忆界面");
 	//获取十字记忆
 	var memory = app.getMemory();
 	//渲染十字记忆页面
