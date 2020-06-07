@@ -98,7 +98,7 @@ mui.plusReady(function(){
 		wtf["password"] = password;
 		console.log(password);
 		var goodJson = JSON.stringify(wtf);
-		alert("封装为json:"+goodJson);
+		//alert("封装为json:"+goodJson);
 		console.log(app.serverUrl+'/user/signup');
 	    mui.ajax(app.serverUrl+'/user/signup',{
 			type:'post',
@@ -117,7 +117,9 @@ mui.plusReady(function(){
 					var userInfoJson = data.data;
 					app.setUserGlobalInfo(userInfoJson);
 					// 页面跳转到默认首页（后续需更改
-					mui.openWindow("index.html", "index.html");
+					//mui.openWindow("index.html", "index.html");
+					mui.toast("注册成功！");
+					mui.back();
 				}
 				else{
 					app.showToast(data.msg, "error");
@@ -140,6 +142,7 @@ mui.plusReady(function(){
 			},
 			success: function(data) {//成功的data函数
 				console.log(JSON.stringify(data));
+				mui.toast("验证码已发送到您的手机，请注意查收");
 				/*var json = eval('('+ data.d + ")");
 				capt=json.code;
 				console.log("返回的验证："+capt);*/
