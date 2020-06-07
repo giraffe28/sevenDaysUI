@@ -563,12 +563,13 @@ function recommendRoomRequests(){
 									mui.toast("入座成功(≧∇≦)");
 									//获取新的已加入且开启中的食堂列表，并且渲染到页面
 									openRoomRequests();
-									
+									document.getElementById("recommendRoomItem").setAttribute("class","mui-table-view-cell mui-collapse");//将折叠面板收起来
 									gotoDiningRoom(par1,par.getAttribute("roomName"));
+									document.getElementById("recommendRoom").innerHTML="";
 									//setTimeout("recommendRoomRequests()",200);
 								}
 								else{
-									mui.toast("发送入座食堂请求出错啦！QAQ");
+									mui.toast("发送入座食堂请求出错了？QAQ");
 									//取消：关闭滑动列表
 									mui.swipeoutClose(par);
 								}
@@ -587,6 +588,12 @@ function recommendRoomRequests(){
 			else{
 				console.log("发送食堂街道加载请求出错啦！QAQ");
 			}
+		},
+		error: function(xhr, type, errorThrown) {
+			//异常处理；
+			//plus.nativeUI.closeWaiting();
+			console.log("发送获取推荐食堂error");
+			// console.log(JSON.stringify(data.data));
 		}
 	});
 }
@@ -618,7 +625,7 @@ function sendIntoRoom(userId,roomId){
 			}
 		},
 	});
-	console.log(status);
+//	console.log(status);
 	return status;
 }
 

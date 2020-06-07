@@ -22,11 +22,13 @@ mui.plusReady(function() {
 				tagNum++;
 			}
 		}
-		console.log(thisWeekTagStr);
+		//console.log(thisWeekTagStr);
 		if(tagNum==0){
-			mui.toast("请至少选择一个标签哦");
+			mui.toast("请至少选择一个标签哦(︶︹︺)哼");
 		}
 		else if (tagNum <= 3) {
+		//	console.log(user.userId);
+		//	console.log(thisWeekTagStr);
 			mui.ajax(app.serverUrl + "/user/setThisWeekTag", {
 				data: {
 					userId:user.userId,
@@ -37,20 +39,21 @@ mui.plusReady(function() {
 				timeout: 10000, //超时时间设置为10秒
 				headers:{'Content-Type':'application/json'},
 				success: function(data) {
-					console.log(JSON.stringify(data));
+//					console.log(JSON.stringify(data));
 					user.thisWeekTag = thisWeekTagStr;
 					plus.storage.setItem("userInfo",JSON.stringify(user));
-					//console.log("thisweektag"+user.thisWeekTag);
+//					console.log("thisweektag"+user.thisWeekTag);
 					mui.toast("已经为您换上标签了哦(˶‾᷄ ⁻̫ ‾᷅˵)");
 					var chatWebview = plus.webview.getWebviewById("ll_personalCenter.html");
 					chatWebview.evalJS("refreshThisWeekTags('"+user.thisWeekTag+"')");
 					mui.back();
 				},
 				error: function(xhr, type, errorThrown) {
-
+					console.log("修改标签出错");
 				},
 			});
-		} else {
+		}
+		else {
 			mui.toast('保存失败啦=.= 最多只能选择三个哦！');
 		}
 	})
@@ -73,7 +76,7 @@ function renderTagPage(thisWeekTags) {
 			if (data.status == 200) {
 				var flag;
 				var tags = data.data;
-				console.log(JSON.stringify(tags));
+//				console.log(JSON.stringify(tags));
 				if (tags != null && tags.length > 0) {
 					var tagsHtml = "";
 					for (var i = 0; i < tags.length; i++) {

@@ -30,7 +30,7 @@ mui.plusReady(function () {
 	});
 	
 	window.addEventListener("refresh",function(){
-		 console.log("触发chatRecord的refresh事件");
+//		 console.log("触发chatRecord的refresh事件");
 		//从缓存中获取朋友列表，并且渲染到页面
 		fetchContactList();
 	});
@@ -68,7 +68,7 @@ function loadingChatSnapshot() {
 
 // 获取后端所有好友列表，并渲染
 function fetchContactList() {
-	console.log("刷新加载好友列表所有内容");
+//	console.log("刷新加载好友列表所有内容");
 	loadingFriendRequests();
 	renderFriPage();
 	//加载聊天快照

@@ -85,7 +85,7 @@ function requestLogOff(){
 				var webviews= plus.webview.all();
 				//打开login页面		
 				mui.openWindow("crb_login1.html","crb_login1.html");
-				console.log("执行至跳转到登录页面");
+//				console.log("执行至跳转到登录页面");
 				setTimeout(function(){
 					for(var i=0;i<webviews.length;i++){
 						webviews[i].close();
@@ -179,7 +179,7 @@ function refreshBasicInfo() {
 
 
 function loadPersonalCenter(user){
-	console.log('加载缓存中的用户数据');
+//	console.log('加载缓存中的用户数据');
 	//用户基本信息已经在缓存中
 	var nickname = user.nickname; //假名
 	var gender = user.gender; //性别
@@ -200,9 +200,8 @@ function loadPersonalCenter(user){
 //加载本周标签
 function loadThisWeekTags(tags){
 	user=app.getUserGlobalInfo();
-//	console.log("加载缓存中的本周标签:"+tags);
+	//console.log("加载缓存中的本周标签:"+tags);
 	var tags = tags.split(",");
-	//console.log(tags);
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		var weekTagsHtml = "";
@@ -218,7 +217,7 @@ function loadThisWeekTags(tags){
 
 //刷新本周标签
 function refreshThisWeekTags(tags){
-	console.log("刷新本周标签：");
+//	console.log("刷新本周标签：");
 	loadThisWeekTags(tags);
 }
 

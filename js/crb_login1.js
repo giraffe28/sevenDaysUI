@@ -49,7 +49,7 @@ mui.plusReady(function(){
             return;
         }
 
-		console.log(app.serverUrl+"/user/login");
+//		console.log(app.serverUrl+"/user/login");
         mui.ajax(app.serverUrl+"/user/login",{//后端url
             data:{
                 telephone:telephone,
@@ -61,17 +61,17 @@ mui.plusReady(function(){
 			headers: {"Content-Type":"application/json;charset=utf-8"},
             success:function(data){
 			//服务器返回响应，根据响应结果，分析是否登录成功；
-				console.log(JSON.stringify(data));
-				console.log(telephone);
+//				console.log(JSON.stringify(data));
+//				console.log(telephone);
             	if (data.status == 200) {
-					console.log(JSON.stringify(data));
+//					console.log(JSON.stringify(data));
             		// 登录成功之后，保存全局用户对象到本地缓存
             		var userInfoJson = data.data;
             		app.setUserGlobalInfo(userInfoJson);
             		// 页面跳转到默认首页（后续需更改
             		plus.webview.open("../html/index.html", "index.html");
             		plus.webview.currentWebview().close();
-            		console.log("登录结束");
+//            		console.log("登录结束");
             	}
 				else{
             		app.showToast(data.msg, "error");

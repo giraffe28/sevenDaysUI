@@ -76,7 +76,7 @@ mui.plusReady(function(){
 		}
 		else{
 			if(true){//captcha==textcap){
-				console.log("注册成功");
+//				console.log("注册成功");
 				adduse(username,telephone,password1);
 				/*mui.toast('注册成功！！')
 				setTimeout(function() { 
@@ -94,12 +94,12 @@ mui.plusReady(function(){
 	function adduse(username,telephone,password){
 		var wtf = {};
 		wtf["telephone"] = telephone;
-		console.log(telephone);
+//		console.log(telephone);
 		wtf["password"] = password;
-		console.log(password);
+//		console.log(password);
 		var goodJson = JSON.stringify(wtf);
 		//alert("封装为json:"+goodJson);
-		console.log(app.serverUrl+'/user/signup');
+//		console.log(app.serverUrl+'/user/signup');
 	    mui.ajax(app.serverUrl+'/user/signup',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
@@ -111,7 +111,7 @@ mui.plusReady(function(){
 			},
 			success:function(data){
 			//服务器返回响应，根据响应结果，分析是否注册成功；
-			console.log(JSON.stringify(data));
+//			console.log(JSON.stringify(data));
 				if (data.status == 200) {
 					// 注册成功之后，保存全局用户对象到本地缓存
 					var userInfoJson = data.data;
@@ -131,7 +131,7 @@ mui.plusReady(function(){
 	//第五部分：此处为点击获取验证码，服务器返回数据给客户端，接收验证码的接口：
 	function GetCode(telephone){
 		var capt;
-		console.log(app.serverUrl+'/user/getCode');
+//		console.log(app.serverUrl+'/user/getCode');
 		mui.ajax(app.serverUrl+'/user/getCode',{
 			type:'post',
 			contentType: "application/json;charset=utf-8",
@@ -141,7 +141,7 @@ mui.plusReady(function(){
 				telephone:telephone
 			},
 			success: function(data) {//成功的data函数
-				console.log(JSON.stringify(data));
+//				console.log(JSON.stringify(data));
 				mui.toast("验证码已发送到您的手机，请注意查收");
 				/*var json = eval('('+ data.d + ")");
 				capt=json.code;
