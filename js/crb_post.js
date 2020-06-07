@@ -64,14 +64,16 @@ document.getElementById("post").addEventListener('tap',function(){
 function showImage(imageUrl){
 	console.log("暂时显示动态照片");
 	imgUrl=imageUrl;
-	var img=document.getElementById("imgs");
+	var img=document.getElementById("img");
 	var html="";
-	html='<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
-		'<a href="#">'+
-			'<img class="mui-media-object" src="'+imageUrl+'">'+
-			'<span class="mui-icon mui-icon-trash deleteBtn"></span>'+
-		'</a>'+
-	'</li>';
+	html='<ul class="mui-table-view mui-grid-view">'+
+			'<li class="mui-table-view-cell mui-media mui-col-xs-6">'+
+				'<a href="#">'+
+					'<img class="mui-media-object" src="'+imageUrl+'">'+
+					'<span class="mui-icon mui-icon-trash deleteBtn"></span>'+
+				'</a>'+
+			'</li>'+
+		'</ul>';
 	img.innerHTML=html;
 	mui.back();
 }
