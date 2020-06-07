@@ -1,5 +1,5 @@
 body {
-	background-image: url("../images/letter.jpg");
+	background-image: url("../images/driftBackground.JPG");
 	height: 100%;
 	width: 100%;
 	background-repeat: no-repeat;
@@ -9,7 +9,7 @@ body {
 	overflow: hidden;
 }
 .mui-content{
-	background-image: url("../images/letter.jpg");
+	background-image: url("../images/driftBackground.JPG");
 	height: 100%;
 	width: 100%;
 	background-repeat: no-repeat;

@@ -126,7 +126,7 @@ function renderNewTag(newTags){
 
 //渲染搜索的结果（顺便绑定点击事件）
 function renderResult(roomList){
-	console.log("渲染搜索食堂的结果");
+//	console.log("渲染搜索食堂的结果");
 	var room;
 //	console.log(roomList.length);
 //	console.log(roomList);

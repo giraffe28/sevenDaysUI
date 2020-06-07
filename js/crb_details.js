@@ -118,41 +118,46 @@ mui.plusReady(function () {
 		});
 	});
 	
-	//mui('.makeChat').on('tap','.mui-btn-blue',function() {
+
 	chatDom.addEventListener('tap',function(){
-		console.log(icon);
-		console.log(nickname);
-		//获取当前DOM对象
-		//var elem1 = this;
-		//获取DOM对象
-		//var par = elem1.parentElement.parentNode;
-		var btnArray = ['是', '否'];
-		mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
-			if (e.index == 0) {			
-				var chatWebview=plus.webview.getWebviewById("lhf_chatRecord.html");
-				console.log(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")")==true);
-				//if(midnightDiner.evalJS("sendLeaveRoom("+userId+","+roomId+")")==true){
-				if(chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")")==true){
-				//if(sendMakeFri(user.userId,postuser)==true){
-					//获取朋友列表，并且渲染到页面
-					chatWebview.evalJS("fetchContactList()");
-					setTimeout("loadingRecFriendRequests()",500);
-					//页面跳转至对应的聊天页面todo
-					
-					gotoFriendChat(postuser,nickname,icon);
-					
+//		console.log(icon);
+		//console.log(nickname);
+		if(postuser!=user.userId){
+			//false表示不是朋友，true表示本就是朋友
+			var isFriend=false;
+			//获取好友列表
+			var friList = app.getFriList();
+			if(friList!=null&&friList.length>0){
+				for(var i=0;i<friList.length;i++){
+					if(friList[i].userId==postuser){
+						isFriend=true;
+						break;
+					}
 				}
-				else{
-					mui.toast("发送闲聊请求出错啦！QAQ");
-					//取消：关闭滑动列表
-					//mui.swipeoutClose(par);
-				}
-			} 
-			else {
-				//取消：关闭滑动列表
-				//mui.swipeoutClose(par);
 			}
-		});
+			
+			var btnArray = ['是', '否'];
+			mui.confirm('确定展开与其为其最多一周的闲聊？', '提示', btnArray, function(e) {
+				if (e.index == 0) {
+					if(isFriend==true){
+						mui.toast("你们早已经是朋友了Σ(ﾟдﾟlll)");
+					}
+					else{
+						var chatWebview=plus.webview.getWebviewById("lhf_chatRecord.html");
+						chatWebview.evalJS("sendMakeFri("+user.userId+","+postuser+")");
+						//获取朋友列表，并且渲染到页面
+						chatWebview.evalJS("fetchContactList()");
+						//页面跳转至对应的聊天页面
+						//console.log(icon);
+						chatWebview.evalJS("gotoFriendChat("+postuser+",'"+nickname+"','"+icon+"')");
+						mui.toast("快，开个头！(´｡･v･｡｀)");
+					}
+				}
+			});
+		}
+		else{
+			mui.toast("该不会是要与自己交朋友？⊙ω⊙");
+		}
 	});
 })
 
@@ -179,7 +184,7 @@ function likeornot(){
 		async: false, 
 		success:function(data){
 			if (data.status == 200) {
-				console.log(JSON.stringify(data));
+//				console.log(JSON.stringify(data));
 				if(data.data=="已经点赞"){
 					like="已赞";
 					//return like;

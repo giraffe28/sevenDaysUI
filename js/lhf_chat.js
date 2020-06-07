@@ -35,6 +35,10 @@ mui.plusReady(function () {
 	if(app.isNotNull(me.icon)){
 		myFaceImg=me.icon;
 	}
+//	console.log(friendFaceImg);
+	if(!app.isNotNull(friendFaceImg)){
+		friendFaceImg="../images/1.jpg";
+	}
 	
 	//获取聊天记录页面
 	chatWebview = plus.webview.getWebviewById("lhf_chatRecord.html");

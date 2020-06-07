@@ -58,7 +58,7 @@ mui.plusReady(function(){
 					if (data.status == 200) {
 						//显示成功信息
 						//console.log(JSON.stringify(data));
-						mui.toast("评论发送成功");
+						mui.toast("评论发送成功,瓶子又回归大海了\^O^/");
 						//mui.openWindow('../html/crb_drift.html','crb_drift.html');
 						//location.reload();
 						//mui.openWindow('../html/crb_drift.html','crb_drift.html');
@@ -77,7 +77,7 @@ mui.plusReady(function(){
 	});	
 	
 	reportDom.addEventListener('tap',function(){
-		console.log("到达举报的事件监听");
+//		console.log("到达举报的事件监听");
 		console.log(randomId);
 		//跳转到对应的朋友的举报页面
 		mui.openWindow({
