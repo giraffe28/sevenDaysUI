@@ -5,7 +5,7 @@ mui.init();
 mui.plusReady(function() {
 	user = app.getUserGlobalInfo();
 	var thisWeekTagStr = "";
-	thisWeekTags = user.thisWeekTag.split(" ");
+	thisWeekTags = user.thisWeekTag.split(",");
 	renderTagPage(thisWeekTags);
 	var selectedTags = document.getElementsByTagName("input");
 	tagFormDom = document.getElementById("tagForm");
@@ -15,11 +15,14 @@ mui.plusReady(function() {
 		thisWeekTagStr = "";
 		for (var i = 0; i < selectedTags.length; i++) {
 			if (selectedTags[i].type == "checkbox" && selectedTags[i].checked) {
-				thisWeekTagStr += selectedTags[i].value + ' ';
-				console.log(thisWeekTagStr);
+				if(tagNum==0)
+					thisWeekTagStr += selectedTags[i].value;
+				else
+					thisWeekTagStr += ','+selectedTags[i].value;
 				tagNum++;
 			}
 		}
+		console.log(thisWeekTagStr);
 		if(tagNum==0){
 			mui.toast("请至少选择一个标签哦");
 		}

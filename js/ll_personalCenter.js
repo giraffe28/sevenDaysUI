@@ -201,11 +201,12 @@ function loadPersonalCenter(user){
 function loadThisWeekTags(tags){
 	user=app.getUserGlobalInfo();
 //	console.log("加载缓存中的本周标签:"+tags);
-	var tags = tags.split(" ");
+	var tags = tags.split(",");
+	//console.log(tags);
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		var weekTagsHtml = "";
-		for (var i = 0; i <tags.length-1; i++) {
+		for (var i = 0; i <tags.length; i++) {
 			weekTagsHtml += ' <div class="mui-badge mui-badge-success" style="margin-top: 10px;">'
 			+tags[i]+'</div>';
 		}
