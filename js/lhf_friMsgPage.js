@@ -97,7 +97,7 @@ function showFrimsg(friMsg){
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
 		tags = tags.split(" ");
 		var weekTagsHtml = "";
-		for (var i = 0; i <tags.length; i++) {
+		for (var i = 0; i <tags.length-1; i++) {
 			weekTagsHtml += '<span class="mui-badge mui-badge-success" style="margin-top: 10px;">'
 			+tags[i]+'</span>';
 		}

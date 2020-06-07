@@ -26,12 +26,12 @@ mui.plusReady(function () {
 	//监听show事件，用于加载缓存中的列表
 	var thisWebview = plus.webview.currentWebview();
 	thisWebview.addEventListener("show",function(){
-		console.log("触发midnightDiner的show事件");
+//		console.log("触发midnightDiner的show事件");
 		renderStoredClosedRoom();
 		renderStoredCreateRoom();
 		renderStoredOpenRoom();
 		//加载聊天快照
-		loadingChatSnapshot();
+		setTimeout("loadingChatSnapshot()",200);//延迟一点点
 	});
 	
 	//刷新聊天室推荐(食堂街道)
@@ -412,7 +412,7 @@ function createRoomRequests(){
 						var roomName=this.getAttribute("roomName");
 						var roomNameNode = this.getElementsByTagName('span');//获取食堂名的项
 						
-						roomNameNode[0].setAttribute("class","");//去掉红点
+						roomNameNode[1].setAttribute("class","");//去掉红点
 						
 						//打开聊天子页面
 						mui.openWindow({
@@ -482,7 +482,7 @@ function openRoomRequests(){
 						var roomName=this.getAttribute("roomName");
 						var roomNameNode = this.getElementsByTagName('span');//获取食堂名的项
 						
-						roomNameNode[0].setAttribute("class","");//去掉红点
+						roomNameNode[1].setAttribute("class","");//去掉红点
 						
 						//打开食堂子页面
 						mui.openWindow({
@@ -563,8 +563,9 @@ function recommendRoomRequests(){
 									mui.toast("入座成功(≧∇≦)");
 									//获取新的已加入且开启中的食堂列表，并且渲染到页面
 									openRoomRequests();
-									setTimeout("recommendRoomRequests()",200);
-									//页面跳转至对应的食堂内部聊天页面todo
+									
+									gotoDiningRoom(par1,par.getAttribute("roomName"));
+									//setTimeout("recommendRoomRequests()",200);
 								}
 								else{
 									mui.toast("发送入座食堂请求出错啦！QAQ");
@@ -648,7 +649,7 @@ function sendLeaveRoom(userId,roomId){
 
 //加载食堂的聊天快照
 function loadingChatSnapshot(){
-	console.log("加载食堂的聊天快照");
+//	console.log("加载食堂的聊天快照");
 	var chatSnapshotList = app.getUserChatRoomSnapshot(me.userId);
 	
 	var roomsList = document.getElementById("rooms");//获取食堂列表
@@ -662,9 +663,12 @@ function loadingChatSnapshot(){
 		roomChatItem = chatSnapshotList[i];
 		roomId = roomChatItem.roomId;//获取聊天快照对应的食堂id
 	//	console.log(JSON.stringify(roomChatItem));
-	//	console.log(roomId);
+		//console.log(roomId);
 		roomItem = roomsList.querySelector('li[roomId="'+roomId+'"]');//获取指定id食堂的项
 		//console.log(roomId);
+		if(!app.isNotNull(roomItem)){
+			continue;
+		}
 		snapshotNode = roomItem.getElementsByClassName("mui-ellipsis")[0];//获取食堂的关于聊天快照的填写区域
 		roomNameNode = roomItem.querySelector('span[roomId="'+roomId+'"]');//获取食堂的关于昵称的项
 		// 判断消息的已读或未读状态
@@ -676,3 +680,20 @@ function loadingChatSnapshot(){
 	}
 }
 
+
+//进入食堂聊天页
+function gotoDiningRoom(roomId,roomName){
+	//打开食堂子页面
+	mui.openWindow({
+		url:"lhf_diningRoom.html",
+		id:"lhf_diningRoom_"+roomId,//每个食堂的聊天页面独立
+		extras:{
+			roomId:roomId,
+			isMine:false,
+			userId:me.userId,
+			roomName:roomName,
+			myIcon:me.icon
+		},
+		createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+	});
+}
