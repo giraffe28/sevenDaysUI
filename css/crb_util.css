@@ -2982,3 +2982,13 @@
 	right: 0px;
 	bottom: 0px;
 }
+
+#capbt {
+	width: 23%;
+	float: none;
+	margin-top: 5px;
+	margin-right: 5px;
+	padding-left: 6px;
+	padding-top: 12px;
+}
+	

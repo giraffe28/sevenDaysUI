@@ -412,7 +412,7 @@ function createRoomRequests(){
 						var roomName=this.getAttribute("roomName");
 						var roomNameNode = this.getElementsByTagName('span');//获取食堂名的项
 						
-						roomNameNode[1].setAttribute("class","");//去掉红点
+						roomNameNode[0].setAttribute("class","");//去掉红点
 						
 						//打开聊天子页面
 						mui.openWindow({
@@ -594,7 +594,7 @@ function recommendRoomRequests(){
 
 //对入座推荐食堂时，向后端发送消息
 function sendIntoRoom(userId,roomId){
-	console.log("roomId:"+roomId+" userId:"+userId);
+//	console.log("roomId:"+roomId+" userId:"+userId);
 	var status =false;
 	plus.nativeUI.showWaiting("请稍等");
 	mui.ajax(app.serverUrl+"/chatRoom/add",{

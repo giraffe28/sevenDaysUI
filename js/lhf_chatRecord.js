@@ -389,6 +389,7 @@ function sendMakeFri(userId,friendId){
 
 //打开聊天页面
 function gotoFriendChat(friendUserId,friName,friendIcon){
+//	console.log(friendIcon);
 	mui.openWindow({
 		url:"lhf_chat.html",
 		id:"lhf_chat_"+friendUserId,//每个朋友的聊天页面独立
@@ -396,7 +397,7 @@ function gotoFriendChat(friendUserId,friName,friendIcon){
 			friUserId:friendUserId,
 			friendLevel:0,//默认为不信任
 			friName:friName,
-			friFaceImage:friendIcon
+			friendFaceImg:friendIcon
 		},
 		createNew:false//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 	});

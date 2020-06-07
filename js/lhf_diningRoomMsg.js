@@ -152,7 +152,7 @@ function getRoomMsgRequests(){
 				
 				var roomMsg=data.data;
 				renderRoomMsg(roomMsg);
-				console.log("加载食堂详情完毕");
+//				console.log("加载食堂详情完毕");
 			}
 			else{
 				mui.toast("发送食堂详情加载请求出错啦！QAQ");
