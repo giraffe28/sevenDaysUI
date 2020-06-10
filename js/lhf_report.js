@@ -129,6 +129,12 @@ mui.plusReady(function () {
 function sendReport(){
 	var result=false;
 	
+//	console.log(myId);
+//	console.log(reportObjectId);
+//	console.log(reportType);
+//	console.log(reportReasonItem.reportReasonId);
+//	console.log(reportContentItem.value);
+	
 	mui.ajax(app.serverUrl+"/Friend/report",{
 		data:{
 			sendId:myId,

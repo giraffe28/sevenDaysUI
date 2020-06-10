@@ -21,8 +21,8 @@ a:active {color:black;}
 }
 
 #sendMsg{
-	margin: 3px 7px;
-	padding: 3px 8px;
+	margin: 3px 3px 3px auto;
+	padding: 3px 3px;
 	font-size: 20px !important;
 }
 
@@ -132,12 +132,6 @@ a:active {color:black;}
 	border-radius: 5px;
 }
 
-
-#msgs {
-	height: 100%;
-	overflow: auto;
-	-webkit-overflow-scrolling: touch;
-}
 
 .red_point{
   position: relative;

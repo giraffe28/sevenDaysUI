@@ -192,12 +192,6 @@
 }
 
 
-#msgs {
-	height: 100%;
-	overflow: auto;
-	-webkit-overflow-scrolling: touch;
-}
-
 .red_point{
   position: relative;
 }

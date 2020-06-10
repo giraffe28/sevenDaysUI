@@ -74,7 +74,7 @@ mui.plusReady(function(){
 			return false;
 		}
 		else{
-			if(true){    //if(captcha==textcap)这里验证码判断我先跳过，后续你测试的时候补一下
+			if(captcha==textcap){
 				adduse(telephone,password1);
 				mui.toast('修改成功！！')
 				setTimeout(function() { 
@@ -127,7 +127,8 @@ mui.plusReady(function(){
 				telephone:telephone
 			},
 			success: function(data) {//成功的data函数
-				console.log(JSON.stringify(data));
+				//console.log(JSON.stringify(data));
+				capt=data.data;
 				/*var json = eval('('+ data.d + ")");
 				capt=json.code;
 				console.log("返回的验证："+capt);*/

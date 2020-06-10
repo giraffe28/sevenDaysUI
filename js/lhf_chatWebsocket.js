@@ -42,16 +42,28 @@ mui.plusReady(function () {
 		},
 		chat: function(msg) {
 			// 如果当前websocket的状态是已打开，则直接发送， 否则重连
-		//	console.log("发送的消息" + msg);
+			//console.log("发送的消息" + msg);
 			if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
 				//console.log("发送的消息" + msg);
 				CHAT.socket.send(msg);
 			} 
-			else {
-				offWebConnect();//先注销用户登录
-				// 重连websocket
-				CHAT.init();
-				setTimeout("CHAT.reChat('" + msg + "')", "1000");//延时一秒重新发送
+			else {//网络断了
+				var btnArray = ['是', '否（将退回登录页面）'];
+				mui.confirm('是否重连网络？', '您已掉线', btnArray, function(e) {
+					if (e.index == 0) {
+						//先注销用户登录
+						offWebConnect();
+						// 重连websocket
+						CHAT.init();
+						setTimeout("CHAT.reChat('" + msg + "')", "1000");//延时一秒重新发送
+					} 
+					else {//取消：	
+						//先注销用户登录
+						offWebConnect();
+						plus.webview.getWebviewById("ll_personalCenter.html").evalJS("requestLogOff()");
+						mui.toast("您已退出登录");
+					}
+				});
 			}
 			
 			// 渲染快照列表进行展示

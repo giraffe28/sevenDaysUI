@@ -3,7 +3,7 @@ var friendUserId;
 
 
 mui.plusReady(function () {
-	console.log("到达朋友的信息页，进行plusReady加载中");
+//	console.log("到达朋友的信息页，进行plusReady加载中");
     //获取本页面
     var chatview=plus.webview.currentWebview();
     //获取上一个页面传入的朋友id
@@ -70,15 +70,15 @@ function loadFriMsg(){
 
 //利用后端传来的数据进行信息的显示
 function showFrimsg(friMsg){
-	console.log("朋友信息开始加载");
+//	console.log("朋友信息开始加载");
 	
 	var nickName=friMsg.nickname; //假名
 	var noteName=friMsg.remark;//备注
 	var gender=friMsg.gender; //性别
 	var profile=friMsg.profile; //简介
-	var tags=friMsg.thisweektags;//本周标签
+	var tags=friMsg.thisWeekTag;//本周标签
 	
-	if(friMsg.icon=""){//如果朋友有设置头像
+	if(friMsg.icon!=""){//如果朋友有设置头像
 		document.getElementById("friImage").src=friMsg.icon;
 	}
 	
@@ -95,10 +95,10 @@ function showFrimsg(friMsg){
 	//显示本周标签
 	var weekTagsDom=document.getElementById('weekTags');
 	if (tags!= null && tags.length > 0 && tags!=undefined) {
-		tags = tags.split(" ");
+		tags = tags.split(",");
 		var weekTagsHtml = "";
-		for (var i = 0; i <tags.length-1; i++) {
-			weekTagsHtml += '<span class="mui-badge mui-badge-success" style="margin-top: 10px;">'
+		for (var i = 0; i <tags.length; i++) {
+			weekTagsHtml += '<span class="mui-badge mui-badge-success" style="margin-top: 10px; margin-left:5px;">'
 			+tags[i]+'</span>';
 		}
 		weekTagsDom.innerHTML = weekTagsHtml;
@@ -125,6 +125,7 @@ function changeNoteName(newNoteName){
 				app.changeFriNoteName(friendUserId,newNoteName);
 				document.getElementById("noteName").innerHTML=newNoteName;//新备注加载
 				mui.toast("(´｡･v･｡｀)偷偷备注成功！");
+				plus.webview.currentWebview().opener().evalJS("reloadFriName('"+newNoteName+"')");//带动聊天页面的名称变化
 			}
 			else{
 				mui.toast("好像出了一些问题？稍后再试试吧！");

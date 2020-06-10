@@ -14,7 +14,7 @@ mui.plusReady(function () {
 	   }
 	   else{
 	   var user = app.getUserGlobalInfo();
-	   mui.ajax(app.serverUrl+"/drift/write", {//需更改
+	   mui.ajax(app.serverUrl+"/drift/write", {
 	   	data: {
 			userId:user.userId,
 	   		content:content
@@ -30,7 +30,7 @@ mui.plusReady(function () {
 	   		if (data.status == 200) {
 	   			//显示成功信息
 	   			mui.toast("成功扔出漂流瓶");
-				console.log(data.data);
+//				console.log(data.data);
 				var chatWebview = plus.webview.getWebviewById("crb_drift.html");
 				mui.back();
 	   		}

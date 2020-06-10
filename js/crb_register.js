@@ -28,7 +28,7 @@ mui.plusReady(function(){
 			mui.toast('手机号不能为空');
 			return false; 
 		}
-		else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
+		else if(!(/^1[3|4|5|6|7|8][0-9]\d{4,8}$/.test(telephone))){
 	    	mui.toast("手机号不正确");
 	    	return false; 
 		}
@@ -38,8 +38,8 @@ mui.plusReady(function(){
 		}
 		else{
 			settime(this);
-			GetCode(telephone);//目前我测试过了，没有问题，可以发送验证码,留待前端判断
-			//textcap=GetCode(telephone);
+			//GetCode(telephone);
+			textcap=GetCode(telephone);
 		}
 	});
 	
@@ -75,8 +75,8 @@ mui.plusReady(function(){
 			return false;
 		}
 		else{
-			if(true){//captcha==textcap){
-//				console.log("注册成功");
+			if(captcha==textcap){
+				console.log("注册成功");
 				adduse(username,telephone,password1);
 				/*mui.toast('注册成功！！')
 				setTimeout(function() { 
@@ -143,6 +143,7 @@ mui.plusReady(function(){
 			success: function(data) {//成功的data函数
 //				console.log(JSON.stringify(data));
 				mui.toast("验证码已发送到您的手机，请注意查收");
+				capt=data.data;
 				/*var json = eval('('+ data.d + ")");
 				capt=json.code;
 				console.log("返回的验证："+capt);*/

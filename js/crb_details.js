@@ -105,7 +105,7 @@ mui.plusReady(function () {
 	});
 	
 	reportDom.addEventListener('tap',function(){
-		console.log("到达举报的事件监听");
+//		console.log("到达举报的事件监听");
 		//跳转到对应的朋友的举报页面
 		mui.openWindow({
 			url:"lhf_report.html",
@@ -207,7 +207,7 @@ function likeornot(){
 function likeclick(){
 	var user = app.getUserGlobalInfo();
 	var like=document.getElementById("like");
-	console.log(like.innerHTML);
+//	console.log(like.innerHTML);
 	if(like.innerHTML=="赞"){
 		mui.ajax(app.serverUrl+"/corner/like",{//后端url
 			data:{
@@ -220,7 +220,7 @@ function likeclick(){
 			contentType:'application/json;charset=utf-8',
 			success:function(data){
 				if (data.status == 200) {
-					console.log(JSON.stringify(data));
+//					console.log(JSON.stringify(data));
 					like.innerHTML="已赞";
 					postlike+=1;
 					location.reload();
@@ -242,7 +242,7 @@ function likeclick(){
 			contentType:'application/json;charset=utf-8',
 			success:function(data){
 				if (data.status == 200) {
-					console.log(JSON.stringify(data));
+//					console.log(JSON.stringify(data));
 					like.innerHTML="赞";
 					postlike-=1;
 					location.reload();
@@ -291,7 +291,7 @@ function send(){
 					if (data.status == 200) {
 						//显示成功信息
 						mui.toast("评论发送成功");
-						console.log(data.data);
+//						console.log(data.data);
 						//var chatWebview = plus.webview.getWebviewById("crb_details.html");
 						//chatWebview.evalJS("pulldownRefresh()");
 						location.reload()

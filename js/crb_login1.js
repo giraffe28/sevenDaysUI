@@ -36,7 +36,7 @@ mui.plusReady(function(){
         	mui.toast('手机号不能为空');
         	return false; 
         }
-        else if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(telephone))){
+        else if(!(/^1[3|4|5|6|7|8][0-9]\d{4,8}$/.test(telephone))){
         	mui.toast("手机号不正确");
         	return false; 	
         }
@@ -79,4 +79,4 @@ mui.plusReady(function(){
             }
         });
     })
-})
+});

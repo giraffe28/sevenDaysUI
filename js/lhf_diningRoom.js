@@ -56,8 +56,8 @@ mui.plusReady(function () {
     isMine=thisWebview.isMine;
 	userId=thisWebview.userId;
 	roomName=thisWebview.roomName;
-	if(app.isNotNull(thisWebview.icon))
-		myIcon=thisWebview.icon;
+	if(app.isNotNull(thisWebview.myIcon))
+		myIcon=thisWebview.myIcon;
 	//获取index页面
 	chatWebSocket = plus.webview.getWebviewById("index.html");
 	
@@ -65,6 +65,15 @@ mui.plusReady(function () {
 	
 	thisWebview.setStyle({
 		softinputMode:"adjustResize"//设置软键盘样式
+	});
+	
+	scroll = mui('#msgss').scroll({
+	    scrollY: true, //是否竖向滚动
+	    scrollX: false, //是否横向滚动
+	    startX: 0, //初始化时滚动至x
+	    indicators: false, //是否显示滚动条
+	    deceleration:0.0006, //阻尼系数,系数越小滑动越灵敏
+	    bounce: true //是否启用回弹
 	});
 	
 	//渲染初始化的食堂聊天记录
@@ -147,17 +156,13 @@ mui.plusReady(function () {
 		if(isMine==true){//这时候退出食堂等于关闭食堂
 			mui.confirm('确定关闭该食堂？', '提示', btnArray, function(e) {
 				if (e.index == 0) {
-					if(midnightDiner.evalJS("sendLeaveRoom("+userId+","+roomId+")")==true){
-						mui.toast("您关闭了食堂~( ´•︵•` )~");
-						midnightDiner.evalJS("createRoomRequests()");
-						mui.back();
-					}
-					else{
-						mui.toast("发送关闭食堂请求出错啦！QAQ");
-					}
-				} 
-				else {
-					//取消
+					midnightDiner.evalJS("sendLeaveRoom("+userId+","+roomId+")");
+					mui.toast("您关闭了食堂~( ´•︵•` )~");
+					midnightDiner.evalJS("createRoomRequests()");
+					mui.back();
+					mui.back();
+				}
+				else{
 					mui.toast("食堂里还是蛮有意思的对吧！(*ﾟ∀ﾟ*)");
 				}
 			});
@@ -165,15 +170,11 @@ mui.plusReady(function () {
 		else{//普通的退出食堂
 			mui.confirm('确定离开该食堂？', '提示', btnArray, function(e) {
 				if (e.index == 0) {
-				
-					if(midnightDiner.evalJS("sendLeaveRoom("+userId+","+roomId+")")==true){
-						mui.toast("您离开了食堂~( ´•︵•` )~");
-						midnightDiner.evalJS("openRoomRequests()");
-						mui.back();
-					}
-					else{
-						mui.toast("发送离开食堂请求出错啦！QAQ");
-					}
+					midnightDiner.evalJS("sendLeaveRoom("+userId+","+roomId+")");
+					mui.toast("您离开了食堂~( ´•︵•` )~");
+					midnightDiner.evalJS("openRoomRequests()");
+					mui.back();
+					mui.back();
 				} 
 				else {
 					//取消
@@ -223,7 +224,8 @@ function reload(roomName,theTags){
 
 //设置聊天记录滚动到最后一条
 function resizeScreen (){
-	areaMsgList.scrollTop = areaMsgList.scrollHeight+areaMsgList.offsetHeight;
+	scroll.reLayout();
+	scroll.scrollToBottom();
 }
 
 //对当前窗口监听resize事件
