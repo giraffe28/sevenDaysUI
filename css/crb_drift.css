@@ -1,18 +1,24 @@
+
+body{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
 .bodystyle {
     background-image: url("../images/driftBackground.jpg");
-    height: 100%;
-	width: 100%;
-	opacity: 0.8;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-	background-size: cover;
+	background-size:cover;
 	position: absolute;
-	overflow: hidden;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
 }
 
 .leftstyle{
 	width:50%;
-	float:left;
 	vertical-align: middle;
 	text-align:center;
 	position: absolute;
@@ -21,16 +27,15 @@
 
 .middlestyle {
 	width:50%;
-	float:right;
 	vertical-align: middle;
 	text-align:center;
 	position: absolute;
 	bottom: 30px;
-	margin-left: 240px;
+	margin-left: 50%;
 }
 
 img{
 	vertical-align: middle;
-	width:50%;
-	height:50%;
+	width:100px;
+	height:100px;
 }

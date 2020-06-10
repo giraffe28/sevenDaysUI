@@ -13,7 +13,7 @@ document.getElementById('choose').addEventListener('tap', function() {
 });
 
 document.getElementById("post").addEventListener('tap',function(){
-	console.log(imgUrl);
+//	console.log(imgUrl);
 	var content=document.getElementById('post_content').value;
 	if(content==''){
 		mui.toast('内容不能为空');
@@ -45,7 +45,7 @@ document.getElementById("post").addEventListener('tap',function(){
 	   		if (data.status == 200) {
 	   			//显示成功信息
 	   			mui.toast("发送动态成功");
-				console.log(data.data);
+//				console.log(data.data);
 				var squareWebview = plus.webview.getWebviewById("crb_square.html");
 				squareWebview.evalJS("pulldownRefresh()");
 				mui.back();

@@ -85,7 +85,7 @@ function renderNewTag(newTags){
 	if (app.isNotNull(newTags)) {
 		var theTagsHtml = "";
 		for (var i = 0; i < newTags.length-1; i++) {
-			theTagsHtml += '<span  class="mui-badge mui-badge-success" style="margin-top: 10px;">'
+			theTagsHtml += '<span  class="mui-badge mui-badge-success" style="margin-top: 10px; margin-left:5px;">'
 			+newTags[i]+'</span>';
 		}
 		addTagDom.innerHTML = theTagsHtml;

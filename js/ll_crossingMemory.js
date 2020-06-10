@@ -90,6 +90,7 @@ mui('.memoryList').on('tap', '.memoryRecord', function() {
 });
 
 function requestMemory() {
+	plus.nativeUI.showWaiting("请稍等");
 //	console.log("请求十字记忆");
 	mui.ajax(app.serverUrl + '/memory/getMemory', {
 		data: {
@@ -97,17 +98,20 @@ function requestMemory() {
 		},
 		dataType: 'json', //服务器返回json格式数据
 		type: 'post', //HTTP请求类型
+		async: false,
 		timeout: 10000, //超时时间设置为10秒；
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		success: function(data) {
 			//服务器返回响应
+//			console.log(data.data);
 			if (data.status == 200) {
 				//刷新用户十字记忆信息
 				var memoryJson = data.data;
 				app.setMemory(memoryJson);
 				//console.log(JSON.parse(memoryJson));
+				plus.nativeUI.closeWaiting();
 			}
 		},
 		error: function(xhr, type, errorThrown) {
@@ -116,6 +120,10 @@ function requestMemory() {
 		}
 	});
 };
+
+
+
+
 //从缓存中获取十字记忆，并且渲染到页面
 function renderMemoryPage() {
 //	console.log("渲染十字记忆界面");
@@ -152,3 +160,5 @@ function renderMemory(memory) {
 function t(s){
 	return s<10?"0"+s:s;
 }
+
+

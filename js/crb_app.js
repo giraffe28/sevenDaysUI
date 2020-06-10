@@ -305,6 +305,7 @@ window.app = {
 					item.level = Math.abs(item.level-1);;		// 标记为与原本相反的信赖状态
 					friListList.splice(i, 1, item);	// 替换原有的朋友数据
 					console.log("app中的修改信赖");
+					console.log(item.level);
 					break;
 				}
 			}
@@ -333,7 +334,7 @@ window.app = {
 				if (item.userId == friendId) {
 					item.remark = newNoteName;		// 修改为新备注
 					friListList.splice(i, 1, item);	// 替换原有的朋友数据
-					console.log("app中的修改备注");
+//					console.log("app中的修改备注");
 					break;
 				}
 			}

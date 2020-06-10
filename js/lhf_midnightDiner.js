@@ -640,16 +640,21 @@ function sendLeaveRoom(userId,roomId){
 		},//上传的数据
 		dataType:'json',//服务器返回json格式数据
 		async:false,
-		type:'post',//HTTP请求类型
+		type:'delete',//HTTP请求类型
 		timeout:10000,//超时时间设置为10秒；
 		headers:{'Content-Type':'application/json'},	              
 		success:function(data){
 			//服务器返回响应,进行数据的重新加载
 			if(data.status==200){
 				status = true;
+//				console.log(data.status);
+			}
+			else{
+	//			console.log(data.status);
 			}
 		},
 	});
+//	console.log(status);
 	return status;
 }
 

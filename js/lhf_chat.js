@@ -16,6 +16,7 @@ var friendName;
 var friendFaceImg;
 var friendLevel;//信赖与否，0表示不信赖，1表示信赖
 var chatWebview,chatWebSocket;//chatRecord页面和index页面
+var scroll;//聊天记录的滚动显示
 
 mui.plusReady(function () {
 	//获取聊天页面
@@ -47,11 +48,21 @@ mui.plusReady(function () {
 	//标题改为朋友的昵称
 	document.getElementById("friNickname").innerHTML = friendName;
 	
+//	console.log(friendLevel);
 	//设置信赖开关,如果为信赖，则要初始化成开启状态，否则默认关闭状态
 	if(friendLevel==1){
-		trustSwitch.switch().toggle();
-		console.log("调整信赖开关状态为开启");
+		mui("#trustSwitch").switch().toggle();
+//		console.log("调整信赖开关状态为开启");
 	}
+	
+	scroll = mui('#msgss').scroll({
+	    scrollY: true, //是否竖向滚动
+	    scrollX: false, //是否横向滚动
+	    startX: 0, //初始化时滚动至x
+	    indicators: false, //是否显示滚动条
+	    deceleration:0.0006, //阻尼系数,系数越小滑动越灵敏
+	    bounce: true //是否启用回弹
+	});
 	
 	//渲染初始化的聊天记录
 	initChatHistory()
@@ -104,10 +115,10 @@ mui.plusReady(function () {
 		var Itrust;
 		if(event.detail.isActive){
 			Itrust=true;
-			console.log("选择了信赖");
+//			console.log("选择了信赖");
 		}
 		else{
-			console.log("选择了不信赖");	
+//			console.log("选择了不信赖");	
 			Itrust=false;
 		}
 		//向后端发送消息，并更新缓存
@@ -122,13 +133,17 @@ mui.plusReady(function () {
 				if(data.status==200){
 					if(Itrust==true){
 						mui.toast("(*'▽'*)♪你们似乎很能聊得来呢！");
+						app.changeFriTrust(friendUserId);
+						plus.webview.currentWebview().opener().evalJS("renderFriPage()");//重新从缓存中加载朋友列表
 					}
 					else{
 						mui.toast("(# ` n´ )咱不信赖这家伙！");
+						app.changeFriTrust(friendUserId);
+						plus.webview.currentWebview().opener().evalJS("renderFriPage()");//重新从缓存中加载朋友列表
 					}
 				}
 				else{
-					trustSwitch.switch().toggle();
+					mui("#trustSwitch").switch().toggle();
 					mui.toast("好像出了一些问题？稍后再试试吧！");
 				}
 			},
@@ -141,7 +156,7 @@ mui.plusReady(function () {
 	
 	//监听查看好友信息的操作
 	document.getElementById("watchFriMessage").addEventListener("tap",function(event){
-		console.log("到达查看好友信息的事件监听");
+//		console.log("到达查看好友信息的事件监听");
 		//跳转到对应的朋友的个人中心页面
 		mui.openWindow({
 			url:"lhf_friMsgPage.html",
@@ -156,7 +171,7 @@ mui.plusReady(function () {
 	
 	//监听举报的操作
 	document.getElementById("report").addEventListener("tap",function(event){
-		console.log("到达举报的事件监听");
+//		console.log("到达举报的事件监听");
 		//跳转到对应的朋友的举报页面
 		mui.openWindow({
 			url:"lhf_report.html",
@@ -175,7 +190,7 @@ mui.plusReady(function () {
 		var btnArray = ['是', '否'];
 		mui.confirm('你确定要将其加入黑名单吗？', '提示', btnArray, function(e) {
 			if (e.index == 0) {
-				console.log("选择了将其加入黑名单");
+//				console.log("选择了将其加入黑名单");
 				//向服务器发送请求将该朋友加入黑名单
 				mui.ajax(app.serverUrl+'/blacklist/add', {
 					data: {
@@ -249,7 +264,9 @@ mui.plusReady(function () {
 
 //设置聊天记录滚动到最后一条
 function resizeScreen (){
-	areaMsgList.scrollTop = areaMsgList.scrollHeight+areaMsgList.offsetHeight;
+//	console.log("滚动");
+	scroll.reLayout();
+	scroll.scrollToBottom();
 }
 
 //对当前窗口监听resize事件
@@ -323,4 +340,10 @@ function initChatHistory() {
 			receiveMsgFunc(singleMsg.msg);//渲染接受到的消息
 		}
 	}
+}
+
+//修改备注后，及时更新聊天页面的标题，还有重新加载朋友列表的渲染
+function reloadFriName(frinewName){
+	document.getElementById("friNickname").innerHTML=frinewName;
+	plus.webview.currentWebview().opener().evalJS("renderFriPage()");//重新从缓存中加载朋友列表
 }

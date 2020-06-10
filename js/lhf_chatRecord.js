@@ -53,6 +53,10 @@ function loadingChatSnapshot() {
 	//	console.log(JSON.stringify(chatItem));
 //		console.log(friendId);
 		friendItem = chatFriendsList.querySelector('li[friendId="'+friendId+'"]');//获取指定id朋友的项
+		if(!app.isNotNull(friendItem)){//如果为空
+			app.deleteUserChatSnapshot(user.userId,friendId);
+			continue;
+		}
 //		console.log(friendId);
 		snapshotNode = friendItem.getElementsByClassName("mui-ellipsis")[0];//获取朋友的关于聊天快照的填写区域
 		friNicknameNode = friendItem.querySelector('span[friId="'+friendId+'"]');//获取朋友的关于昵称的项
@@ -107,6 +111,8 @@ function renderFriPage(){
 			if(app.isNotNull(friendNoteName)){
 				friName=friendNoteName;
 			}
+			
+//			console.log(friendLevel);
 			
 			friNicknameNode[1].setAttribute("class","");
 			//console.log(friendUserId);
